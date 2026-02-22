@@ -1,4 +1,4 @@
-# Lab Assignment 5: Cleaning and Resolving Data Issues
+# Lab 5: Cleaning and Resolving Data Issues
 
 **CAP2791C: Power BI Data Preparation and Modeling**  
 **Miami Dade College | Business Intelligence Certification**
