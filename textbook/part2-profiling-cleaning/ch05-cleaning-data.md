@@ -150,7 +150,11 @@ Now let us do what Sofia did. Follow these steps on your own screen.
 
   <strong>Step 4.</strong> Select <strong>Replace Values...</strong> from the context menu. A dialog box opens with two fields: "Value to Find" and "Replace With."<br><br>
 
-  ![Figure 5.2: The Replace Values dialog with Value to Find field empty for null and Replace With field showing 0](images/ch05/fig-5-2-replace-values-dialog.png)<br><br>
+  <img width="703" height="277" alt="image" src="https://github.com/user-attachments/assets/b5057ad8-7c5f-415d-81d2-0ee1ebaa7fc8" />
+
+  Figure 5.2: The Replace Values dialog with Value to Find field empty for null and Replace With field showing 0
+
+<br><br>
 
   <strong>Step 5.</strong> Leave the <strong>"Value to Find"</strong> field empty (this matches null values). Type <strong>0</strong> in the <strong>"Replace With"</strong> field. Click <strong>OK</strong>.
 </div>
@@ -221,7 +225,11 @@ Now let us apply **Proper Case** to the Employee name columns. Proper Case capit
 
   <strong>Step 2.</strong> Click the <strong>First_Name</strong> column header to select it.<br><br>
 
-  ![Figure 5.3: The Transform tab in the Power Query Editor ribbon with the Format dropdown highlighted showing Capitalize Each Word](images/ch05/fig-5-3-proper-case-menu.png)<br><br>
+  <img width="561" height="291" alt="image" src="https://github.com/user-attachments/assets/ffaeb50d-7da5-4e82-8528-ad22f7953964" />
+
+  Figure 5.3: The Transform tab in the Power Query Editor ribbon with the Format dropdown highlighted showing Capitalize Each Word
+  
+  <br><br>
 
   <strong>Step 3.</strong> Click the <strong>Transform</strong> tab in the ribbon (the green ribbon at the top of the Power Query Editor). In the <strong>Text Column</strong> section, click <strong>Format</strong> → Select <strong>Capitalize Each Word</strong>.<br><br>
 
@@ -349,7 +357,10 @@ Abuela Carmen is watching Sofia work on the Menu Items table. The Price column r
 
   <strong>Step 2.</strong> Look at the <strong>Price</strong> column header. Notice the small icon next to the column name — it shows <strong>"ABC"</strong>, which means this column is currently the <strong>Text</strong> data type.<br><br>
 
-  ![Figure 5.4: The Price column header showing the ABC Text data type icon highlighted with a red circle](images/ch05/fig-5-4-abc-data-type-icon.png)<br><br>
+  <img width="203" height="209" alt="image" src="https://github.com/user-attachments/assets/ff114115-38c6-4cdd-9c4f-880bf7f1dc4f" />
+  
+  Figure 5.4: The Price column header showing the ABC Text data type icon highlighted with a red circle
+<br><br>
 
   <strong>Step 3.</strong> Click the <strong>"ABC"</strong> icon next to the Price column name. A dropdown of data types appears. Select <strong>Decimal Number</strong>.<br><br>
 
