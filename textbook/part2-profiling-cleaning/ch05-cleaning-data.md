@@ -125,7 +125,8 @@ Sofia pulls up the Sales table in Power Query and scrolls to the Tip column. Som
 
 ---
 
-![Figure 5.1: The Null Decision — A family dinner table with an empty chair showing three strategies: removing the plate (Remove Row), placing a full plate (Replace Value), and sliding food from the plate above (Fill Down).](images/ch05/fig-5-1-null-decision.jpeg)
+![fig-5-1-null-decision](https://github.com/user-attachments/assets/4e25dcc3-cb06-45fc-9ec7-bd40c133c210)
+
 
 <!-- NANO BANANA PRO PROMPT: "A cozy family dinner table in a Miami home with an empty chair. Three visual zones: Zone 1 shows the empty plate being removed (caption concept: 'Remove Row'). Zone 2 shows someone placing a full plate at the empty seat (caption concept: 'Replace Value'). Zone 3 shows someone sliding food from the plate above down to the empty spot (caption concept: 'Fill Down'). Warm indoor lighting, Cuban-style table setting with colorful tablecloth. Illustrated in digital watercolor style, coral and turquoise tones." -->
 
@@ -391,7 +392,8 @@ Now that every data quality issue from your Chapter 4 profiling report has been 
 
 In this section, you will learn how to rename columns and queries using consistent, human-readable naming conventions.
 
-![Figure 5.5: Before and After — A split-panel illustration showing a messy whiteboard with inconsistent text on the left and the same whiteboard rewritten cleanly on the right.](images/ch05/fig-5-5-before-after-cleaning.png)
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/ad61f96f-6b0b-4a14-aed1-cf09e6093d90" />
+
 
 <!-- NANO BANANA PRO PROMPT: "Split-panel digital watercolor illustration. Left panel: a messy restaurant kitchen whiteboard with handwritten, inconsistent text — some ALL CAPS, some lowercase, misspellings, dollar signs mixed with numbers, smudged labels. Right panel: the same whiteboard, rewritten cleanly — consistent capitalization, corrected spellings, clean numbers, professional labels. Both panels in Miami coral and turquoise palette. A sense of relief and clarity on the right side." -->
 
@@ -422,7 +424,8 @@ Naming is not cosmetic. When you build visuals in Part III and write DAX formula
 
 ---
 
-![Figure 5.6: The Applied Steps Timeline — Recipe cards pinned to a string on a kitchen wall, each showing a cleaning step, stretching from messy raw ingredients on the left to a clean plated dish on the right.](images/ch05/fig-5-6-applied-steps-timeline.png)
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/21f3309c-fceb-46a4-8590-514106245fb0" />
+
 
 <!-- NANO BANANA PRO PROMPT: "A timeline illustration showing recipe cards pinned to a string with clothespins, stretching across a kitchen wall. Each card has a cleaning step written on it: 'Replaced Nulls,' 'Fixed Case,' 'Removed $,' 'Changed Type,' 'Renamed Columns.' The string stretches from left (raw ingredients, messy) to right (plated dish, clean). Digital watercolor, warm Miami kitchen setting, coral and gold tones." -->
 
