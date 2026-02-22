@@ -5,7 +5,7 @@
 
 ---
 
-## Assignment Overview
+## Lab Overview
 
 | | |
 |---|---|
