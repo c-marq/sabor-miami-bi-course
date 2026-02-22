@@ -1,0 +1,16 @@
+Event_ID,Event_Name,Event_Type,Event_Date,Location,Expected_Attendance
+EV001,Wynwood Art Walk,Festival,2024-01-13,"Wynwood, Miami",5000
+EV002,Calle Ocho Festival,Street Festival,2024-03-10,Little Havana,50000
+EV003,Bayfront Park Lunch,Lunch Spot,2024-02-15,"bayfront park, miami",200
+EV004,MDC Food Truck Friday,lunch spot,2024-04-05,Miami Dade College Kendall,300
+EV005,Art Basel Week,Festival,2024-12-06,Miami Beach Convention Center,80000
+EV006,Brickell Lunch Service,Lunch Spot,,"Brickell Ave, Miami",150
+EV007,Coconut Grove Arts Fest,Fest,2024-02-17,Coconut Grove,15000
+EV008,Homestead Rodeo,Festival,2024-01-27,"HOMESTEAD, FL",3000
+EV009,South Beach Wine & Food,Festival,2024-02-22,south beach,60000
+EV010,Doral Food Truck Rally,lunch spot,2024-05-18,Doral Central Park,-500
+EV011,FIU Farmers Market,Lunch spot,2024-06-01,FIU Campus,400
+EV012,Key Biscayne July 4th,Festival,2024-07-04,Key Biscayne,8000
+EV013,Hialeah Heritage Days,Street Festival,,hialeah,2000
+EV014,Coral Gables Food & Wine,Fest,2024-10-12,"Coral Gables, FL",5000
+EV015,Miami Book Fair Food Court,Festival,2024-11-15,Downtown Miami,25000
