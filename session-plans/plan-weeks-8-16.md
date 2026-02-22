@@ -1,4 +1,4 @@
-# SEMESTER TRIAGE PLAN — Weeks 8–16
+# SEMESTER PLAN — Weeks 8–16
 
 **CAP2791C: Power BI Data Preparation and Modeling | ND Section**  
 **2 Sessions per Week | 100 Minutes per Session**  
