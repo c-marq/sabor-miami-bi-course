@@ -47,7 +47,7 @@ Upload the following to the assignment dropbox:
 <strong style="font-size: 1.1em;">🚀 LAUNCH PAD</strong><br><br>
 <strong>What you are building:</strong> A fully transformed version of the Sabor Miami dataset with five distinct transformations applied<br>
 <strong>Tool:</strong> Power BI Desktop → Power Query Editor<br>
-<strong>File to open:</strong> SaborMiami_Week9_Starter.pbix (or your cleaned file from Week 8)<br>
+<strong>File to open:</strong> SaborMiami_Week9_Starter.pbix<br>
 <strong>Data source:</strong> Sales, Employees, and Events tables from the Sabor Miami dataset<br>
 <strong>Time estimate:</strong> 45–60 minutes<br>
 <strong>What "done" looks like:</strong> Five transformation tasks completed, Applied Steps visible for each modified query, written reflections submitted separately<br>
