@@ -1,253 +1,260 @@
-# CAP2791C — Week 9 Graded Lab
+# Graded Lab #1: Data Cleaning
 
-## Transforming Text and Numerical Data in Power Query
-
-**Chapter 6 Lab | 100 Points Total**  
-**Due:** See course calendar  
-**Estimated Time:** 45–60 minutes  
-**Tool:** Power BI Desktop → Power Query Editor  
-**Dataset:** Sabor Miami (cleaned .pbix from Chapter 5 / provided starter file)
+**CAP2791C: Power BI Data Preparation and Modeling | ND Section**  
+**Week 9 Session B | 50 Points**
 
 ---
 
-## Overview
+## Assignment Overview
 
-In this lab, you will apply the transformation techniques from Chapter 6 to the Sabor Miami dataset. You will split and merge text columns, create calculated columns, group and aggregate data, and reshape a table using Unpivot. Each task builds on the skills practiced in the chapter walkthrough, but some steps reduce scaffolding to test your ability to work independently.
-
-**All work is done in the Power Query Editor.** Do not click Close & Apply until all tasks are complete and verified.
-
----
-
-## What to Submit
-
-Upload the following to the assignment dropbox:
-
-1. **Your completed .pbix file** with all transformations applied and visible in Applied Steps
-2. **A written response document** (.docx or .pdf) answering the reflection questions at the end of this lab
+| | |
+|---|---|
+| **Lab** | Graded Lab #1 of 4 |
+| **Chapter** | Chapter 5 — Cleaning and Resolving Data Issues |
+| **Competencies** | C3.1, C3.2, C3.7, C3.9 · PL-300: Clean |
+| **Tool** | Power BI Desktop → Power Query Editor |
+| **File to open** | Your Sabor Miami .pbix file (with all 5 tables connected) |
+| **Time estimate** | 45–55 minutes |
+| **Points** | 50 points |
+| **What you submit** | Your cleaned .pbix file + short written response (2 questions) |
 
 ---
 
-## Grading Criteria
+## Policies for This Lab
 
-| Component | Points | What I Am Looking For |
-|-----------|--------|----------------------|
-| Task 1: Split and Rename | 15 | Column correctly split by delimiter, both columns renamed to clear names |
-| Task 2: Merge Columns | 15 | New Display_Name column created in "Last, First" format using Add Column tab (originals preserved) |
-| Task 3: Custom Calculated Column | 15 | Total_With_Tip column formula is correct, values verified, data type is Currency or Decimal |
-| Task 4: Group By with Multiple Aggregations | 20 | Reference query created (original Sales preserved), grouped by Truck_ID with Sum and Count aggregations, result has exactly 4 rows |
-| Task 5: Unpivot | 20 | Correct columns selected for unpivot, Attribute and Value columns renamed meaningfully, table is taller and narrower than the original |
-| Reflection Questions | 15 | Thoughtful, specific answers demonstrating understanding — not restating definitions |
-| **Total** | **100** | |
+- **Late work:** 48-hour grace period (no penalty). After 48 hours: 10% per day, max 30% off.
+- **Redo option:** If you score below "Good" (30 pts), you may revise and resubmit once for up to the Good tier score.
+- **Submission formats:** (1) your .pbix file, and (2) written response as a .txt, .docx, or typed directly into Canvas submission comments.
+
+---
+
+## What You Are Doing
+
+In Week 8, you profiled all five Sabor Miami tables and documented data quality issues in your Data Quality Snapshot. In this lab, you **fix those issues** using the cleaning techniques from Chapter 5. By the end, your dataset should have no unresolved errors, consistent text values, correct data types, and clear column and query names.
+
+If you get stuck on any task, refer back to the Chapter 5 walkthrough for step-by-step guidance.
+
+---
+
+## Grading Rubric
+
+Rubric is provided upfront so you know exactly what to aim for.
+
+| Tier | Points | What It Looks Like |
+|------|--------|--------------------|
+| **Excellent** | 45–50 | All 5 tasks completed correctly. Column Quality shows 100% Valid (or near-100% with justified nulls). Naming is clean and consistent. Written response demonstrates understanding of WHY, not just WHAT. |
+| **Good** | 30–44 | Most tasks completed. Minor issues remain (1–2 inconsistencies, a missed rename, or a data type not fully corrected). Written response addresses both questions but may lack depth. |
+| **Needs Work** | 0–29 | Multiple tasks incomplete or incorrect. Errors remain in Column Quality. Written response missing or restates steps without explaining reasoning. Eligible for redo. |
+
+### Points by Task
+
+| Task | Points | What I Am Looking For |
+|------|--------|-----------------------|
+| **Task 1:** Resolve null values | 8 pts | Null tips replaced with 0 in Sales. Null phone numbers left as null in Employees. Both decisions visible in Applied Steps. |
+| **Task 2:** Fix text inconsistencies | 10 pts | Menu Items categories standardized. Employee names in Proper Case. Truck location typo corrected. Trailing spaces trimmed. |
+| **Task 3:** Standardize values | 5 pts | Payment methods use consistent casing. No duplicate variants in Column Distribution. |
+| **Task 4:** Resolve data type errors | 10 pts | Dollar signs removed from Price column BEFORE changing type. Price is Decimal Number, not Text. No errors. |
+| **Task 5:** Apply naming conventions | 7 pts | Columns use spaces instead of underscores. All 5 queries renamed to clean names. |
+| **Written response** | 10 pts | Two questions answered thoughtfully (2–3 sentences each). Demonstrates understanding of business decisions behind cleaning choices. |
+| **TOTAL** | **50 pts** | |
 
 ---
 
 ## Before You Begin
 
-<div style="background-color: #EBF5FB; border: 2px solid #2E86C1; padding: 20px; margin: 15px 0; border-radius: 8px;">
-<strong style="font-size: 1.1em;">🚀 LAUNCH PAD</strong><br><br>
-<strong>What you are building:</strong> A fully transformed version of the Sabor Miami dataset with five distinct transformations applied<br>
-<strong>Tool:</strong> Power BI Desktop → Power Query Editor<br>
-<strong>File to open:</strong> SaborMiami_Week9_Starter.pbix (or your cleaned file from Week 8)<br>
-<strong>Data source:</strong> Sales, Employees, and Events tables from the Sabor Miami dataset<br>
-<strong>Time estimate:</strong> 45–60 minutes<br>
-<strong>What "done" looks like:</strong> Five transformation tasks completed, Applied Steps visible for each modified query, written reflections submitted separately<br>
-<strong>Start here →</strong> Open the .pbix file in Power BI Desktop and click Transform Data on the Home tab to enter the Power Query Editor
+<div style="background-color: #1a1a2e; border: 2px solid #16a085; padding: 20px; margin: 15px 0; border-radius: 8px;">
+  <strong style="color: #16a085; font-size: 1.1em;">🚀 LAUNCH PAD</strong><br><br>
+  <strong>What you are building:</strong> A fully cleaned version of the Sabor Miami dataset<br>
+  <strong>Tool:</strong> Power BI Desktop → Power Query Editor<br>
+  <strong>File to open:</strong> Your .pbix file with all 5 Sabor Miami tables<br>
+  <strong>Time estimate:</strong> 45–55 minutes<br>
+  <strong>Number of tasks:</strong> 5 tasks + written response<br>
+  <strong>What "done" looks like:</strong> All 5 tables cleaned — no errors, consistent text, correct data types, clear names<br>
+  <strong>Start here →</strong> Open your .pbix file and click <strong>Transform Data</strong> on the Home tab
 </div>
 
-**WHERE AM I?** All tasks are completed inside the **Power Query Editor** — the separate window with the green ribbon and the Applied Steps pane on the right. If you do not see the Power Query Editor, click **Transform Data** on the Home tab of the main Power BI Desktop window.
+> **WHERE AM I?** All tasks in this lab take place in the **Power Query Editor** — the separate window with the green ribbon. If you see the main Power BI canvas with the Visualizations pane, you are in the wrong window. Click **Transform Data** on the Home tab to open the Power Query Editor.
 
 ---
 
-## Task 1: Split a Column (15 Points)
+## What Success Looks Like
 
-**Query:** Employees  
-**Goal:** Separate the combined name column into individual First_Name and Last_Name columns.
+When you are done, your Power Query Editor should show:
 
-**Step 1:** In the Queries pane on the left side of the Power Query Editor, click the **Employees** query.
+- **5 queries** in the Queries pane with clean names: **Sales, Menu Items, Trucks, Employees, Events**
+- **Column Quality bars** showing 100% Valid on all columns (except Employees phone numbers, which may show some Empty — that is correct)
+- **Applied Steps** pane for each query showing 3–8 cleaning steps
+- **No dollar signs** in the Price column (Menu Items), and the data type icon shows **1.2** (Decimal Number), not **ABC** (Text)
+- **Column Distribution** for Menu Items Category and Sales Payment Method showing clean, distinct bars — no duplicates from casing
 
-**Step 2:** Identify the column that contains full names (first and last name combined in a single column). Click that column header to select it.
+---
 
-**Step 3:** Navigate to **Transform tab → Split Column → By Delimiter**.
+## Tasks
 
-**Step 4:** In the Split Column by Delimiter dialog:
-- Select the appropriate delimiter (the character separating the first and last names — most likely a **space**).
-- Choose **At the left-most delimiter** (this handles cases where someone might have a middle name or initial — it splits only at the first space).
-- Click **OK**.
+### Task 1: Resolve Null Values (8 points)
 
-**Step 5:** Rename the two resulting columns:
-- Right-click the first new column header → **Rename** → type **First_Name**
-- Right-click the second new column header → **Rename** → type **Last_Name**
+**Phase: Setup → Explore → Build → Verify**
+
+**Sales table:**
+
+1. Click the **Sales** query in the Queries pane (left side of the Power Query Editor).
+2. Click on the **Tip** column header to select it.
+3. Go to **Transform tab** → click **Replace Values**.
+4. In the Replace Values dialog: **Value to Find** = `null` · **Replace With** = `0` · click **OK**.
+
+**Employees table:**
+
+5. Click the **Employees** query in the Queries pane.
+6. Check for null values in the phone number column. **Do not replace these.** A missing phone number does not mean the number is zero — it means the employee did not provide one.
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
-Your Employees table should now have separate <strong>First_Name</strong> and <strong>Last_Name</strong> columns instead of the original combined name column. Scan several rows to confirm the split worked correctly — first names in one column, last names in the other. Check your Applied Steps pane: you should see at least 2 new steps (the split and the renames).
+  <strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
+  <strong>Sales table:</strong> Scroll through the Tip column. You should see <strong>0</strong> where nulls used to be. The Applied Steps pane should show a new step called "Replaced Value."<br><br>
+  <strong>Employees table:</strong> Null phone numbers should still appear as <strong>null</strong> — no changes made.
 </div>
 
 ---
 
-## Task 2: Merge Columns into a Display Name (15 Points)
+### Task 2: Fix Text Inconsistencies (10 points)
 
-**Query:** Employees (continuing from Task 1)  
-**Goal:** Create a new Display_Name column in "Last, First" format while keeping the original First_Name and Last_Name columns intact.
+**Menu Items table:**
 
-**Step 1:** Select both the **Last_Name** and **First_Name** columns. Click **Last_Name** first, then hold **Ctrl** and click **First_Name**.
+1. Click the **Menu Items** query (or whatever it is currently named) in the Queries pane.
+2. Click on the **Category** column header.
+3. Use **Transform tab → Replace Values** to fix each variant:
+   - Replace `Entree` with `Entrée`
+   - Replace `entree` with `Entrée`
+   - Repeat for any other inconsistent categories you find (check Column Distribution to see all variants)
 
-**Step 2:** Navigate to the **Add Column tab** (not the Transform tab — you need to keep the original columns).
+**Employees table:**
 
-**Step 3:** Click **Merge Columns**.
+4. Click the **Employees** query.
+5. Click the **First Name** column header (or First_Name).
+6. Go to **Transform tab → Format → Capitalize Each Word** (this applies Proper Case).
+7. Repeat for the **Last Name** column.
+8. With each name column selected, go to **Transform tab → Format → Trim** to remove trailing spaces.
 
-**Step 4:** In the Merge Columns dialog:
-- Select **Custom** from the Separator dropdown.
-- Type a comma followed by a space: **, **
-- In the New column name field, type **Display_Name**.
-- Click **OK**.
+**Trucks table:**
+
+9. Click the **Trucks** query.
+10. Use **Replace Values** on the location column to fix `Kendal` → `Kendall`.
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
-You should now have <strong>three</strong> name columns: First_Name, Last_Name, and Display_Name. The Display_Name values should look like "Santos, Maria" — last name, comma, space, first name. If the original First_Name and Last_Name columns disappeared, you used the Transform tab instead of the Add Column tab. Undo the step (click the X in Applied Steps) and redo it using the <strong>Add Column tab</strong>.
+  <strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
+  Turn on <strong>Column Distribution</strong> (View tab → Data Preview section → check Column Distribution) for the Category column in Menu Items. The number of distinct values should match the actual number of categories — no duplicates from casing or spelling.<br><br>
+  In Employees, all names should be in consistent Proper Case format (e.g., "Maria Garcia," not "MARIA GARCIA" or "maria garcia").
 </div>
 
 ---
 
-## Task 3: Create a Custom Calculated Column (15 Points)
+<div style="background-color: #E8DAEF; border-left: 5px solid #8E44AD; padding: 15px; margin: 15px 0; border-radius: 4px;">
+  <strong style="color: #6C3483;">💜 TAKE A BREATH</strong><br>
+  You are halfway through. Tasks 1 and 2 are the most tedious part — lots of Replace Values clicks. The remaining tasks go faster. Stretch if you need to.
+</div>
 
-**Query:** Sales  
-**Goal:** Add a column that calculates the total transaction amount including tip.
+---
 
-**Step 1:** In the Queries pane, click the **Sales** query.
+### Task 3: Standardize Values (5 points)
 
-**Step 2:** Before creating the column, verify that the **Amount** and **Tip** columns have numerical data types. Check the icon to the left of each column header:
-- **$** or **1.2** = numerical (good)
-- **ABC** = Text (needs to be changed — click the icon and select **Currency**)
+**Sales table:**
 
-**Step 3:** Navigate to **Add Column tab → Custom Column**.
-
-**Step 4:** In the Custom Column dialog:
-- New column name: **Total_With_Tip**
-- Formula: `[Amount] + [Tip]`
-- Click **OK**.
-
-**Step 5:** Verify the data type of your new column. If it is not Currency or Decimal Number, click the data type icon to the left of the **Total_With_Tip** column header and select **Currency**.
+1. Click the **Sales** query.
+2. Click on the **Payment Method** column header (or Payment_Method).
+3. Use **Replace Values** to standardize all casing variants to one consistent form:
+   - `CASH` → `Cash`
+   - `cash` → `Cash`
+   - Do the same for any credit card variants (e.g., `CREDIT` → `Credit Card`, `cc` → `Credit Card`)
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
-Scroll to the right side of your Sales table. The Total_With_Tip column should show values that equal Amount + Tip for every row. Spot-check at least 3 rows by adding the values mentally. If any rows show <strong>Error</strong>, the Tip column likely has null values — you can handle this by modifying the formula to: <code>[Amount] + (if [Tip] = null then 0 else [Tip])</code>
+  <strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
+  Column Distribution for the Payment Method column should show clean, distinct bars — one bar per payment type, no duplicates from casing differences.
 </div>
 
 ---
 
-## Task 4: Group By with Multiple Aggregations (20 Points)
+### Task 4: Resolve Data Type Errors (10 points)
 
-**Query:** Create a new Reference query from Sales  
-**Goal:** Produce a per-truck summary showing total sales and transaction count.
+**Menu Items table:**
 
-This task is worth the most points because it tests multiple skills: creating a reference query, using Advanced Group By, and verifying the output.
+<div style="background-color: #FEF9E7; border-left: 5px solid #F1C40F; padding: 15px; margin: 15px 0; border-radius: 4px;">
+  <strong style="color: #7D6608;">⚠️ COMMON MISTAKE</strong><br>
+  The order of operations matters here. If you change the data type <strong>before</strong> removing the dollar sign, the entire column will fill with errors. Always: clean the text first, THEN change the type.
+</div>
 
-**Step 1:** In the Queries pane, right-click the **Sales** query and select **Reference**. This creates a new query that points to the same data without modifying the original.
-
-**Step 2:** Right-click the new query (it may be named "Sales (2)") and select **Rename**. Type **Sales_By_Truck**.
-
-**Step 3:** With the Sales_By_Truck query selected, click the **Group By** button (Transform tab → Table section).
-
-**Step 4:** In the Group By dialog:
-- Click the **Advanced** option at the top.
-- **Group by:** Truck_ID
-- First aggregation — **New column name:** Total_Sales | **Operation:** Sum | **Column:** Amount
-- Click **Add aggregation** to add a second row.
-- Second aggregation — **New column name:** Transaction_Count | **Operation:** Count Rows
-
-**Step 5:** Click **OK**.
+1. Click the **Menu Items** query.
+2. Click the **Price** column header.
+3. Use **Replace Values** to remove the dollar sign: **Value to Find** = `$` · **Replace With** = *(leave empty)* · click **OK**.
+4. **After** the dollar signs are removed, change the data type: click the **ABC** icon to the left of the Price column header → select **Decimal Number**.
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
-Your Sales_By_Truck query should have exactly <strong>4 rows</strong> (one for each Sabor Miami truck: T001, T002, T003, T004) and <strong>3 columns</strong> (Truck_ID, Total_Sales, Transaction_Count). If you see more than 4 rows, check that you grouped by Truck_ID. Also confirm that the original <strong>Sales</strong> query still has all its detail rows — click back on Sales in the Queries pane to verify it is untouched.
+  <strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
+  The Price column should show clean numbers (8.50, 12.00, 6.75 — no dollar signs). The data type icon next to the column name should show <strong>1.2</strong> (Decimal Number), not <strong>ABC</strong> (Text). Column Quality should show 100% Valid — no errors.<br><br>
+  <strong>If you see errors:</strong> Delete the last Applied Steps by clicking the <strong>X</strong> next to each step in the Applied Steps pane. Then start from step 3 again — remove the "$" first, then change the type.
 </div>
 
 ---
 
-## Task 5: Unpivot Columns (20 Points)
+### Task 5: Apply Naming Conventions (7 points)
 
-**Query:** Events (or a Reference copy)  
-**Goal:** Convert wide-format columns into tall-format rows suitable for a data model.
+**All tables:**
 
-The scaffolding decreases for this task. You have the concepts from the chapter — now apply them.
+1. Rename columns that use underscores to use spaces instead. Double-click a column header to edit it:
+   - `Truck_ID` → `Truck ID`
+   - `Employee_ID` → `Employee ID`
+   - `Menu_Item_ID` → `Menu Item ID`
+   - `Transaction_ID` → `Transaction ID`
+   - Apply the same pattern to any other columns that use underscores
 
-**Step 1:** In the Queries pane, examine the **Events** query. Identify which columns represent categories or time periods as separate column headers (wide format) instead of row values. These are the columns you will unpivot.
-
-> **Hint:** If you are unsure which columns to unpivot, ask yourself: "Are these column headers values that should be in a single column?" For example, if you see month names or event type names as column headers, those should probably be row values.
-
-**Step 2:** Create a **Reference** copy of the Events query to preserve the original. Rename the reference to something descriptive (for example, **Events_Unpivoted**).
-
-**Step 3:** Select the columns you want to **keep** as they are (such as an ID column or a name column). Then use **Unpivot Other Columns** (Transform tab → Any Column section). This approach is safer than selecting individual columns to unpivot because it automatically handles any new columns that might be added in future data refreshes.
-
-**Step 4:** Rename the resulting **Attribute** column and **Value** column to meaningful names that describe what they contain.
+2. Rename all five queries in the Queries pane. Right-click a query → **Rename**:
+   - `SaborMiami_Sales_2024` (or similar) → **Sales**
+   - `SaborMiami_MenuItems` (or similar) → **Menu Items**
+   - `SaborMiami_Trucks` (or similar) → **Trucks**
+   - `SaborMiami_Employees` (or similar) → **Employees**
+   - `SaborMiami_Events_2024` (or similar) → **Events**
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
-Compare your unpivoted table to the original Events table:
-<ul>
-<li>The unpivoted table should have <strong>more rows</strong> and <strong>fewer columns</strong> than the original</li>
-<li>The old column headers should now appear as values in your renamed Attribute column</li>
-<li>The numbers from those old columns should appear in your renamed Value column</li>
-<li>The columns you chose to keep should be unchanged and repeated across the new rows</li>
-</ul>
+  <strong style="color: #922B21;">🛑 STOP AND CHECK</strong><br>
+  Your Queries pane should list five queries with clean names: <strong>Sales, Menu Items, Trucks, Employees, Events</strong>. Column headers across all tables should use spaces, not underscores.
 </div>
 
 ---
 
-## Final Verification
+## Save and Submit
 
-Before saving your file, do a final pass through the Queries pane:
-
-| Query | What to Verify |
-|-------|---------------|
-| **Employees** | First_Name, Last_Name, and Display_Name columns all present. Display_Name format: "Last, First" |
-| **Sales** | Total_With_Tip column present. Values are correct (Amount + Tip). Data type is Currency or Decimal |
-| **Sales_By_Truck** | Reference query. 4 rows, 3 columns (Truck_ID, Total_Sales, Transaction_Count) |
-| **Events_Unpivoted** (or your name) | Reference query. Taller than original Events. Attribute and Value columns renamed |
-| **Original Sales and Events** | Still intact with all original detail rows — not modified by your Group By or Unpivot work |
-
-When everything checks out, click **Close & Apply** (Home tab → Close & Apply) to save your Power Query work and load it into the data model. Then save the .pbix file.
+1. Click **Close & Apply** in the Power Query Editor (Home tab → Close & Apply). This saves your cleaning steps and loads the cleaned data into the model.
+2. Save your .pbix file: **File → Save As → `LastName_FirstName_Lab01.pbix`**
+3. Answer the two written response questions below.
+4. Submit both your .pbix file and your written response to the **Lab #1** assignment in Canvas.
 
 ---
 
-## Reflection Questions (15 Points)
+## Written Response (10 points)
 
-Answer the following in your written response document. Each answer should be **2–4 sentences**. I am looking for your understanding of the concepts, not restated definitions from the textbook.
+Answer both questions in 2–3 sentences each. Include your responses in a .txt file, .docx file, or type them directly into the Canvas submission comments.
 
-**Question 1 (5 points):** In Task 4, you created a Reference query before applying Group By instead of grouping the original Sales query directly. Explain in your own words why this step was necessary. What would have happened to your data if you had skipped it?
+> **Question 1:** You replaced null Tip values with 0 but left null phone numbers as null. Explain why these two situations required different decisions. What would happen to your calculations if you made the wrong choice in either case?
 
-**Question 2 (5 points):** Think about the Unpivot operation you performed in Task 5. Describe a real-world scenario — from a job, an internship, a class, or your personal life — where you might receive data in a wide format that would need to be unpivoted before analysis. What would the column headers be, and what would the resulting tall table look like?
-
-**Question 3 (5 points):** In this lab, you used both the **Transform tab** and the **Add Column tab** for different tasks. Explain the key difference between them and describe a situation where choosing the wrong tab could cause a problem you would need to undo.
+> **Question 2:** You removed the dollar sign from the Price column before changing the data type. What happens if you reverse that order? Why does the sequence of Applied Steps matter in Power Query?
 
 ---
 
-## Bonus Challenge (Optional — Up to 5 Extra Credit Points)
+## How Your Work Will Be Evaluated
 
-Create a second Group By reference query called **Sales_By_Truck_By_Event** that groups the Sales data by **two columns**: Truck_ID and Event_ID (or the equivalent event-linking column in your dataset). Include three aggregations: Total Sales (Sum of Amount), Average Transaction (Average of Amount), and Total Tips (Sum of Tip).
+Your instructor will open your .pbix file and check:
 
-This requires using the **Add grouping** button in the Advanced Group By dialog to add a second grouping column — a feature not explicitly demonstrated in the chapter walkthrough. Experiment with the dialog to figure out where this button is and how it works.
+- **Applied Steps pane** for each query — are the cleaning steps present and in a logical order?
+- **Column Quality** across all tables — are errors resolved?
+- **Column Distribution** for key columns (Category, Payment Method) — are variants consolidated?
+- **Data types** — is Price Decimal Number, not Text?
+- **Naming** — are queries and columns named clearly?
+- **Written response** — do your answers demonstrate understanding of the business decisions behind data cleaning?
 
-<div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
-<strong style="color: #922B21;">🛑 STOP AND CHECK (Bonus)</strong><br>
-Your Sales_By_Truck_By_Event query should have more than 4 rows (because each truck participates in multiple events) but far fewer rows than the original Sales table. It should have <strong>5 columns</strong>: Truck_ID, Event_ID, Total_Sales, Avg_Transaction, and Total_Tips. If you see only 4 rows, you may have forgotten to add Event_ID as a second grouping column.
+<div style="background-color: #D6EAF8; border-left: 5px solid #2E86C1; padding: 15px; margin: 15px 0; border-radius: 4px;">
+  <strong style="color: #1A5276;">💡 A NOTE ABOUT THIS LAB</strong><br>
+  This lab is not about memorizing which buttons to click — it is about understanding <strong>why</strong> each cleaning decision matters. The goal is a clean dataset and thoughtful written responses, not speed. If you finish early, go back through each table and check for any issues you may have missed.
 </div>
 
 ---
 
-## Submission Checklist
-
-Before submitting, confirm:
-
-- [ ] .pbix file saved with all 5 tasks completed (Tasks 1–5 visible in Applied Steps for each modified query)
-- [ ] Original Sales and Events queries are preserved (not overwritten by Group By or Unpivot)
-- [ ] All new columns have clear, descriptive names (no "Column1" or "Full_Name.1" leftovers)
-- [ ] Written response document includes answers to all 3 reflection questions
-- [ ] (Optional) Bonus challenge query included if attempting extra credit
-
-Upload both files to the Week 9 assignment dropbox.
-
----
-
-> **Reminder:** If you get stuck on any task, re-read the corresponding section in Chapter 6. The walkthrough steps in the chapter mirror what you are doing here. The chapter's STOP AND CHECK boxes describe exactly what your screen should look like at each stage.
+> *Graded Lab 1 of 4 | Week 9 | Chapter 5: Cleaning and Resolving Data Issues*  
+> *Late policy: 48-hour grace period, then 10%/day, max 30% off. Redo available if below 30 pts.*
