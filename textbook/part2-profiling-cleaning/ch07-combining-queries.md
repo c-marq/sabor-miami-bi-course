@@ -6,11 +6,11 @@
 
 ---
 
-<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/49301ecf-94ef-4726-be31-708d75086d3e" />
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/c883cef5-d793-4b9d-accf-0e111c72f009" />
 
-<!-- [img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/49301ecf-94ef-4726-be31-708d75086d3e"]
-Alt text: Digital watercolor illustration of a young Latina woman connecting puzzle pieces on a food truck prep table, each piece representing a data table, with Biscayne Bay visible through the serving window.
-Nano Banana Pro Prompt: "Digital watercolor illustration of a vibrant Miami food truck kitchen scene where a young Latina woman connects puzzle pieces together on a prep table, each puzzle piece showing a different data table (orders, menu items, trucks), with Biscayne Bay visible through the serving window, warm coral and turquoise color palette, soft golden hour lighting"
+<!-- [IMAGE: images/ch07/fig-7-0-chapter-opening.png]
+Alt text: A young Latina woman inside a food truck kitchen connects large interlocking puzzle pieces on a stainless steel prep table, each piece labeled with a data table name, with Biscayne Bay visible through the serving window at golden hour.
+Nano Banana Pro Prompt: "A young Latina woman in her mid-20s with dark hair pulled back, wearing a black apron over a teal t-shirt, stands inside a stainless steel food truck kitchen. She is connecting four large, colorful interlocking puzzle pieces on the prep counter. Each puzzle piece is a distinct pastel color (coral, turquoise, gold, lavender) and has a small label printed on it: 'Sales,' 'Menu Items,' 'Trucks,' and 'Employees.' Two pieces are already connected; she is pressing a third into place with both hands. Through the open serving window behind her, Biscayne Bay is visible in soft golden hour light with the downtown Miami skyline silhouetted in the distance. The interior lighting is warm and natural, coming from the serving window. Style: editorial textbook illustration with soft digital watercolor textures, clean outlines, and a warm coral-and-turquoise color palette. Composition is centered on the woman and the puzzle pieces, with the Miami skyline as a secondary background element. No text other than the four labels on the puzzle pieces."
 -->
 
 ---
@@ -193,11 +193,11 @@ Not every query needs to end up in your data model. Some queries exist to do int
 
 Think of it like a food truck kitchen. In the back, ingredients are chopped, marinated, and mixed. Customers never see those prep bowls — they only see the finished dishes that come out the serving window. The prep bowls are staging queries. The finished dishes are **loaded queries** that appear in your Power BI model.
 
-<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/39578bff-301c-4cfd-95c6-1db28ac562cb" />
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/c120e507-8383-4460-ae72-8f3b7502f309" />
 
 <!-- [IMAGE: images/ch07/fig-7-2-staging-vs-loaded.png]
-Alt text: Digital watercolor of a food truck interior divided by a curtain. The back prep area is labeled Staging Queries with ingredients being sorted. The front serving window is labeled Loaded Queries with finished dishes going to customers.
-Nano Banana Pro Prompt: "Digital watercolor of a Miami food truck interior divided by a curtain: the back prep area (labeled 'Staging Queries') shows ingredients being chopped and sorted, the front serving window (labeled 'Loaded Queries') shows finished dishes going to customers, warm lighting, Latin-Caribbean food visible, Sabor Miami branding on the truck"
+Alt text: A side cross-section view of a Miami food truck interior divided by a curtain. The back prep area has a chalkboard sign reading Staging Queries with ingredients being prepped. The front serving window has a sign reading Loaded Queries with finished dishes being handed to a customer.
+Nano Banana Pro Prompt: "A split-view illustration of a Miami food truck interior seen from a side cross-section perspective. A sheer fabric curtain divides the space into two distinct zones. On the left, the back prep area: a wooden cutting board with chopped plantains, diced mango, and marinating jerk chicken. A hand-lettered chalkboard sign above reads 'Staging Queries.' The lighting here is cooler and utilitarian. On the right, the front serving window: a smiling Latina worker hands a finished plate of empanadas and tostones through an open window to a customer outside. A matching chalkboard sign above reads 'Loaded Queries.' The lighting here is warm golden hour from the Miami sun. A small teal-and-coral logo reading 'Sabor Miami' is visible on the exterior of the truck near the serving window. Style: editorial textbook illustration with soft digital watercolor textures, clean lines, and a warm coral and turquoise color palette. The composition is balanced left-to-right to emphasize the contrast between the two zones. No text other than the three signs specified."
 -->
 
 To control whether a query loads into the model, right-click the query name in the **Queries pane** (the left panel of the Power Query Editor) and look for **Enable Load**. If the checkmark is present, the query will load. If you uncheck it, the query stays in Power Query as a staging query — it does its work behind the scenes but does not appear in the Fields pane of the main Power BI window.
@@ -510,8 +510,11 @@ Now for the big moment — sending everything to the model.
   <strong>Do It:</strong> Click the top half of the <strong>Close & Apply</strong> button (not the dropdown arrow). Power Query will close and Power BI will load your data. A loading dialog appears — wait for it to complete.
 </div>
 
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/bba413c1-49d7-429c-b741-5a8180150cde" />
+
 <!-- [IMAGE: images/ch07/fig-7-3-close-and-apply.png]
-Alt text: Digital watercolor of a completed order ticket being passed through a food truck service window, representing the Close and Apply handoff from Power Query to the Power BI model.
+Alt text: A hand passes a completed order ticket through a food truck serving window at sunset, representing the Close and Apply handoff from Power Query to the Power BI model.
+Nano Banana Pro Prompt: "Close-up of a hand passing a completed paper order ticket through a Miami food truck serving window. The ticket has small colorful table icons printed on it (a grid, a chart, a list). The hand inside the truck belongs to a worker wearing a black apron. Outside the window, a second hand reaches to receive the ticket. The serving window frame is painted teal with small coral accents. Through the window opening, a Miami sunset over Biscayne Bay is visible in the background with warm orange and pink sky gradients. The lighting is golden hour, casting long warm shadows. A small 'Sabor Miami' logo is painted on the truck exterior below the window. Style: editorial textbook illustration with soft digital watercolor textures, warm color palette emphasizing coral, turquoise, and gold. Composition is tightly framed on the window and the handoff moment, conveying a sense of completion and transition. No text other than the Sabor Miami logo."
 -->
 
 <div style="background-color: #FADBD8; border-left: 5px solid #E74C3C; padding: 15px; margin: 15px 0; border-radius: 4px;">
