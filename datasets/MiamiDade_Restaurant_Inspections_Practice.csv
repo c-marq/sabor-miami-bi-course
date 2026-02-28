@@ -1,0 +1,51 @@
+Business Name, Location Address,Location City,Location Zip,Inspection Type,Inspection Date,Total Violations,High Priority,Intermediate,Basic,Inspection Result
+THE ABBEY HOTEL,300 21 ST,MIAMI BEACH,33139,Complaint Full,10/30/2025,0,0,0,0,Inspection Completed - No Further Action
+MCDONALDS REST OF FLORIDA INC,6150 S DIXIE HWY,MIAMI,331435003,Routine - Food,07/01/2025,10,2,1,7,Inspection Completed - No Further Action
+A LO CUBANO TROPICAL,4799 PALM AVE,HIALEAH,33012,Routine - Food,07/25/2025,1,0,0,1,Inspection Completed - No Further Action
+MI RANCHITO SALVADORENO RESTAURANTE,1947 W FLAGLER ST,MIAMI,33135,Routine - Food,10/28/2025,1,0,1,0,Inspection Completed - No Further Action
+ISLA BONITA,862-864 E 41 ST,HIALEAH,33013,Routine - Food,08/14/2025,9,2,1,6,Inspection Completed - No Further Action
+ISLA BONITA,862-864 E 41 ST,HIALEAH,33013,Routine - Food,01/05/2026,6,0,2,4,Warning Issued
+ISLA BONITA,862-864 E 41 ST,HIALEAH,33013,Complaint Full,09/12/2025,4,0,0,4,Inspection Completed - No Further Action
+LA ISLA CAFETERIA,2008 NW 20 ST,MIAMI,33142,Routine - Food,07/10/2025,15,2,3,10,Inspection Completed - No Further Action
+KENTUCKY FRIED CHICKEN,811 W  49 ST,HIALEAH,33012,Routine - Food,08/15/2025,5,0,2,3,Inspection Completed - No Further Action
+KENTUCKY FRIED CHICKEN,811 W  49 ST,HIALEAH,33012,Routine - Food,01/05/2026,5,0,2,3,Inspection Completed - No Further Action
+JOES STONE CRABS RESTAURANT,11 WASHINGTON AVE,MIAMI BEACH,33139,Routine - Food,12/01/2025,5,0,2,3,Inspection Completed - No Further Action
+AKASHI JAPANESE RESTAURANT,5830 S DIXIE HWY,SOUTH MIAMI,33143-3645,Routine - Food,08/04/2025,36,7,3,26,Warning Issued
+AKASHI JAPANESE RESTAURANT,5830 S DIXIE HWY,SOUTH MIAMI,33143-3645,Routine - Food,12/08/2025,17,6,2,9,Administrative complaint recommended
+JIMMY'S EAST SIDE DINER,7201 BISCAYNE BLVD,MIAMI,33138,Routine - Food,08/04/2025,25,5,7,13,Warning Issued
+CVI.CHE 105 SOUTH BEACH,1245 LINCOLN RD,MIAMI BEACH,33139,Routine - Food,08/20/2025,12,4,2,6,Inspection Completed - No Further Action
+CVI.CHE 105 SOUTH BEACH,1245 LINCOLN RD,MIAMI BEACH,33139,Routine - Food,01/22/2026,11,1,4,6,Inspection Completed - No Further Action
+VERSAILLES RESTAURANT,3555 SW 8TH ST,miami,33135,routine - food,09/15/2025,3,1,0,2,Inspection Completed - No Further Action
+LA CARRETA,3632 SW 8TH ST,MIAMI,33135,Routine - Food,11/03/2025,7,1,2,4,Warning Issued
+POLLO TROPICAL,8500 NW 12TH ST,DORAL,33126,Routine - Food,08/22/2025,2,0,1,1,Inspection Completed - No Further Action
+EL REY DE LAS FRITAS ,1821 SW 8TH ST ,MIAMI,33135,Routine - Food,10/14/2025,4,1,0,3,Inspection Completed - No Further Action
+SERGIO'S RESTAURANT,3252 CORAL WAY,CORAL GABLES,33145,Routine - Food,07/30/2025,8,2,1,5,Warning Issued
+SERGIO'S RESTAURANT,3252 CORAL WAY,CORAL GABLES,33145,Routine - Food,08/15/2025,3,0,1,2,Inspection Completed - No Further Action
+FLANIGAN'S SEAFOOD BAR AND GRILL,11225 S DIXIE HWY,miami,331565103,Routine - Food,09/08/2025,6,1,2,3,Inspection Completed - No Further Action
+CASA JUANCHO,2436 SW 8 ST,MIAMI,33135,Complaint Full,10/22/2025,,,,,Inspection Completed - No Further Action
+PALACIO DE LOS JUGOS,5721 W FLAGLER ST,MIAMI,33144,Routine - Food,07/18/2025,14,3,4,7,Warning Issued
+EL EXQUISITO RESTAURANT,1510 SW 8TH ST,MIAMI,33135,Routine - Food,11/20/2025,5,1,1,3,Inspection Completed - No Further Action
+HAVANA HARRY'S,4612 LE JEUNE RD,coral gables,33146,Routine - Food,08/28/2025,2,0,0,2,Inspection Completed - No Further Action
+OLD'S HAVANA CUBAN BAR & COCINA,1442 SW 8 ST,MIAMI,33135,routine - food,12/15/2025,9,2,3,4,Warning Issued
+TAQUERIA EL MEXICANO,521 SW 8TH ST,MIAMI,33130,Routine - Food,09/05/2025,$3,0,1,2,Inspection Completed - No Further Action
+GARCIA'S SEAFOOD GRILLE,398 NW NORTH RIVER DR,MIAMI,33128,Routine - Food,10/08/2025,11,3,2,6,warning issued
+LA MOON COLOMBIAN RESTAURANT,144 SW 8TH ST,MIAMI,33130,Routine - Food,07/22/2025,4,1,0,3,Inspection Completed - No Further Action
+COYO TACO,2300 NW 2ND AVE,MIAMI,33127,Routine - Food,08/12/2025,6,0,2,4,Inspection Completed - No Further Action
+SWEET DOGS,2001 BISCAYNE BLVD,MIAMI,33132,Complaint Full,11/10/2025,0,0,0,0,Inspection Completed - No Further Action
+PHUC YEA,7100 BISCAYNE BLVD,MIAMI,33138,Routine - Food,09/20/2025,8,2,1,5,Warning Issued
+LIME FRESH MEXICAN GRILL,1439 ALTON RD,MIAMI BEACH,33139,Routine - Food,10/05/2025,3,0,1,2,Inspection Completed - No Further Action
+TAQUERIAS EL MEXICANO,7535 SW 8TH ST,MIAMI,33144,Routine - Food,08/30/2025,5,1,1,3,Inspection Completed - No Further Action
+TAQUERIA EL MEXICANO,7535 SW 8TH ST,MIAMI,33144,Complaint Full,01-15-2026,2,0,1,1,Inspection Completed - No Further Action
+ISLAS CANARIAS,285 NW 27TH AVE,MIAMI,33125,Routine - Food,07/08/2025,6,1,2,3,Inspection Completed - No Further Action
+PINCHO FACTORY,30 MERRICK WAY,CORAL GABLES,33134,Routine - Food,09/18/2025,1,0,0,1,Inspection Completed - No Further Action
+SUSHI SAKE,8228 SW 40TH ST,miami,33155,Routine - Food,10/25/2025,7,2,1,4,Warning Issued
+PUBLIX DELI,485 BRICKELL AVE,MIAMI,33131,Routine - Food,08/05/2025,4,0,1,3,Inspection Completed - No Further Action
+POLLO TROPICAL,2725 NW 7TH ST ,MIAMI,33125,Routine - Food,11/14/2025,3,0,1,2,Inspection Completed - No Further Action
+LAS VEGAS CUBAN CUISINE,6970 COLLINS AVE,MIAMI BEACH,33141,routine - food,12/03/2025,10,2,3,5,Warning Issued
+NOVECENTO,1414 BRICKELL AVE,MIAMI,33131,Routine - Food,08/18/2025,5,1,1,3,Inspection Completed - No Further Action
+LA SANDWICHERIE,229 14TH ST,MIAMI BEACH,33139,Routine - Food,09/28/2025,2,0,0,2,Inspection Completed - No Further Action
+night owl cookies,2 NE 40TH ST,MIAMI,33137,Routine - Food,10/12/2025,1,0,0,1,Inspection Completed - No Further Action
+ZUMA RESTAURANT,270 BISCAYNE BLVD WAY,MIAMI,33131,Routine - Food,07/15/2025,8,1,3,4,warning issued
+MS CHEEZIOUS,VARIOUS LOCATIONS,MIAMI,,Routine - Food,08/08/2025,0,0,0,0,Inspection Completed - No Further Action
+THE SALTY DONUT,50 NW 24TH ST,MIAMI,33127,Routine - Food,11/22/2025,3,0,1,2,Inspection Completed - No Further Action
+NIU KITCHEN,134 NE 2ND AVE,miami,33132,Routine - Food,01-08-2026,6,1,2,3,Warning Issued
