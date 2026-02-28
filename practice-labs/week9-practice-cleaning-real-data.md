@@ -240,7 +240,6 @@ If you finished early and want extra practice, try these. They are NOT required.
 
 - Re-read **Chapter 5** on GitHub
 - Review your notes from **Session 9A**
-- Ask the tutor — they have a completed version of this exercise
 - Check the **Applied Steps** panel if you get lost — you can always delete a step by clicking the X next to it
 
 ---
