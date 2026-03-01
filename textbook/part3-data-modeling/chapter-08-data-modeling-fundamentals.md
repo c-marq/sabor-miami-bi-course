@@ -74,17 +74,17 @@ Here is where you are in the overall pipeline — you have completed everything 
 
 ```mermaid
 graph LR
-    subgraph "Part II: Power Query Editor (Done ✅)"
-        Profile["Profile Data<br/>(Ch 4)"] --> Clean["Clean Data<br/>(Ch 5)"]
-        Clean --> Transform["Transform Data<br/>(Ch 6)"]
-        Transform --> Combine["Combine & Load<br/>(Ch 7)"]
+    subgraph PQ ["Part II — Done ✅"]
+        Profile["Profile<br/>Ch 4"] --> Clean["Clean<br/>Ch 5"]
+        Clean --> Transform["Transform<br/>Ch 6"]
+        Transform --> Combine["Combine<br/>Ch 7"]
     end
 
     Combine -- "Close & Apply" --> Model
 
-    subgraph "Part III: Main Window (You Are Here 📍)"
-        Model["Configure Tables<br/>& Properties"] --> Relate["Create<br/>Relationships"]
-        Relate --> Verify["Verify with<br/>Visual Test"]
+    subgraph MV ["Part III — You Are Here 📍"]
+        Model["Configure<br/>Tables"] --> Relate["Create<br/>Relationships"]
+        Relate --> Verify["Verify with<br/>Visual"]
     end
 
     style Profile fill:#D5F5E3,stroke:#27AE60,color:#000
@@ -394,18 +394,18 @@ The filter does NOT flow backward. Selecting a specific sale does not filter the
 Think of Miami's one-way streets downtown. They exist because two-way traffic on a narrow grid creates chaos. Single-direction cross-filtering works the same way — it keeps data flowing predictably through your model. You can change it to **Both** (bidirectional) for specific use cases in advanced scenarios, but the default of Single is correct for the Sabor Miami model and for most models you will build.
 
 ```mermaid
-graph LR
-    subgraph "Single Direction (Default — Recommended)"
-        T1["Trucks (1)"] -- "Filter flows →" --> S1["Sales (Many)"]
+graph TD
+    subgraph S1 ["Single Direction — Default"]
+        T1["Trucks (1)"] -- "Filter flows ↓" --> S1a["Sales (Many)"]
     end
-    subgraph "Both Directions (Use Rarely)"
-        T2["Trucks (1)"] <-- "Filters flow ↔" --> S2["Sales (Many)"]
+    subgraph S2 ["Both Directions — Use Rarely"]
+        T2["Trucks (1)"] <-- "Filters flow ↕" --> S2a["Sales (Many)"]
     end
 
     style T1 fill:#D6EAF8,stroke:#2E86C1,color:#000
-    style S1 fill:#D5F5E3,stroke:#27AE60,color:#000
+    style S1a fill:#D5F5E3,stroke:#27AE60,color:#000
     style T2 fill:#FEF9E7,stroke:#F1C40F,color:#000
-    style S2 fill:#FEF9E7,stroke:#F1C40F,color:#000
+    style S2a fill:#FEF9E7,stroke:#F1C40F,color:#000
 ```
 
 **Figure 8.6: Cross-Filter Direction** — Single direction (top) keeps filters flowing predictably from the lookup table to the transaction table. Both direction (bottom) allows filters to flow in either direction, which can cause unexpected results if not carefully managed.
