@@ -7,18 +7,7 @@
 
 ---
 
-<!-- CHAPTER OPENING IMAGE
-Nano Banana Pro Prompt:
-Subject: Abstract geometric shapes — cubes, cylinders, and pyramids — in three stages of connection across a horizontal composition
-Action: Left third shows shapes floating disconnected in mist; center shows glowing turquoise and coral filaments reaching between shapes pulling them into alignment; right third shows shapes locked into a luminous crystalline star formation with light pulsing through connections
-Environment: Dark cosmic void with subtle grid lines suggesting a digital workspace, no ground plane, shapes float in space
-Lighting: Left is dim and diffused; center has dynamic directional light beams from the connecting filaments; right glows with warm golden-turquoise radiance from the completed structure
-Style: Futuristic digital art with Miami neon palette — coral, turquoise, electric violet, warm gold against deep navy/black. Clean vector-inspired edges with soft volumetric glow effects. Abstract, no text, no UI elements.
-Constraints: No people. No Power BI interface. No brand logos. Horizontal composition reading left to right as a journey. Shapes should suggest data tables without being literal rectangles with rows/columns.
-Filename: images/ch08/fig-8-0-from-isolation-to-architecture.png
--->
-
-![Chapter 8 Opening Image: Abstract geometric shapes progressing from disconnected isolation on the left, through glowing connection filaments in the center, to a luminous crystalline star formation on the right — representing the journey from isolated tables to a connected data model.](images/ch08/fig-8-0-from-isolation-to-architecture.png)
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/d02a43ff-4bd2-424d-b17b-32ac8b493c79" />
 
 ---
 
