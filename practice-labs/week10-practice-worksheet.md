@@ -12,11 +12,11 @@
 |---|---|
 | **What you are building** | Six specific transformations applied to your cleaned Sabor Miami dataset |
 | **Tool** | Power BI Desktop → Power Query Editor |
-| **File to open** | Your cleaned .pbix file from Lab #1 (the one you submitted with clean names and no errors) |
+| **File to open** | A **practice copy** of your cleaned Lab #1 .pbix file (you will Save As before starting — see Step 0 below) |
 | **Time estimate** | 30–40 minutes |
 | **Number of tasks** | 6 tasks across 3 phases |
 | **What "done" looks like** | Employees table has split name columns and a Display Name column. Sales table has a Total With Tip column. Two new reference queries show grouped summaries. |
-| **Start here →** | Open your Lab #1 .pbix file and click **Transform Data** on the Home tab to enter the Power Query Editor |
+| **Start here →** | Open your Lab #1 .pbix file and immediately **Save As** a practice copy (Step 0 below) |
 
 ---
 
@@ -25,6 +25,32 @@
 ---
 
 > **Important:** This worksheet is **not graded**. It is practice. The six skills you practice here are the same skills you will need for Lab #2 next week. Treat this as rehearsal — try each task, check your work, and ask questions if something does not match.
+
+---
+
+## Step 0: Create Your Practice Copy
+
+Your cleaned Lab #1 file is the starting point for Lab #2 next week. You do **not** want to save today's practice work into that file. Instead, you will create a separate practice copy right now.
+
+<div style="background-color: #D5F5E3; border-left: 5px solid #27AE60; padding: 15px; margin: 15px 0; border-radius: 4px;">
+<strong style="color: #1E8449;">✅ DO THIS</strong><br>
+
+**Step 1:** Open your cleaned Lab #1 .pbix file in Power BI Desktop.
+
+**Step 2:** Immediately go to **File → Save As**.
+
+**Step 3:** Save it with a new name: `LastName_FirstName_Week10_Practice.pbix`
+
+**Step 4:** Make sure the title bar at the top of Power BI Desktop shows your new practice file name — not your Lab #1 file name.
+
+**Step 5:** Now click **Transform Data** on the Home tab to open the Power Query Editor.
+
+</div>
+
+<div style="background-color: #FEF9E7; border-left: 5px solid #F1C40F; padding: 15px; margin: 15px 0; border-radius: 4px;">
+<strong style="color: #7D6608;">⚠️ COMMON MISTAKE</strong><br>
+If you skip this step and work directly in your Lab #1 file, you will end up with extra columns and reference queries baked into the file you need for Lab #2. That creates a mess. Take 30 seconds to Save As now, and your Lab #1 file stays clean.
+</div>
 
 ---
 
@@ -289,6 +315,7 @@ Before you close, confirm:
 
 | ✓ | What to Check | Where to Look |
 |---|---|---|
+| ☐ | Title bar shows your **practice file name**, not your Lab #1 file name | Top of the Power BI Desktop window |
 | ☐ | Employees has **First Name**, **Last Name**, and **Display Name** columns | Click Employees query → scan column headers |
 | ☐ | Trucks has a **Truck Prefix** column (original Truck ID still intact) | Click Trucks query → scan column headers |
 | ☐ | Sales has a **Total With Tip** column with correct values | Click Sales query → scroll right → spot-check a few rows |
@@ -299,11 +326,11 @@ Before you close, confirm:
 
 ---
 
-## Do Not Close & Apply Yet
+## Save and Close Your Practice File
 
-You have two new reference queries (Sales By Truck and Sales By Payment Method) that were useful for practice but are **not part of your final data model**. In Chapter 7, you will learn how to configure which queries load into the model and which ones stay behind as staging queries. For now, **save your .pbix file** but do not click Close & Apply.
+This practice file has served its purpose. You do not need to submit it, and you do not need to keep it — the skills are what matter, not this file. Your original cleaned Lab #1 file is untouched and ready for Lab #2 next week.
 
-> **File → Save** (or Ctrl + S). That is it. You are done with this worksheet.
+> **File → Save** (or Ctrl + S) if you want to keep your practice work for reference. Otherwise, you can close without saving. Either way, your Lab #1 file is safe.
 
 ---
 
