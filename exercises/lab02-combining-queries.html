@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab #2: Combining Queries — CAP2791C</title>
+  <style>
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 48px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #34495e;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    .subtitle {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    strong { font-weight: 600; }
+
+    code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+      background: #f0f0f0;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 28px 0;
+    }
+
+    ol, ul { margin-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+
+    /* ===== STUDENT INFO HEADER ===== */
+    .student-info {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 20px 0 28px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .student-info label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #495057;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .student-info input {
+      width: 100%;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    /* ===== LAUNCH PAD ===== */
+    .launch-pad {
+      background: #f0f7ff;
+      border: 2px solid #2E86C1;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .launch-pad-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a5276;
+      margin-bottom: 12px;
+    }
+
+    .launch-pad table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .launch-pad td {
+      padding: 5px 8px;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    .launch-pad td:first-child {
+      font-weight: 600;
+      color: #1a5276;
+      white-space: nowrap;
+      width: 180px;
+    }
+
+    /* ===== UDN BOXES ===== */
+    .box {
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 5px;
+      border-left: 5px solid;
+    }
+
+    .box-title {
+      font-weight: 700;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* Green — DO THIS */
+    .box-do {
+      background-color: #D5F5E3;
+      border-left-color: #27AE60;
+    }
+    .box-do .box-title { color: #1E8449; }
+
+    /* Red — STOP AND CHECK */
+    .box-stop {
+      background-color: #FADBD8;
+      border-left-color: #E74C3C;
+    }
+    .box-stop .box-title { color: #922B21; }
+
+    /* Blue — WHY */
+    .box-why {
+      background-color: #D6EAF8;
+      border-left-color: #2E86C1;
+    }
+    .box-why .box-title { color: #1A5276; }
+
+    /* Yellow — COMMON MISTAKE */
+    .box-warn {
+      background-color: #FEF9E7;
+      border-left-color: #F1C40F;
+    }
+    .box-warn .box-title { color: #7D6608; }
+
+    /* Purple — TAKE A BREATH */
+    .box-breath {
+      background-color: #E8DAEF;
+      border-left-color: #8E44AD;
+    }
+    .box-breath .box-title { color: #6C3483; }
+
+    .box ol { margin-top: 6px; margin-left: 20px; }
+    .box li { margin-bottom: 3px; }
+
+    /* ===== TASK HEADER CHIPS ===== */
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: #eee;
+      color: #444;
+    }
+
+    .chip-key { background: #dbeafe; color: #1e40af; }
+    .chip-join { background: #d1fae5; color: #065f46; }
+    .chip-cols { background: #fef3c7; color: #92400e; }
+
+    /* ===== FILLABLE FIELDS ===== */
+    .fill-field {
+      display: inline-block;
+      min-width: 140px;
+      padding: 4px 10px;
+      font-size: 14px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      border: 1px dashed #999;
+      border-radius: 4px;
+      background: #fffde7;
+    }
+
+    .fill-area {
+      width: 100%;
+      min-height: 110px;
+      padding: 12px;
+      font-size: 14px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      background: #fffde7;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .fill-label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #495057;
+      display: block;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+
+    /* ===== PHASE PROGRESS BAR ===== */
+    .phase-bar {
+      display: flex;
+      gap: 4px;
+      margin: 24px 0 10px 0;
+    }
+
+    .phase-step {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 4px;
+      background: #e9ecef;
+      color: #6c757d;
+    }
+
+    .phase-step.active {
+      background: #2E86C1;
+      color: #fff;
+    }
+
+    .phase-step.done {
+      background: #27AE60;
+      color: #fff;
+    }
+
+    /* ===== CHECKLIST IN SUCCESS SECTION ===== */
+    .success-check {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .success-check li {
+      padding: 4px 0;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    .success-check li::before {
+      content: "✅";
+      position: absolute;
+      left: 0;
+    }
+
+    /* ===== RUBRIC TABLE ===== */
+    .rubric-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+
+    .rubric-table th {
+      background: #2c3e50;
+      color: #fff;
+      padding: 10px 8px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .rubric-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #dee2e6;
+      vertical-align: top;
+    }
+
+    .rubric-table tr:nth-child(even) { background: #f8f9fa; }
+
+    .tier-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+
+    .tier-table th {
+      background: #34495e;
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .tier-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    /* ===== TROUBLESHOOTING ===== */
+    .trouble-item {
+      margin-bottom: 16px;
+    }
+
+    .trouble-item strong {
+      display: block;
+      font-style: italic;
+      color: #922B21;
+      margin-bottom: 2px;
+    }
+
+    /* ===== COLLAPSIBLE RUBRIC ===== */
+    details {
+      margin-top: 20px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #2c3e50;
+      background: #f8f9fa;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::before {
+      content: "▸ ";
+      font-size: 14px;
+    }
+
+    details[open] summary::before {
+      content: "▾ ";
+    }
+
+    details .details-body {
+      padding: 20px;
+    }
+
+    /* ===== PRINT / PDF ===== */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+        font-size: 12px;
+      }
+
+      .container {
+        box-shadow: none;
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .box { break-inside: avoid; }
+
+      .fill-field, .student-info input {
+        border: 1px solid #999;
+        background: #fff;
+      }
+
+      .fill-area {
+        border: 1px solid #999;
+        background: #fff;
+        min-height: 80px;
+      }
+
+      details { open: true; }
+      details[open] { break-inside: avoid; }
+
+      .no-print { display: none; }
+
+      h2 { break-after: avoid; }
+      h3 { break-after: avoid; }
+
+      .phase-bar .phase-step {
+        border: 1px solid #999;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== HEADER ===== -->
+  <h1>Lab #2: Combining Queries</h1>
+  <p class="subtitle">CAP2791C — Power BI: Data Preparation and Modeling</p>
+  <p class="subtitle">Week 11 · Session 11B (Thursday) · 50 Points</p>
+
+  <!-- ===== STUDENT INFO ===== -->
+  <div class="student-info">
+    <div>
+      <label for="student-name">Student Name</label>
+      <input type="text" id="student-name" placeholder="Last Name, First Name">
+    </div>
+    <div>
+      <label for="student-date">Date</label>
+      <input type="text" id="student-date" placeholder="MM/DD/YYYY">
+    </div>
+  </div>
+
+  <!-- ===== LAUNCH PAD ===== -->
+  <div class="launch-pad">
+    <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+    <table>
+      <tr><td>What you are building</td><td>A fully merged Sabor Miami dataset where the Sales table contains information from all three dimension tables</td></tr>
+      <tr><td>Tool</td><td>Power BI Desktop → Power Query Editor</td></tr>
+      <tr><td>File to open</td><td><code>SaborMiami_Lab2_Starter.pbix</code> (provided — pre-cleaned dataset)</td></tr>
+      <tr><td>Time estimate</td><td>45–55 minutes</td></tr>
+      <tr><td>Tasks</td><td>6 tasks across 3 phases</td></tr>
+      <tr><td>What "done" looks like</td><td>Sales table has 5 new columns from 3 merges, staging query disabled, row count verified, all tables loaded</td></tr>
+      <tr><td>Start here →</td><td>Open <code>SaborMiami_Lab2_Starter.pbix</code> and click <strong>Transform Data</strong> to enter the Power Query Editor</td></tr>
+    </table>
+  </div>
+
+  <!-- ===== BEFORE YOU BEGIN ===== -->
+  <h2>Before You Begin</h2>
+
+  <p>This lab builds on the skills you learned in <strong>Chapter 7</strong> and practiced during <strong>Session 11A</strong> on Monday. You will perform the same type of work — merging tables using shared keys — but on your own.</p>
+
+  <p><strong>What is in the starter file:</strong> The starter file contains all 5 Sabor Miami tables, already cleaned (the work from Lab #1 is done for you). All tables are loaded in the Power Query Editor with no merges applied yet. You are starting fresh with clean data.</p>
+
+  <p><strong>How this lab is structured:</strong></p>
+  <ul>
+    <li><strong>Phase 1: Setup</strong> — Open the file and record your starting row count</li>
+    <li><strong>Phase 2: Build</strong> — Perform 3 merges, then configure loading</li>
+    <li><strong>Phase 3: Verify</strong> — Confirm everything looks right before submitting</li>
+  </ul>
+
+  <p><strong>Your instructor will check in at the 15-minute mark and the 35-minute mark.</strong> These are not deadlines — they are moments to ask questions if you are stuck.</p>
+
+  <!-- ============================================================ -->
+  <!-- PHASE 1                                                       -->
+  <!-- ============================================================ -->
+  <h2>Phase 1 of 3: Setup</h2>
+
+  <div class="phase-bar">
+    <div class="phase-step active">Phase 1: Setup</div>
+    <div class="phase-step">Phase 2: Build</div>
+    <div class="phase-step">Phase 3: Verify</div>
+  </div>
+
+  <h3>Step 1 — Open the Starter File and Enter Power Query</h3>
+
+  <p>Open <code>SaborMiami_Lab2_Starter.pbix</code> in Power BI Desktop. Then click <strong>Transform Data</strong> on the <strong>Home tab</strong> (in the main Power BI ribbon) to open the Power Query Editor.</p>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    You should be in the <strong>Power Query Editor</strong> — the separate window with the green ribbon. In the <strong>Queries pane</strong> (the narrow panel on the left), you should see 5 queries: <strong>Sales</strong>, <strong>MenuItems</strong>, <strong>Trucks</strong>, <strong>Employees</strong>, and <strong>Events</strong>.
+    <br><br>
+    If you see fewer than 5 queries, raise your hand before continuing.
+  </div>
+
+  <h3>Step 2 — Record Your Starting Row Count</h3>
+
+  <p>Click <strong>Sales</strong> in the Queries pane. Look at the <strong>bottom-left corner</strong> of the Power Query Editor window — it shows the row count (e.g., "XXX rows"). Write this number in the field below. You will need it in Phase 3 to verify that your merges did not add or remove rows.</p>
+
+  <label class="fill-label" for="row-count-start">📝 My starting Sales row count:</label>
+  <input type="text" id="row-count-start" class="fill-field" placeholder="e.g., 247">
+
+  <!-- ============================================================ -->
+  <!-- PHASE 2                                                       -->
+  <!-- ============================================================ -->
+  <h2>Phase 2 of 3: Build</h2>
+
+  <div class="phase-bar">
+    <div class="phase-step done">Phase 1: Setup ✓</div>
+    <div class="phase-step active">Phase 2: Build</div>
+    <div class="phase-step">Phase 3: Verify</div>
+  </div>
+
+  <p>You will perform <strong>3 merges</strong>, each one connecting the Sales table to a dimension table using a shared key column. All three merges use the same technique: <strong>Merge Queries with a Left Outer join</strong>, then <strong>expand specific columns</strong>.</p>
+
+  <p>Every merge follows this pattern:</p>
+  <ol>
+    <li>Select Sales in the Queries pane</li>
+    <li>Open the Merge Queries dialog</li>
+    <li>Pick the dimension table and match the key columns</li>
+    <li>Choose Left Outer join</li>
+    <li>Expand only the columns listed below</li>
+    <li>Uncheck "Use original column name as prefix"</li>
+  </ol>
+
+  <hr>
+
+  <!-- TASK 1 -->
+  <h3>Task 1 — Merge Sales with Menu Items (10 points)</h3>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: Menu_Item_ID</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: Item_Name, Category</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click <strong>Sales</strong> in the Queries pane (left panel).</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong> (click the top option, not "Merge Queries as New").</li>
+      <li>The Merge dialog opens. The top table should show <strong>Sales</strong>.</li>
+      <li>In the bottom dropdown, select <strong>MenuItems</strong>.</li>
+      <li>In the Sales preview (top), click the <strong>Menu_Item_ID</strong> column header — it highlights green.</li>
+      <li>In the MenuItems preview (bottom), click the <strong>Menu_Item_ID</strong> column header — it also highlights green.</li>
+      <li>Confirm the Join Kind says <strong>Left Outer (all from first, matching from second)</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>A new column called <strong>MenuItems</strong> appears at the far right of Sales. Each cell says "Table."</li>
+      <li>Click the <strong>expand button</strong> (the ↔ icon on the right side of the MenuItems column header).</li>
+      <li>In the dropdown, <strong>uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong> <code>Item_Name</code> and <code>Category</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Scroll to the far right of the Sales table. You should see two new columns: <strong>Item_Name</strong> and <strong>Category</strong>. You should see item names like "Cubano Sandwich" or "Empanadas de Carne" next to each transaction.
+    <br><br>
+    If your new columns are named <strong>MenuItems.Item_Name</strong> and <strong>MenuItems.Category</strong> (with the prefix), you forgot to uncheck the prefix box. Delete this Applied Step (click the X next to it in the Applied Steps pane on the right) and redo the expand.
+  </div>
+
+  <hr>
+
+  <!-- TASK 2 -->
+  <h3>Task 2 — Merge Sales with Trucks (10 points)</h3>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: Truck_ID</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: Truck_Name</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Make sure <strong>Sales</strong> is still selected in the Queries pane.</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong>.</li>
+      <li>In the bottom dropdown, select <strong>Trucks</strong>.</li>
+      <li>Click <strong>Truck_ID</strong> in the Sales preview (top) — it highlights green.</li>
+      <li>Click <strong>Truck_ID</strong> in the Trucks preview (bottom) — it highlights green.</li>
+      <li>Confirm the Join Kind is <strong>Left Outer</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>Click the <strong>expand button</strong> (↔) on the new <strong>Trucks</strong> column.</li>
+      <li><strong>Uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong> <code>Truck_Name</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Scroll right. You should now see a <strong>Truck_Name</strong> column in Sales. Most rows should have a truck name. However, <strong>you may notice 1–2 rows where Truck_Name shows null.</strong> This means those sales reference a Truck ID that does not exist in the Trucks table. This is a data quality issue — your Left Join preserved the sales rows and revealed the gap. Make a note of it — you will write about this in the written response.
+  </div>
+
+  <hr>
+
+  <!-- TAKE A BREATH -->
+  <div class="box box-breath">
+    <span class="box-title">💜 TAKE A BREATH</span>
+    You have completed two of your three merges. The pattern is the same every time — select Sales, open Merge Queries, pick the table, match the key, expand the columns. One more merge to go, then you configure loading.
+  </div>
+
+  <hr>
+
+  <!-- TASK 3 -->
+  <h3>Task 3 — Merge Sales with Employees (10 points)</h3>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: Employee_ID</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: First_Name, Last_Name</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Make sure <strong>Sales</strong> is still selected in the Queries pane.</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong>.</li>
+      <li>In the bottom dropdown, select <strong>Employees</strong>.</li>
+      <li>Click <strong>Employee_ID</strong> in the Sales preview (top) — it highlights green.</li>
+      <li>Click <strong>Employee_ID</strong> in the Employees preview (bottom) — it highlights green.</li>
+      <li>Confirm the Join Kind is <strong>Left Outer</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>Click the <strong>expand button</strong> (↔) on the new <strong>Employees</strong> column.</li>
+      <li><strong>Uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong> <code>First_Name</code> and <code>Last_Name</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — All 3 Merges Complete</span>
+    Scroll to the far right of the Sales table. You should now see <strong>5 new columns</strong> from your three merges:
+    <br><br>
+    ✅ <strong>Item_Name</strong> (from MenuItems)<br>
+    ✅ <strong>Category</strong> (from MenuItems)<br>
+    ✅ <strong>Truck_Name</strong> (from Trucks)<br>
+    ✅ <strong>First_Name</strong> (from Employees)<br>
+    ✅ <strong>Last_Name</strong> (from Employees)<br>
+    <br>
+    Each sales transaction now tells a more complete story: what was sold, which truck sold it, and who made the sale. If any of these columns are missing, check the Applied Steps pane on the right — you should see a "Merged Queries" step and an "Expanded" step for each merge (6 steps total for the 3 merges).
+  </div>
+
+  <hr>
+
+  <!-- TASK 4 -->
+  <h3>Task 4 — Configure Loading (8 points)</h3>
+
+  <p>Now you will control which queries load into the Power BI data model. The 5 original tables should all load. But first, you need to create a <strong>staging query</strong> and disable it — this demonstrates that you understand the difference between a loaded query and a staging query.</p>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS — Create a staging query</span>
+    <ol>
+      <li>Right-click <strong>Sales</strong> in the Queries pane.</li>
+      <li>Select <strong>Reference</strong>. A new query called <strong>Sales (2)</strong> appears.</li>
+      <li>Right-click <strong>Sales (2)</strong> and select <strong>Rename</strong>. Type <code>Sales_Summary_ByTruck</code> and press Enter.</li>
+      <li>With <strong>Sales_Summary_ByTruck</strong> selected, go to <strong>Transform tab → Table section → Group By</strong>.</li>
+      <li>In the Group By dialog:<br>
+        — Group by: <strong>Truck_ID</strong><br>
+        — New column name: <strong>Total Sales</strong><br>
+        — Operation: <strong>Sum</strong><br>
+        — Column: <strong>Amount</strong></li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS — Disable loading for the staging query</span>
+    <ol>
+      <li>Right-click <strong>Sales_Summary_ByTruck</strong> in the Queries pane.</li>
+      <li>Click <strong>Enable Load</strong> to uncheck it.</li>
+      <li>The query name should become <em>italicized</em> — this means it will NOT load into the data model.</li>
+    </ol>
+  </div>
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    In real projects, you often have helper queries that do intermediate work (summaries, filtered subsets, lookups) but should not clutter your data model. Disabling their load keeps the model clean — only the tables you actually need for reports and calculations appear in the Fields pane. The staging query still runs and can feed other queries, but it stays behind the scenes.
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Loading Configuration</span>
+    Look at the Queries pane on the left. You should see:
+    <br><br>
+    ✅ <strong>Sales</strong> — normal text (will load)<br>
+    ✅ <strong>MenuItems</strong> — normal text (will load)<br>
+    ✅ <strong>Trucks</strong> — normal text (will load)<br>
+    ✅ <strong>Employees</strong> — normal text (will load)<br>
+    ✅ <strong>Events</strong> — normal text (will load)<br>
+    ✅ <em>Sales_Summary_ByTruck</em> — <em>italicized text</em> (will NOT load)
+    <br><br>
+    If Sales_Summary_ByTruck is NOT italicized, right-click it and toggle Enable Load again.
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PHASE 3                                                       -->
+  <!-- ============================================================ -->
+  <h2>Phase 3 of 3: Verify</h2>
+
+  <div class="phase-bar">
+    <div class="phase-step done">Phase 1: Setup ✓</div>
+    <div class="phase-step done">Phase 2: Build ✓</div>
+    <div class="phase-step active">Phase 3: Verify</div>
+  </div>
+
+  <h3>Task 5 — Verify Row Counts (5 points)</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click <strong>Sales</strong> in the Queries pane.</li>
+      <li>Look at the row count in the <strong>bottom-left corner</strong> of the Power Query Editor window.</li>
+      <li>Compare this number to the row count you recorded in Phase 1, Step 2.</li>
+    </ol>
+  </div>
+
+  <label class="fill-label" for="row-count-end">📝 My Sales row count after merges:</label>
+  <input type="text" id="row-count-end" class="fill-field" placeholder="e.g., 247">
+
+  <label class="fill-label" for="row-match">📝 Does it match my starting count?</label>
+  <input type="text" id="row-match" class="fill-field" placeholder="Yes / No">
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Row Count Verification</span>
+    <strong>Your Sales row count should be exactly the same as your starting row count.</strong>
+    <br><br>
+    A Left Outer join keeps ALL rows from the first table (Sales). It adds columns — it does not add or remove rows. If your row count changed, something went wrong with one of the merges. The most common cause: you accidentally used <strong>Merge Queries as New</strong> instead of <strong>Merge Queries</strong>, or you selected <strong>Inner</strong> join instead of <strong>Left Outer</strong>.
+    <br><br>
+    If the count does not match, check the Applied Steps pane for your merge steps and verify the join type on each one.
+  </div>
+
+  <hr>
+
+  <!-- CLOSE & APPLY -->
+  <h3>Close, Apply, and Save</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click <strong>Close & Apply</strong> on the <strong>Home tab</strong> of the Power Query Editor (far left of the ribbon — click the top half of the button, not the dropdown arrow).</li>
+      <li>Wait for the loading dialog to complete. You are now back in the main Power BI Desktop window.</li>
+      <li>Check the <strong>Fields pane</strong> (right side). You should see: Sales, MenuItems, Trucks, Employees, Events. You should NOT see Sales_Summary_ByTruck.</li>
+      <li>Expand the <strong>Sales</strong> table in the Fields pane. Confirm the 5 merged columns appear: Item_Name, Category, Truck_Name, First_Name, Last_Name.</li>
+      <li>Save your file: <strong>File → Save As</strong> → name it <code>Lab2_YourLastName.pbix</code>.</li>
+    </ol>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TASK 6 — WRITTEN RESPONSE                                    -->
+  <!-- ============================================================ -->
+  <h2>Task 6 — Written Response (7 points)</h2>
+
+  <p>Answer both questions below. Write 2–4 sentences per question.</p>
+
+  <label class="fill-label" for="q1">Question 1 (4 points): In this lab, every merge used a Left Outer join. Explain in your own words why Left Outer was the right choice for merging Sales with the dimension tables. What would have happened to your Sales data if you had used an Inner join instead?</label>
+  <textarea id="q1" class="fill-area" placeholder="Type your answer here..."></textarea>
+
+  <label class="fill-label" for="q2">Question 2 (3 points): You created a Reference query (Sales_Summary_ByTruck) and then disabled its loading. Explain the difference between a Reference and a Duplicate. Why did you use a Reference instead of a Duplicate for this task?</label>
+  <textarea id="q2" class="fill-area" placeholder="Type your answer here..."></textarea>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- WHAT SUCCESS LOOKS LIKE                                      -->
+  <!-- ============================================================ -->
+  <h2>What Success Looks Like</h2>
+
+  <p>Your completed .pbix file should have:</p>
+  <ul class="success-check">
+    <li><strong>5 loaded tables</strong> visible in the Fields pane (Sales, MenuItems, Trucks, Employees, Events)</li>
+    <li><strong>Sales table includes 5 merged columns:</strong> Item_Name, Category, Truck_Name, First_Name, Last_Name</li>
+    <li><strong>Sales row count matches</strong> the original row count (no rows gained or lost)</li>
+    <li><strong>1 staging query</strong> (Sales_Summary_ByTruck) that does NOT appear in the Fields pane</li>
+    <li><strong>File saved</strong> as <code>Lab2_YourLastName.pbix</code></li>
+  </ul>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- SUBMISSION                                                   -->
+  <!-- ============================================================ -->
+  <h2>Submission</h2>
+
+  <p>Submit <strong>both</strong> of the following to the Canvas assignment:</p>
+  <ol>
+    <li>Your completed <code>.pbix</code> file (<code>Lab2_YourLastName.pbix</code>)</li>
+    <li>This lab document saved as a PDF (File → Print → Save as PDF) with your filled-in answers</li>
+  </ol>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TROUBLESHOOTING                                              -->
+  <!-- ============================================================ -->
+  <h2>Troubleshooting</h2>
+
+  <div class="trouble-item">
+    <strong>"I do not see the Merge Queries button."</strong>
+    Make sure you are in the <strong>Power Query Editor</strong> (separate window with the green ribbon), not the main Power BI Desktop window. The Merge Queries button is on the <strong>Home tab</strong> of the Power Query Editor, in the <strong>Combine</strong> section.
+  </div>
+
+  <div class="trouble-item">
+    <strong>"My columns say MenuItems.Item_Name instead of Item_Name."</strong>
+    You left "Use original column name as prefix" checked during the expand step. You can fix this two ways: (1) double-click the column header and retype the shorter name, or (2) delete the "Expanded" Applied Step (click the X next to it) and redo the expand with the prefix unchecked.
+  </div>
+
+  <div class="trouble-item">
+    <strong>"I see 'Error' in some cells after merging."</strong>
+    This is different from seeing "null." Errors usually mean a data type mismatch between the key columns. Check that the key column in both tables has the same data type (both Text, or both Whole Number). You can check by clicking the icon next to the column header — it shows the data type.
+  </div>
+
+  <div class="trouble-item">
+    <strong>"My row count is different after the merges."</strong>
+    A Left Outer join should never change the row count of the first table. Check each merge step in the Applied Steps pane: click on the "Merged Queries" step and look at the bottom of the Merge dialog to see the join type. If any merge used Inner instead of Left Outer, delete that step and redo it.
+  </div>
+
+  <div class="trouble-item">
+    <strong>"I clicked Merge Queries as New by accident."</strong>
+    This creates a new separate query instead of adding the merge to Sales. Delete the new query (right-click → Delete), go back to Sales, and use <strong>Merge Queries</strong> (the top option, not "as New").
+  </div>
+
+  <div class="trouble-item">
+    <strong>"Close & Apply is taking a very long time."</strong>
+    This is normal if your dataset is large or your computer is processing many steps. Wait for the loading bar to finish. Do not click anything else while it loads.
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- RUBRIC (collapsible)                                         -->
+  <!-- ============================================================ -->
+  <details>
+    <summary>📋 Grading Rubric (50 points) — Click to expand</summary>
+    <div class="details-body">
+
+      <table class="rubric-table">
+        <thead>
+          <tr>
+            <th style="width:22%">Task</th>
+            <th style="width:32%">Excellent (Full Points)</th>
+            <th style="width:24%">Good (Half Points)</th>
+            <th style="width:22%">Needs Work (0)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Task 1:</strong> Merge Sales ↔ Menu Items (10 pts)</td>
+            <td>Left Outer join on Menu_Item_ID. Item_Name and Category expanded. No prefix. Merge step visible in Applied Steps.</td>
+            <td>Merge completed but wrong columns expanded, or prefix left on column names.</td>
+            <td>No merge attempted, wrong join type, or wrong key column.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 2:</strong> Merge Sales ↔ Trucks (10 pts)</td>
+            <td>Left Outer join on Truck_ID. Truck_Name expanded. No prefix.</td>
+            <td>Merge completed but prefix left on, or extra unnecessary columns expanded.</td>
+            <td>No merge attempted, wrong join type, or wrong key column.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 3:</strong> Merge Sales ↔ Employees (10 pts)</td>
+            <td>Left Outer join on Employee_ID. First_Name and Last_Name expanded. No prefix.</td>
+            <td>Merge completed but prefix left on, or only one name column expanded.</td>
+            <td>No merge attempted, wrong join type, or wrong key column.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 4:</strong> Configure Loading (8 pts)</td>
+            <td>Reference query created from Sales. Renamed to Sales_Summary_ByTruck. Group By applied correctly. Enable Load unchecked (italicized).</td>
+            <td>Reference created but Enable Load not disabled, or Group By missing.</td>
+            <td>No staging query created.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 5:</strong> Verify Row Counts (5 pts)</td>
+            <td>Sales row count matches original — no rows gained or lost.</td>
+            <td>Row count is close but slightly off (minor merge issue).</td>
+            <td>Row count is significantly different, or verification not performed.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 6:</strong> Written Response (7 pts)</td>
+            <td>Both questions answered clearly (2–4 sentences each). Demonstrates understanding of Left Join behavior and Reference vs. Duplicate.</td>
+            <td>One question answered well, or both answered with incomplete reasoning.</td>
+            <td>Questions not answered, or answers show fundamental misunderstanding.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Grading Tiers</h3>
+      <table class="tier-table">
+        <thead>
+          <tr><th>Tier</th><th>Score</th><th>What It Means</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Excellent</strong></td><td>45–50 pts</td><td>All merges correct, loading configured, written responses show understanding</td></tr>
+          <tr><td><strong>Good</strong></td><td>30–44 pts</td><td>Most merges correct, minor issues with configuration or responses</td></tr>
+          <tr><td><strong>Needs Work</strong></td><td>0–29 pts</td><td>Significant merges missing or incorrect, fundamental misunderstandings</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Redo Policy:</strong> If you score below "Good" (below 30 points), you may revise and resubmit once for up to the Good tier score (30 points). See the course policies for details.</p>
+      <p><strong>Late Policy:</strong> 48-hour grace period (no penalty). After 48 hours: 10% per day, capped at 30% maximum reduction.</p>
+
+    </div>
+  </details>
+
+  <br>
+
+  <p style="text-align: center; font-size: 12px; color: #888; margin-top: 20px;">
+    CAP2791C — Power BI: Data Preparation and Modeling · Miami Dade College · Lab #2 v1.0
+  </p>
+
+</div><!-- /container -->
+
+</body>
+</html>
