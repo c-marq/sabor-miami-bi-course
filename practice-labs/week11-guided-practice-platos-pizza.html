@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 11 Guided Practice: Combining Queries — Plato's Pizza</title>
+  <style>
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 48px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; color: #2c3e50; margin-top: 36px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
+    h3 { font-size: 17px; font-weight: 700; color: #34495e; margin-top: 28px; margin-bottom: 10px; }
+    p { margin-bottom: 12px; }
+    .subtitle { font-size: 13px; color: #555; margin-bottom: 2px; }
+    strong { font-weight: 600; }
+    code { font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 28px 0; }
+    ol, ul { margin-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+
+    /* ===== PART DIVIDER ===== */
+    .part-divider {
+      background: linear-gradient(135deg, #1a5276, #2E86C1);
+      color: #fff;
+      padding: 20px 24px;
+      border-radius: 8px;
+      margin: 32px 0 20px 0;
+    }
+    .part-divider h2 {
+      color: #fff;
+      border-bottom: none;
+      margin: 0 0 4px 0;
+      padding: 0;
+      font-size: 22px;
+    }
+    .part-divider p {
+      color: #d6eaf8;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* ===== STUDENT INFO ===== */
+    .student-info {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 20px 0 28px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .student-info label { font-size: 13px; font-weight: 600; color: #495057; display: block; margin-bottom: 3px; }
+    .student-info input { width: 100%; padding: 6px 10px; font-size: 14px; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #ced4da; border-radius: 4px; background: #fff; }
+
+    /* ===== LAUNCH PAD ===== */
+    .launch-pad {
+      background: #f0f7ff;
+      border: 2px solid #2E86C1;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .launch-pad-title { font-size: 18px; font-weight: 700; color: #1a5276; margin-bottom: 12px; }
+    .launch-pad table { width: 100%; border-collapse: collapse; }
+    .launch-pad td { padding: 5px 8px; vertical-align: top; font-size: 14px; }
+    .launch-pad td:first-child { font-weight: 600; color: #1a5276; white-space: nowrap; width: 180px; }
+
+    /* ===== UDN BOXES ===== */
+    .box { padding: 16px 20px; margin: 16px 0; border-radius: 5px; border-left: 5px solid; }
+    .box-title { font-weight: 700; font-size: 14px; display: block; margin-bottom: 6px; }
+    .box-do { background-color: #D5F5E3; border-left-color: #27AE60; }
+    .box-do .box-title { color: #1E8449; }
+    .box-stop { background-color: #FADBD8; border-left-color: #E74C3C; }
+    .box-stop .box-title { color: #922B21; }
+    .box-why { background-color: #D6EAF8; border-left-color: #2E86C1; }
+    .box-why .box-title { color: #1A5276; }
+    .box-warn { background-color: #FEF9E7; border-left-color: #F1C40F; }
+    .box-warn .box-title { color: #7D6608; }
+    .box-breath { background-color: #E8DAEF; border-left-color: #8E44AD; }
+    .box-breath .box-title { color: #6C3483; }
+    .box ol { margin-top: 6px; margin-left: 20px; }
+    .box li { margin-bottom: 3px; }
+
+    /* ===== TASK CHIPS ===== */
+    .task-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+    .chip-key { background: #dbeafe; color: #1e40af; }
+    .chip-join { background: #d1fae5; color: #065f46; }
+    .chip-cols { background: #fef3c7; color: #92400e; }
+
+    /* ===== FILLABLE FIELDS ===== */
+    .fill-field { display: inline-block; min-width: 140px; padding: 4px 10px; font-size: 14px; font-family: 'Segoe UI', Arial, sans-serif; border: 1px dashed #999; border-radius: 4px; background: #fffde7; }
+    .fill-area { width: 100%; min-height: 100px; padding: 12px; font-size: 14px; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #ced4da; border-radius: 5px; background: #fffde7; resize: vertical; line-height: 1.5; }
+    .fill-label { font-weight: 600; font-size: 13px; color: #495057; display: block; margin-bottom: 4px; margin-top: 12px; }
+
+    /* ===== DATASET CARD ===== */
+    .dataset-card {
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .dataset-card table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .dataset-card th { background: #34495e; color: #fff; padding: 8px 12px; text-align: left; font-weight: 600; }
+    .dataset-card td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+    .dataset-card tr:nth-child(even) { background: #f8f9fa; }
+
+    /* ===== KEY CHAIN DIAGRAM ===== */
+    .key-chain {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 2.2;
+    }
+    .key-chain .arrow { color: #2E86C1; font-weight: 700; }
+    .key-chain .table-name { font-weight: 700; color: #1a5276; }
+    .key-chain .key-name { color: #922B21; }
+
+    /* ===== SUCCESS CHECKLIST ===== */
+    .success-check { list-style: none; margin-left: 0; padding-left: 0; }
+    .success-check li { padding: 4px 0 4px 28px; position: relative; }
+    .success-check li::before { content: "✅"; position: absolute; left: 0; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: #fff; padding: 0; font-size: 12px; }
+      .container { box-shadow: none; padding: 20px; max-width: 100%; }
+      .box { break-inside: avoid; }
+      .fill-field, .student-info input { border: 1px solid #999; background: #fff; }
+      .fill-area { border: 1px solid #999; background: #fff; min-height: 70px; }
+      .part-divider { break-before: page; }
+      h2 { break-after: avoid; }
+      h3 { break-after: avoid; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== HEADER ===== -->
+  <h1>Guided Practice: Combining Queries</h1>
+  <p class="subtitle">CAP2791C — Power BI: Data Preparation and Modeling</p>
+  <p class="subtitle">Week 11 · Plato's Pizza Dataset · Ungraded Practice</p>
+
+  <!-- ===== STUDENT INFO ===== -->
+  <div class="student-info">
+    <div>
+      <label for="student-name">Student Name</label>
+      <input type="text" id="student-name" placeholder="Last Name, First Name">
+    </div>
+    <div>
+      <label for="student-date">Date</label>
+      <input type="text" id="student-date" placeholder="MM/DD/YYYY">
+    </div>
+  </div>
+
+  <!-- ===== INTRODUCTION ===== -->
+  <h2>About This Practice</h2>
+
+  <p>This practice uses a <strong>different dataset</strong> than Sabor Miami. You are working with data from <strong>Plato's Pizza</strong> — a fictional Greek-inspired pizza restaurant in New Jersey. The skills are the same ones you will use in Lab #2 on Thursday, but on new data. If you can merge tables in both Plato's Pizza AND Sabor Miami, you know the skill — not just the steps.</p>
+
+  <p>This document has <strong>two parts</strong>:</p>
+  <ul>
+    <li><strong>Part 1: Instructor-Led</strong> — Your instructor walks you through 2 merges step by step (Monday, Session 11A)</li>
+    <li><strong>Part 2: Independent Practice</strong> — You complete 4 tasks on your own (Tutoring session)</li>
+  </ul>
+
+  <p><strong>This practice is ungraded.</strong> It exists to give you hands-on reps before Thursday's graded lab.</p>
+
+  <hr>
+
+  <!-- ===== MEET THE DATA ===== -->
+  <h2>Meet the Data: Plato's Pizza</h2>
+
+  <p>Plato's Pizza has been collecting sales data for a full year (2015). The data is split across <strong>4 tables</strong>. Each table holds a piece of the story — and right now, no single table can answer a real business question on its own.</p>
+
+  <div class="dataset-card">
+    <table>
+      <thead>
+        <tr><th>Table</th><th>Rows</th><th>Columns</th><th>What It Contains</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>order_details</strong></td><td>48,620</td><td>order_details_id, order_id, pizza_id, quantity</td><td>Every pizza sold — the fact table (like Sales in Sabor Miami)</td></tr>
+        <tr><td><strong>orders</strong></td><td>21,350</td><td>order_id, date, time</td><td>When each order was placed</td></tr>
+        <tr><td><strong>pizzas</strong></td><td>96</td><td>pizza_id, pizza_type_id, size, price</td><td>Size and price for each pizza variant</td></tr>
+        <tr><td><strong>pizza_types</strong></td><td>32</td><td>pizza_type_id, name, category, ingredients</td><td>Menu name, category, and ingredients</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The tables connect through <strong>shared key columns</strong>:</p>
+
+  <div class="key-chain">
+    <span class="table-name">order_details</span>.<span class="key-name">pizza_id</span>
+    <span class="arrow"> → </span>
+    <span class="table-name">pizzas</span>.<span class="key-name">pizza_id</span>
+    <br>
+    <span class="table-name">order_details</span>.<span class="key-name">order_id</span>
+    <span class="arrow"> → </span>
+    <span class="table-name">orders</span>.<span class="key-name">order_id</span>
+    <br>
+    <span class="table-name">pizzas</span>.<span class="key-name">pizza_type_id</span>
+    <span class="arrow"> → </span>
+    <span class="table-name">pizza_types</span>.<span class="key-name">pizza_type_id</span>
+  </div>
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    Notice the pattern — it is the same structure as Sabor Miami. A fact table (<strong>order_details</strong>) has foreign key columns that point to dimension tables (<strong>pizzas</strong>, <strong>orders</strong>). And one dimension table (<strong>pizzas</strong>) has its own foreign key pointing to another dimension (<strong>pizza_types</strong>). Merging connects the pieces so you can answer questions like: "What was the most popular pizza category on Fridays?"
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- PART 1                                                            -->
+  <!-- ================================================================ -->
+  <div class="part-divider">
+    <h2>Part 1: Instructor-Led Practice</h2>
+    <p>Monday Session 11A · ~25 minutes · Follow along with your instructor</p>
+  </div>
+
+  <div class="launch-pad">
+    <div class="launch-pad-title">🚀 LAUNCH PAD — Part 1</div>
+    <table>
+      <tr><td>What you are building</td><td>An enriched order_details table with pizza size, price, and order date/time</td></tr>
+      <tr><td>Tool</td><td>Power BI Desktop → Power Query Editor</td></tr>
+      <tr><td>File to open</td><td><code>PlatosPizza_Starter.pbix</code> (provided)</td></tr>
+      <tr><td>Time estimate</td><td>20–25 minutes</td></tr>
+      <tr><td>Merges in Part 1</td><td>2</td></tr>
+      <tr><td>What "done" looks like</td><td>order_details has 5 new columns from 2 merges, row count unchanged at 48,620</td></tr>
+      <tr><td>Start here →</td><td>Open <code>PlatosPizza_Starter.pbix</code> and click <strong>Transform Data</strong></td></tr>
+    </table>
+  </div>
+
+  <h3>Step 1 — Open the File and Confirm Your Tables</h3>
+
+  <p>Open <code>PlatosPizza_Starter.pbix</code> and click <strong>Transform Data</strong> on the <strong>Home tab</strong> to enter the Power Query Editor.</p>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    You should see <strong>4 queries</strong> in the Queries pane (left panel): <strong>order_details</strong>, <strong>orders</strong>, <strong>pizzas</strong>, and <strong>pizza_types</strong>. If any are missing, raise your hand.
+  </div>
+
+  <h3>Step 2 — Record Your Starting Row Count</h3>
+
+  <p>Click <strong>order_details</strong> in the Queries pane. Check the row count in the <strong>bottom-left corner</strong> of the Power Query Editor window.</p>
+
+  <label class="fill-label" for="p1-row-start">📝 My starting order_details row count:</label>
+  <input type="text" id="p1-row-start" class="fill-field" placeholder="should be 48,620">
+
+  <hr>
+
+  <!-- MERGE 1 -->
+  <h3>Merge 1 — order_details with pizzas</h3>
+
+  <p>This merge adds <strong>pizza size and price</strong> to every order line. It also brings in the <code>pizza_type_id</code> column, which you will use in Part 2 to connect to the pizza menu names.</p>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: pizza_id</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: pizza_type_id, size, price</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS — Follow along with your instructor</span>
+    <ol>
+      <li>Click <strong>order_details</strong> in the Queries pane.</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong> (the top option, not "as New").</li>
+      <li>The top table should show <strong>order_details</strong>.</li>
+      <li>In the bottom dropdown, select <strong>pizzas</strong>.</li>
+      <li>In the order_details preview (top), click <strong>pizza_id</strong> — it highlights green.</li>
+      <li>In the pizzas preview (bottom), click <strong>pizza_id</strong> — it highlights green.</li>
+      <li>Confirm the Join Kind is <strong>Left Outer (all from first, matching from second)</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>A new column called <strong>pizzas</strong> appears at the far right. Each cell says "Table."</li>
+      <li>Click the <strong>expand button</strong> (↔ icon) on the <strong>pizzas</strong> column header.</li>
+      <li><strong>Uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong>: <code>pizza_type_id</code>, <code>size</code>, and <code>price</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Scroll to the far right of order_details. You should see <strong>3 new columns</strong>: <strong>pizza_type_id</strong>, <strong>size</strong>, and <strong>price</strong>. The size column should show values like S, M, L, XL. The price column should show dollar amounts like 12.75 or 20.75.
+    <br><br>
+    <strong>Why did we expand pizza_type_id?</strong> Right now it is just a code like "bbq_ckn." In Part 2, you will use this column to merge with the pizza_types table to get the actual menu name ("The Barbecue Chicken Pizza"). We brought the key across now so you can use it later.
+  </div>
+
+  <hr>
+
+  <!-- MERGE 2 -->
+  <h3>Merge 2 — order_details with orders</h3>
+
+  <p>This merge adds <strong>when each order was placed</strong> — the date and time.</p>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: order_id</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: date, time</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS — Follow along with your instructor</span>
+    <ol>
+      <li>Make sure <strong>order_details</strong> is still selected in the Queries pane.</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong>.</li>
+      <li>In the bottom dropdown, select <strong>orders</strong>.</li>
+      <li>Click <strong>order_id</strong> in the order_details preview (top) — green.</li>
+      <li>Click <strong>order_id</strong> in the orders preview (bottom) — green.</li>
+      <li>Confirm the Join Kind is <strong>Left Outer</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>Click the <strong>expand button</strong> (↔) on the new <strong>orders</strong> column.</li>
+      <li><strong>Uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong>: <code>date</code> and <code>time</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Both Merges Complete</span>
+    Your order_details table should now have <strong>5 new columns</strong>:
+    <br><br>
+    ✅ <strong>pizza_type_id</strong> (from pizzas)<br>
+    ✅ <strong>size</strong> (from pizzas)<br>
+    ✅ <strong>price</strong> (from pizzas)<br>
+    ✅ <strong>date</strong> (from orders)<br>
+    ✅ <strong>time</strong> (from orders)<br>
+    <br>
+    Check the row count in the bottom-left corner — it should still be <strong>48,620</strong>. The Left Outer joins added columns, not rows.
+  </div>
+
+  <label class="fill-label" for="p1-row-after">📝 My order_details row count after 2 merges:</label>
+  <input type="text" id="p1-row-after" class="fill-field" placeholder="should still be 48,620">
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    Before these merges, the order_details table only told you "order #2 included pizza bbq_ckn_m, quantity 1." Now it tells you "order #2 included a <strong>Medium Barbecue Chicken pizza</strong> at <strong>$16.75</strong>, placed on <strong>01/01/2015</strong> at <strong>11:57 AM</strong>." That is the power of merging — turning codes into stories.
+  </div>
+
+  <h3>Save Your Work</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <strong>Do NOT click Close & Apply yet.</strong> You will continue this file in Part 2.
+    <ol>
+      <li>In the Power Query Editor, go to <strong>File → Save</strong> (or press Ctrl+S).</li>
+      <li>Save as <code>PlatosPizza_YourLastName.pbix</code>.</li>
+    </ol>
+  </div>
+
+  <p><strong>You will pick this file up again during your tutoring session for Part 2.</strong></p>
+
+  <!-- ================================================================ -->
+  <!-- PART 2                                                            -->
+  <!-- ================================================================ -->
+  <div class="part-divider">
+    <h2>Part 2: Independent Practice</h2>
+    <p>Tutoring Session · ~60 minutes · Work at your own pace</p>
+  </div>
+
+  <div class="launch-pad">
+    <div class="launch-pad-title">🚀 LAUNCH PAD — Part 2</div>
+    <table>
+      <tr><td>What you are building</td><td>A fully merged dataset with all 4 tables connected, a staging query configured, and everything loaded into the model</td></tr>
+      <tr><td>Tool</td><td>Power BI Desktop → Power Query Editor</td></tr>
+      <tr><td>File to open</td><td><code>PlatosPizza_YourLastName.pbix</code> (your file from Part 1)</td></tr>
+      <tr><td>Time estimate</td><td>45–60 minutes</td></tr>
+      <tr><td>Tasks</td><td>4 tasks + 2 reflection questions</td></tr>
+      <tr><td>What "done" looks like</td><td>order_details has 7 total new columns, staging query disabled, data loaded into the model</td></tr>
+      <tr><td>Start here →</td><td>Open your saved file and click <strong>Transform Data</strong> if not already in the Power Query Editor</td></tr>
+    </table>
+  </div>
+
+  <h3>Where You Left Off</h3>
+
+  <p>In Part 1, you merged order_details with <strong>pizzas</strong> (getting pizza_type_id, size, and price) and with <strong>orders</strong> (getting date and time). Your order_details table now has 5 new columns and the row count should still be 48,620.</p>
+
+  <p>In Part 2, you will:</p>
+  <ol>
+    <li>Do a <strong>chain merge</strong> — use the pizza_type_id column (from Merge 1) to connect to the pizza_types table</li>
+    <li>Create a <strong>Reference query</strong> with a Group By summary</li>
+    <li>Configure <strong>loading</strong> — disable the Reference as a staging query</li>
+    <li><strong>Close & Apply</strong> and verify everything loaded correctly</li>
+  </ol>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Before You Start</span>
+    Open your file and enter the Power Query Editor. Click <strong>order_details</strong> in the Queries pane. Scroll right and confirm you see the 5 columns from Part 1: <strong>pizza_type_id</strong>, <strong>size</strong>, <strong>price</strong>, <strong>date</strong>, <strong>time</strong>.
+    <br><br>
+    If these columns are missing, you may need to redo Part 1 or open the <code>PlatosPizza_Part2_Starter.pbix</code> backup file (ask your tutor).
+  </div>
+
+  <hr>
+
+  <!-- TASK 1 -->
+  <h3>Task 1 — Chain Merge: order_details with pizza_types</h3>
+
+  <p>Here is something new: the <code>pizza_type_id</code> column did not exist in order_details originally. It came from the <strong>pizzas</strong> table during Merge 1. Now you can use it as a key to merge with a <em>third</em> table — <strong>pizza_types</strong> — to get the actual menu names and categories. This is called a <strong>chain merge</strong>: one merge creates the key that enables the next merge.</p>
+
+  <div class="task-meta">
+    <span class="chip chip-key">Key: pizza_type_id</span>
+    <span class="chip chip-join">Join: Left Outer</span>
+    <span class="chip chip-cols">Expand: name, category</span>
+  </div>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click <strong>order_details</strong> in the Queries pane.</li>
+      <li>Go to <strong>Home tab → Combine section → Merge Queries</strong>.</li>
+      <li>In the bottom dropdown, select <strong>pizza_types</strong>.</li>
+      <li>In the order_details preview (top), click <strong>pizza_type_id</strong> — green.</li>
+      <li>In the pizza_types preview (bottom), click <strong>pizza_type_id</strong> — green.</li>
+      <li>Confirm the Join Kind is <strong>Left Outer</strong>.</li>
+      <li>Click <strong>OK</strong>.</li>
+      <li>Click the <strong>expand button</strong> (↔) on the new <strong>pizza_types</strong> column.</li>
+      <li><strong>Uncheck</strong> "Use original column name as prefix."</li>
+      <li>Check <strong>only</strong>: <code>name</code> and <code>category</code>.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Scroll to the far right. You should now see <strong>2 more new columns</strong>: <strong>name</strong> (the full pizza name like "The Barbecue Chicken Pizza") and <strong>category</strong> (like "Chicken," "Classic," "Supreme," or "Veggie").
+    <br><br>
+    Your order_details table now has <strong>7 new columns total</strong> from 3 merges. Check the row count — still 48,620.
+  </div>
+
+  <label class="fill-label" for="p2-row-after-merge">📝 My order_details row count after 3 merges:</label>
+  <input type="text" id="p2-row-after-merge" class="fill-field" placeholder="should still be 48,620">
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    The chain merge pattern shows up all the time in real data. An e-commerce company might have Orders → Products → Product Categories. A hospital might have Visits → Doctors → Departments. The key from one merge unlocks the next. On Thursday's Lab #2, you will not encounter a chain merge — all three Sabor Miami merges use keys that already exist in the Sales table. But knowing this pattern exists makes you a stronger analyst.
+  </div>
+
+  <hr>
+
+  <div class="box box-breath">
+    <span class="box-title">💜 TAKE A BREATH</span>
+    You just completed 3 merges on a dataset you had never seen before today. That means the merge skill is transferring — you are not memorizing steps for one dataset, you are learning a technique that works on any data. Take a moment to stretch before the next task.
+  </div>
+
+  <hr>
+
+  <!-- TASK 2 -->
+  <h3>Task 2 — Create a Reference Query with Group By</h3>
+
+  <p>Now you will create a <strong>summary table</strong> that shows how many pizzas were sold in each category — using a Reference query and Group By, the same technique you will use in Lab #2 Task 4.</p>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Right-click <strong>order_details</strong> in the Queries pane.</li>
+      <li>Select <strong>Reference</strong>. A new query called <strong>order_details (2)</strong> appears.</li>
+      <li>Right-click <strong>order_details (2)</strong> → <strong>Rename</strong>. Type <code>Sales_ByCategory</code> and press Enter.</li>
+      <li>With <strong>Sales_ByCategory</strong> selected, go to <strong>Transform tab → Table section → Group By</strong>.</li>
+      <li>In the Group By dialog:<br>
+        — Group by: <strong>category</strong><br>
+        — New column name: <strong>Total Quantity</strong><br>
+        — Operation: <strong>Sum</strong><br>
+        — Column: <strong>quantity</strong></li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Your <strong>Sales_ByCategory</strong> query should show a small table with <strong>4 rows</strong> — one for each pizza category (Chicken, Classic, Supreme, Veggie) — and a Total Quantity column showing how many pizzas of each type were sold across the whole year.
+  </div>
+
+  <label class="fill-label" for="p2-categories">📝 Write the 4 categories and their total quantities:</label>
+  <textarea id="p2-categories" class="fill-area" placeholder="e.g., Chicken: _____, Classic: _____, Supreme: _____, Veggie: _____" style="min-height: 70px;"></textarea>
+
+  <hr>
+
+  <!-- TASK 3 -->
+  <h3>Task 3 — Configure Loading</h3>
+
+  <p>The Sales_ByCategory summary is useful for a quick reference, but it should not load into the data model — it is a <strong>staging query</strong>.</p>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Right-click <strong>Sales_ByCategory</strong> in the Queries pane.</li>
+      <li>Click <strong>Enable Load</strong> to uncheck it.</li>
+      <li>The query name should become <em>italicized</em>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Your Queries pane should now show:
+    <br><br>
+    ✅ <strong>order_details</strong> — normal text (will load)<br>
+    ✅ <strong>orders</strong> — normal text (will load)<br>
+    ✅ <strong>pizzas</strong> — normal text (will load)<br>
+    ✅ <strong>pizza_types</strong> — normal text (will load)<br>
+    ✅ <em>Sales_ByCategory</em> — <em>italicized</em> (will NOT load)
+  </div>
+
+  <hr>
+
+  <!-- TASK 4 -->
+  <h3>Task 4 — Close & Apply and Verify</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click <strong>Close & Apply</strong> on the <strong>Home tab</strong> of the Power Query Editor (far left — click the top half, not the dropdown).</li>
+      <li>Wait for the loading dialog to complete.</li>
+      <li>In the main Power BI window, check the <strong>Fields pane</strong> (right side).</li>
+      <li>Confirm you see <strong>4 tables</strong>: order_details, orders, pizzas, pizza_types.</li>
+      <li>Confirm you do <strong>NOT</strong> see Sales_ByCategory.</li>
+      <li>Expand the <strong>order_details</strong> table. Confirm the 7 merged columns appear (pizza_type_id, size, price, date, time, name, category).</li>
+      <li>Save your file: <strong>File → Save</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Final Verification</span>
+    <strong>Fields pane shows 4 loaded tables</strong> (not 5 — the staging query is hidden).
+    <br><br>
+    <strong>order_details includes all merged columns</strong> — you can scroll through and see pizza names like "The Hawaiian Pizza" alongside prices, sizes, dates, and times.
+  </div>
+
+  <hr>
+
+  <!-- ===== WHAT SUCCESS LOOKS LIKE ===== -->
+  <h2>What Success Looks Like</h2>
+
+  <p>Your completed file should have:</p>
+  <ul class="success-check">
+    <li><strong>4 loaded tables</strong> visible in the Fields pane (order_details, orders, pizzas, pizza_types)</li>
+    <li><strong>order_details includes 7 merged columns:</strong> pizza_type_id, size, price, date, time, name, category</li>
+    <li><strong>Row count unchanged</strong> at 48,620 in order_details</li>
+    <li><strong>1 staging query</strong> (Sales_ByCategory) that does NOT appear in the Fields pane</li>
+    <li><strong>File saved</strong> as <code>PlatosPizza_YourLastName.pbix</code></li>
+  </ul>
+
+  <hr>
+
+  <!-- ===== REFLECTION ===== -->
+  <h2>Reflection Questions (Ungraded)</h2>
+
+  <p>These questions prepare you for the written response in Thursday's Lab #2. Practice answering them now — the lab questions will be similar.</p>
+
+  <label class="fill-label" for="reflect1">Question 1: Compare the Plato's Pizza dataset to the Sabor Miami dataset. What is similar about how the tables connect? Can you identify the fact table and the dimension tables in each dataset?</label>
+  <textarea id="reflect1" class="fill-area" placeholder="Type your answer here..."></textarea>
+
+  <label class="fill-label" for="reflect2">Question 2: In Task 1, you performed a chain merge — using a column from one merge (pizza_type_id) as the key for the next merge. Why did the pizza_type_id column need to come from the pizzas table first, rather than being in order_details from the start?</label>
+  <textarea id="reflect2" class="fill-area" placeholder="Type your answer here..."></textarea>
+
+  <hr>
+
+  <!-- ===== TROUBLESHOOTING ===== -->
+  <h2>Troubleshooting</h2>
+
+  <p><strong>"I do not see the pizza_type_id column in order_details for Task 1."</strong><br>
+  You may not have expanded it during Merge 1 in Part 1. Go back to the Applied Steps pane, find the "Expanded pizzas" step, and click it. If pizza_type_id is missing, delete this step (click the X) and redo the expand — this time check pizza_type_id, size, and price.</p>
+
+  <p><strong>"The name column shows null after the chain merge."</strong><br>
+  Double-check that you selected <strong>pizza_type_id</strong> (not pizza_id) in both the top and bottom table previews in the Merge dialog. The pizza_type_id values look like "bbq_ckn" while the pizza_id values look like "bbq_ckn_s" — they are different columns.</p>
+
+  <p><strong>"I lost my Part 1 work — my file does not have the first 2 merges."</strong><br>
+  Ask your tutor for the <code>PlatosPizza_Part2_Starter.pbix</code> backup file, which has Part 1 already completed.</p>
+
+  <p><strong>"My Group By only shows 1 row instead of 4."</strong><br>
+  You may have grouped by the wrong column. Delete the Grouped Rows step and redo it — make sure you select <strong>category</strong> (not pizza_type_id or pizza_id) in the Group By dropdown.</p>
+
+  <p><strong>"Close & Apply is very slow."</strong><br>
+  The order_details table has 48,620 rows — loading may take 30–60 seconds. This is normal. Wait for the loading bar to finish.</p>
+
+  <hr>
+
+  <p style="text-align: center; font-size: 12px; color: #888; margin-top: 20px;">
+    CAP2791C — Power BI: Data Preparation and Modeling · Miami Dade College · Week 11 Guided Practice v1.0
+  </p>
+
+</div><!-- /container -->
+
+</body>
+</html>
