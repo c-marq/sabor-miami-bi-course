@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extension: Sabor Miami Dashboard Sprint — CAP2791C</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 48px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    h1 { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; color: #2c3e50; margin-top: 32px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
+    h3 { font-size: 17px; font-weight: 700; color: #34495e; margin-top: 24px; margin-bottom: 10px; }
+    p { margin-bottom: 12px; }
+    .subtitle { font-size: 13px; color: #555; margin-bottom: 2px; }
+    strong { font-weight: 600; }
+    code { font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+    ol, ul { margin-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+
+    /* ===== UNGRADED BANNER ===== */
+    .ungraded-banner {
+      background: linear-gradient(135deg, #27AE60, #2ECC71);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 6px;
+      margin: 16px 0 24px 0;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ===== LAUNCH PAD ===== */
+    .launch-pad {
+      background: #f0f7ff;
+      border: 2px solid #2E86C1;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .launch-pad-title { font-size: 18px; font-weight: 700; color: #1a5276; margin-bottom: 12px; }
+    .launch-pad table { width: 100%; border-collapse: collapse; }
+    .launch-pad td { padding: 5px 8px; vertical-align: top; font-size: 14px; }
+    .launch-pad td:first-child { font-weight: 600; color: #1a5276; white-space: nowrap; width: 180px; }
+
+    /* ===== UDN BOXES ===== */
+    .box { padding: 16px 20px; margin: 16px 0; border-radius: 5px; border-left: 5px solid; }
+    .box-title { font-weight: 700; font-size: 14px; display: block; margin-bottom: 6px; }
+    .box-do { background-color: #D5F5E3; border-left-color: #27AE60; }
+    .box-do .box-title { color: #1E8449; }
+    .box-stop { background-color: #FADBD8; border-left-color: #E74C3C; }
+    .box-stop .box-title { color: #922B21; }
+    .box-why { background-color: #D6EAF8; border-left-color: #2E86C1; }
+    .box-why .box-title { color: #1A5276; }
+    .box-breath { background-color: #E8DAEF; border-left-color: #8E44AD; }
+    .box-breath .box-title { color: #6C3483; }
+    .box ol { margin-top: 6px; margin-left: 20px; }
+    .box li { margin-bottom: 3px; }
+
+    /* ===== SCREENSHOT PASTE ZONE ===== */
+    .paste-zone {
+      width: 100%;
+      min-height: 200px;
+      border: 2px dashed #adb5bd;
+      border-radius: 8px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin: 12px 0;
+      position: relative;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+    .paste-zone:hover, .paste-zone.drag-over { border-color: #2E86C1; background: #eaf2fb; }
+    .paste-zone-placeholder { text-align: center; color: #868e96; font-size: 14px; pointer-events: none; }
+    .paste-zone-placeholder .icon { font-size: 32px; display: block; margin-bottom: 6px; }
+    .paste-zone img { max-width: 100%; border-radius: 4px; }
+    .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; padding: 12px; min-height: auto; }
+    .paste-zone .remove-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: #E74C3C; color: #fff; border: none; border-radius: 50%;
+      width: 24px; height: 24px; font-size: 14px; cursor: pointer;
+      display: none; align-items: center; justify-content: center; line-height: 1;
+    }
+    .paste-zone.has-image .remove-btn { display: flex; }
+
+    /* ===== STUDENT INFO ===== */
+    .student-info {
+      background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px;
+      padding: 16px 20px; margin: 20px 0 24px 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .student-info label { font-size: 13px; font-weight: 600; color: #495057; display: block; margin-bottom: 3px; }
+    .student-info input { width: 100%; padding: 6px 10px; font-size: 14px; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #ced4da; border-radius: 4px; background: #fff; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: #fff; padding: 0; font-size: 12px; }
+      .container { box-shadow: none; padding: 20px; max-width: 100%; }
+      .box { break-inside: avoid; }
+      .student-info input { border: 1px solid #999; background: #fff; }
+      .paste-zone { border: 1px solid #999; min-height: auto; }
+      .paste-zone-placeholder { display: none; }
+      .paste-zone .remove-btn { display: none !important; }
+      .paste-zone img { max-width: 100%; }
+      .no-print { display: none; }
+      h2 { break-after: avoid; }
+      h3 { break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Sabor Miami Dashboard Sprint</h1>
+  <p class="subtitle">CAP2791C — Power BI: Data Preparation and Modeling</p>
+  <p class="subtitle">Week 11 · Extension Activity · Ungraded</p>
+
+  <div class="ungraded-banner">
+    ⭐ BONUS CHALLENGE — This activity is not graded. It is here for you to explore and have fun with your data.
+  </div>
+
+  <div class="student-info">
+    <div>
+      <label for="student-name">Student Name</label>
+      <input type="text" id="student-name" placeholder="Last Name, First Name">
+    </div>
+    <div>
+      <label for="student-date">Date</label>
+      <input type="text" id="student-date" placeholder="MM/DD/YYYY">
+    </div>
+  </div>
+
+  <div class="launch-pad">
+    <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+    <table>
+      <tr><td>What you are building</td><td>A one-page Sabor Miami sales dashboard with 5 visuals and a slicer</td></tr>
+      <tr><td>Tool</td><td>Power BI Desktop → Report View</td></tr>
+      <tr><td>File to open</td><td>Your completed <code>Lab2_YourLastName.pbix</code> (the file you just submitted)</td></tr>
+      <tr><td>Time estimate</td><td>15–20 minutes</td></tr>
+      <tr><td>Tasks</td><td>5 visuals + 1 title</td></tr>
+      <tr><td>What "done" looks like</td><td>A single report page with 5 visuals, a slicer, and a title — all powered by your merged data</td></tr>
+      <tr><td>Start here →</td><td>Open your Lab #2 file and make sure you are in <strong>Report View</strong></td></tr>
+    </table>
+  </div>
+
+  <h2>The Challenge</h2>
+
+  <p>You already have 2 visuals from Lab #2 (a Card and a Bar Chart). Your challenge is to build <strong>3 more visuals</strong>, add a <strong>slicer</strong> that filters everything, and give your dashboard a <strong>title</strong>. Every visual uses a column that only exists because of your merges — this is your data pipeline in action.</p>
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    In the portfolio project (Week 16), you will build a full dashboard page with at least 4 visuals. This is a low-pressure preview of that work. Nothing you do here is graded — experiment, try things, and see what your data can show you.
+  </div>
+
+  <hr>
+
+  <!-- VISUAL 1 -->
+  <h3>Visual 1 — Donut Chart: Sales by Category</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click an empty area of the Report View canvas.</li>
+      <li>In the <strong>Visualizations pane</strong> (right side), click the <strong>Donut Chart</strong> icon (looks like a donut ring).</li>
+      <li>From the <strong>Fields pane</strong>, drag <strong>category</strong> (from the sales table) into the <strong>Legend</strong> area.</li>
+      <li>Drag <strong>amount</strong> (from the sales table) into the <strong>Values</strong> area.</li>
+      <li>You should see a donut with slices for each food category.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Your donut should show category names (not category IDs). If you see codes instead of names, you may have dragged the wrong column. The <strong>category</strong> column came from your Menu Items merge — it is proof that merge worked.
+  </div>
+
+  <hr>
+
+  <!-- VISUAL 2 -->
+  <h3>Visual 2 — Table: Top Items by Sales</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click an empty area of the canvas.</li>
+      <li>In the Visualizations pane, click the <strong>Table</strong> icon (looks like a grid).</li>
+      <li>Drag <strong>item_name</strong> into the table.</li>
+      <li>Drag <strong>amount</strong> into the table.</li>
+      <li>The table should show item names with their total sales, automatically sorted.</li>
+      <li>To show only the top 10: click the table visual, then click the <strong>Filter icon</strong> on the visual header (or look in the Filters pane on the right). Under <strong>item_name</strong>, change the filter type to <strong>Top N</strong>, set it to <strong>10</strong>, and drag <strong>amount</strong> into the "By value" field. Click <strong>Apply filter</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Your table should show 10 rows with item names like "Cubano Sandwich" or "Mango Tango Smoothie" alongside their total sales. If the Top N filter feels tricky, skip it — a full table with all items still works. You can always come back to it.
+  </div>
+
+  <hr>
+
+  <div class="box box-breath">
+    <span class="box-title">💜 TAKE A BREATH</span>
+    You are building a real dashboard from data you merged yourself. This is what Power BI analysts do every day. Take a moment to look at what you have built — three visuals, each one pulling from a different merge.
+  </div>
+
+  <hr>
+
+  <!-- VISUAL 3 -->
+  <h3>Visual 3 — Bar Chart: Sales by Employee</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click an empty area of the canvas.</li>
+      <li>In the Visualizations pane, click the <strong>Clustered Bar Chart</strong>.</li>
+      <li>Drag <strong>first_name</strong> into the <strong>Y-axis</strong>.</li>
+      <li>Drag <strong>amount</strong> into the <strong>X-axis</strong>.</li>
+      <li>You should see a bar for each employee showing their total sales.</li>
+    </ol>
+  </div>
+
+  <hr>
+
+  <!-- SLICER -->
+  <h3>Visual 4 — Slicer: Filter by Truck</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Click an empty area of the canvas.</li>
+      <li>In the Visualizations pane, click the <strong>Slicer</strong> icon (looks like a funnel with a list).</li>
+      <li>Drag <strong>truck_name</strong> into the slicer.</li>
+      <li>You should see a list of truck names. Click one of them.</li>
+      <li><strong>Watch what happens</strong> — all of your other visuals should update to show only the data for that truck.</li>
+    </ol>
+  </div>
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    When you clicked a truck name, every visual on the page filtered to show only that truck's data. This is called <strong>cross-filtering</strong> — Power BI automatically connects your visuals because they all share the same underlying data model. You did not write any code or set up any filters manually. This is a preview of the data modeling concepts you will learn in Week 12.
+  </div>
+
+  <hr>
+
+  <!-- TITLE -->
+  <h3>Visual 5 — Dashboard Title</h3>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Go to <strong>Insert tab</strong> (in the main Power BI ribbon at the top).</li>
+      <li>Click <strong>Text box</strong>.</li>
+      <li>A text box appears on the canvas. Type: <strong>Sabor Miami Sales Dashboard</strong>.</li>
+      <li>Highlight the text. Use the formatting toolbar above the text box to make it bold and increase the font size to 20–24.</li>
+      <li>Drag the text box to the top of your report page.</li>
+    </ol>
+  </div>
+
+  <hr>
+
+  <!-- ARRANGE AND SCREENSHOT -->
+  <h2>Arrange and Screenshot</h2>
+
+  <p>Resize and arrange your visuals so everything fits on <strong>one page</strong> without overlapping. There is no single "right" layout — just make sure all 5 visuals and the title are visible at the same time.</p>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Drag visuals by their edges to resize them. Drag from the center to reposition.</li>
+      <li>Make sure no visuals overlap and the title is at the top.</li>
+      <li>Click the slicer and select <strong>(Select all)</strong> so the dashboard shows all trucks.</li>
+      <li>Take a screenshot: press <strong>Print Screen</strong> (or <strong>Windows + Shift + S</strong> to select a region).</li>
+      <li>Click the paste zone below and press <strong>Ctrl + V</strong>.</li>
+    </ol>
+  </div>
+
+  <label style="font-weight:600; font-size:13px; color:#495057; display:block; margin-top:16px; margin-bottom:4px;">📸 Paste your finished dashboard screenshot below:</label>
+  <div class="paste-zone" id="paste-dashboard">
+    <button class="remove-btn" title="Remove image">✕</button>
+    <div class="paste-zone-placeholder">
+      <span class="icon">📋</span>
+      Click here, then press <strong>Ctrl + V</strong> to paste your screenshot
+    </div>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK — Your Dashboard</span>
+    Your screenshot should show a single report page with:
+    <br><br>
+    ✅ A <strong>title</strong> at the top ("Sabor Miami Sales Dashboard")<br>
+    ✅ A <strong>Card</strong> with total sales (from Lab #2)<br>
+    ✅ A <strong>Bar Chart</strong> — sales by truck name (from Lab #2)<br>
+    ✅ A <strong>Donut Chart</strong> — sales by category<br>
+    ✅ A <strong>Table</strong> — top items by sales<br>
+    ✅ A <strong>Bar Chart</strong> — sales by employee<br>
+    ✅ A <strong>Slicer</strong> — truck name filter
+  </div>
+
+  <hr>
+
+  <p><strong>Save your file</strong> (Ctrl + S). You just built your first Sabor Miami dashboard. This is the foundation of your portfolio project in Week 16.</p>
+
+  <p style="text-align: center; font-size: 12px; color: #888; margin-top: 24px;">
+    CAP2791C — Power BI: Data Preparation and Modeling · Miami Dade College · Dashboard Sprint v1.0
+  </p>
+
+</div><!-- /container -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.paste-zone').forEach(function(zone) {
+    var placeholder = zone.querySelector('.paste-zone-placeholder');
+    var removeBtn = zone.querySelector('.remove-btn');
+
+    zone.addEventListener('click', function() { zone.focus(); });
+    zone.setAttribute('tabindex', '0');
+
+    zone.addEventListener('paste', function(e) {
+      e.preventDefault();
+      var items = e.clipboardData.items;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          var blob = items[i].getAsFile();
+          var reader = new FileReader();
+          reader.onload = function(evt) {
+            var img = document.createElement('img');
+            img.src = evt.target.result;
+            if (placeholder) placeholder.style.display = 'none';
+            var old = zone.querySelector('img');
+            if (old) old.remove();
+            zone.appendChild(img);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          break;
+        }
+      }
+    });
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var img = zone.querySelector('img');
+        if (img) img.remove();
+        if (placeholder) placeholder.style.display = '';
+        zone.classList.remove('has-image');
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
