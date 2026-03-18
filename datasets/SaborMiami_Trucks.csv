@@ -1,0 +1,5 @@
+Truck_ID,Truck_Name,Home_Location,Capacity,Status,License_Plate,Year_Acquired
+T001,La Havana Express,Wynwood,4,Active,FL-ABC-1234,2019
+T002,Sabor on Wheels,Kendal,6,active,FLABC5678,2020
+T003,Caribbean Cruiser,Little Havana,seats 6,ACTIVE,FL-DEF-9012,2021
+T004,The Plantain Express,Doral,4,,FL GHI 3456,2018

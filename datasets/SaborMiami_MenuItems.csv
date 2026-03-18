@@ -1,0 +1,26 @@
+Menu_Item_ID,Item_Name,Category,Price,Description
+M001,Cuban Sandwich,Entrée,$15.89,House-made cuban sandwich
+M002,Jerk Chicken Bowl,Entrée,$8.45,House-made jerk chicken bowl
+M003,Mojo Pork Plate ,Entrée,$9.16,House-made mojo pork plate
+M004,Empanada Platter,Entrée,$11.29,House-made empanada platter
+M005,Ropa Vieja Bowl,Entrée,$6.56,House-made ropa vieja bowl
+M006,Plantain Power Bowl,Entrée,$15.1,
+M007,Arroz con Pollo,Entree,$15.53,House-made arroz con pollo
+M008,Fish Tacos ,Entree,$8.76,House-made fish tacos
+M009,Carne Asada Wrap,entree,$15.79,House-made carne asada wrap
+M010,Tostones,Side,$10.2,House-made tostones
+M011,Black Beans & Rice,Side,$7.61,House-made black beans & rice
+M012,Yuca Fries ,Side,$6.65,House-made yuca fries
+M013,Maduros,Side,$4.25,House-made maduros
+M014,Coleslaw,side,$12.27,
+M015,Mango Batido,Drink,$10.63,House-made mango batido
+M016,Café Cubano,Drink,$15.1,
+M017,Coconut Water,Drink,$4.44,House-made coconut water
+M018,Guarapo,Drink,$5.65,House-made guarapo
+M019,Horchata,DRINK,$10.98,
+M020,Tres Leches Cup,Dessert,$13.72,
+M021,Churros,Dessert,$8.79,House-made churros
+M022,Guava Pastelito,dessert,$12.8,House-made guava pastelito
+M023,,Entree,$11.99,
+M024,Special Item 24,Side,$7.55,
+M025,Special Item 25,Drink,$12.32,

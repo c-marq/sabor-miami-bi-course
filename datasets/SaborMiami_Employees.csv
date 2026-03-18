@@ -1,0 +1,13 @@
+Employee_ID,First_Name,Last_Name,Role,Phone,Email,Hire_Date,Truck_ID
+E001,MARIA,RODRIGUEZ,Manager,305-555-0101,maria.r@sabormia.com,2019-03-15,T001
+E002,carlos,martinez,Driver,305-555-0102,carlos.m@sabormia.com,2019-06-01,T001
+E003,Ana,Perez,Cook,,ana.p@sabormia.com,2020-01-10,T002
+E004,JAMES,BAPTISTE,driver,305-555-0104,james.b@@sabormia.com,2020-04-22,T002
+E005,Sofia,Chen,Cook,305-555-0105,sofia.c@sabormia.com,2020-08-15,T003
+E006,DIEGO,VARGAS,DRIVER,,diego.v@sabormia.com,2021-02-01,T003
+E007,lucia,fernandez,cook,305-555-0107,lucia.f@sabormia.com,2021-06-15,T001
+E008,Marcus,Williams,Driver,305-555-0108,marcus.w@sabormia.com,2021-11-01,T004
+E009,ISABELLA,SANTOS,Manager,,isabella.s@sabormia.com,2022-01-15,T002
+E010,kevin,joseph,Cook,305-555-0110,kevin.j@sabormia.com,2022-05-20,T003
+E011,Valentina,Reyes,cook,305-555-0111,val.r@sabormia.com,2027-03-01,T001
+E012,Andre,Louis,Driver,,andre.l@sabormia.com,2023-08-10,T004
