@@ -387,6 +387,73 @@
       padding: 20px;
     }
 
+    /* ===== SCREENSHOT PASTE ZONE ===== */
+    .paste-zone {
+      width: 100%;
+      min-height: 180px;
+      border: 2px dashed #adb5bd;
+      border-radius: 8px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin: 12px 0;
+      position: relative;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .paste-zone:hover, .paste-zone.drag-over {
+      border-color: #2E86C1;
+      background: #eaf2fb;
+    }
+
+    .paste-zone-placeholder {
+      text-align: center;
+      color: #868e96;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .paste-zone-placeholder .icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .paste-zone img {
+      max-width: 100%;
+      border-radius: 4px;
+    }
+
+    .paste-zone.has-image {
+      border-style: solid;
+      border-color: #27AE60;
+      background: #fff;
+      padding: 12px;
+      min-height: auto;
+    }
+
+    .paste-zone .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #E74C3C;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 14px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .paste-zone.has-image .remove-btn { display: flex; }
+
     /* ===== PRINT / PDF ===== */
     @media print {
       body {
@@ -418,6 +485,11 @@
       details[open] { break-inside: avoid; }
 
       .no-print { display: none; }
+
+      .paste-zone { border: 1px solid #999; min-height: auto; }
+      .paste-zone-placeholder { display: none; }
+      .paste-zone .remove-btn { display: none !important; }
+      .paste-zone img { max-width: 100%; }
 
       h2 { break-after: avoid; }
       h3 { break-after: avoid; }
@@ -457,8 +529,8 @@
       <tr><td>Tool</td><td>Power BI Desktop → Power Query Editor</td></tr>
       <tr><td>File to open</td><td><a href="https://github.com/c-marq/sabor-miami-bi-course/raw/main/exercises/templates/SaborMiami_Lab2_Starter.pbix" target="_blank" style="color:#2E86C1; font-weight:600;">📥 Download SaborMiami_Lab2_Starter.pbix</a> (pre-cleaned dataset)</td></tr>
       <tr><td>Time estimate</td><td>45–55 minutes</td></tr>
-      <tr><td>Tasks</td><td>6 tasks across 3 phases</td></tr>
-      <tr><td>What "done" looks like</td><td>Sales table has 5 new columns from 3 merges, staging query disabled, row count verified, all tables loaded</td></tr>
+      <tr><td>Tasks</td><td>7 tasks across 3 phases</td></tr>
+      <tr><td>What "done" looks like</td><td>Sales table has 5 new columns from 3 merges, staging query disabled, row count verified, 2 visuals on Report View, all tables loaded</td></tr>
       <tr><td>Start here →</td><td>Open the downloaded <code>SaborMiami_Lab2_Starter.pbix</code> and click <strong>Transform Data</strong> to enter the Power Query Editor</td></tr>
     </table>
   </div>
@@ -474,7 +546,7 @@
   <ul>
     <li><strong>Phase 1: Setup</strong> — Open the file and record your starting row count</li>
     <li><strong>Phase 2: Build</strong> — Perform 3 merges, then configure loading</li>
-    <li><strong>Phase 3: Verify</strong> — Confirm everything looks right before submitting</li>
+    <li><strong>Phase 3: Verify</strong> — Confirm everything looks right, build 2 quick visuals, and submit</li>
   </ul>
 
   <p><strong>Your instructor will check in at the 15-minute mark and the 35-minute mark.</strong> These are not deadlines — they are moments to ask questions if you are stuck.</p>
@@ -653,7 +725,7 @@
   <hr>
 
   <!-- TASK 4 -->
-  <h3>Task 4 — Configure Loading (8 points)</h3>
+  <h3>Task 4 — Configure Loading (6 points)</h3>
 
   <p>Now you will control which queries load into the Power BI data model. The 5 original tables should all load. But first, you need to create a <strong>staging query</strong> and disable it — this demonstrates that you understand the difference between a loaded query and a staging query.</p>
 
@@ -712,7 +784,7 @@
     <div class="phase-step active">Phase 3: Verify</div>
   </div>
 
-  <h3>Task 5 — Verify Row Counts (5 points)</h3>
+  <h3>Task 5 — Verify Row Counts (3 points)</h3>
 
   <div class="box box-do">
     <span class="box-title">✅ DO THIS</span>
@@ -757,13 +829,58 @@
   <hr>
 
   <!-- ============================================================ -->
-  <!-- TASK 6 — WRITTEN RESPONSE                                    -->
+  <!-- TASK 6 — VISUAL VERIFICATION                                 -->
   <!-- ============================================================ -->
-  <h2>Task 6 — Written Response (7 points)</h2>
+  <h2>Task 6 — Visual Verification (5 points)</h2>
+
+  <p>Now that your data is loaded, create <strong>2 quick visuals</strong> on the Report View canvas to prove your merges worked. These visuals use columns that only exist because of your merges — if the visuals display correctly, your merges are confirmed.</p>
+
+  <div class="box box-do">
+    <span class="box-title">✅ DO THIS</span>
+    <ol>
+      <li>Make sure you are in <strong>Report View</strong> (click the Report View icon on the left sidebar — it looks like a small chart).</li>
+      <li><strong>Visual 1 — Card:</strong> In the Visualizations pane, click the <strong>Card</strong> visual (rectangle with "123"). Drag <strong>amount</strong> from the sales table into the card. It should display a total sales number.</li>
+      <li><strong>Visual 2 — Bar Chart:</strong> Click an empty area of the canvas. In the Visualizations pane, click the <strong>Clustered Bar Chart</strong>. Drag <strong>truck_name</strong> into the Y-axis and <strong>amount</strong> into the X-axis. You should see a bar for each truck showing its total sales.</li>
+      <li>Arrange both visuals so they are visible on one screen.</li>
+      <li>Take a screenshot of your Report View canvas: press <strong>Print Screen</strong> on your keyboard (or <strong>Windows + Shift + S</strong> to select a region).</li>
+      <li>Click inside the paste zone below and press <strong>Ctrl + V</strong> to paste your screenshot.</li>
+    </ol>
+  </div>
+
+  <div class="box box-why">
+    <span class="box-title">💡 WHY ARE WE DOING THIS?</span>
+    The <strong>truck_name</strong> column only exists in the sales table because of your merge with the trucks table (Task 2). If the bar chart shows truck names with sales amounts, it means your merge worked correctly and the data loaded into the model. This is visual proof of your work — and a preview of what you will build in Chapters 11–12.
+  </div>
+
+  <label class="fill-label">📸 Paste your Report View screenshot below (Print Screen → click the box → Ctrl+V):</label>
+  <div class="paste-zone" id="paste-lab-visual">
+    <button class="remove-btn" title="Remove image">✕</button>
+    <div class="paste-zone-placeholder">
+      <span class="icon">📋</span>
+      Click here, then press <strong>Ctrl + V</strong> to paste your screenshot
+    </div>
+  </div>
+
+  <div class="box box-stop">
+    <span class="box-title">🛑 STOP AND CHECK</span>
+    Your screenshot should show:
+    <br><br>
+    ✅ A <strong>Card</strong> visual with a total sales amount<br>
+    ✅ A <strong>Bar Chart</strong> with truck names on the Y-axis and sales amounts on the X-axis<br>
+    <br>
+    If the bar chart shows truck IDs instead of truck names, you may have dragged the wrong column — use <strong>truck_name</strong>, not <strong>truck_id</strong>.
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TASK 7 — WRITTEN RESPONSE                                    -->
+  <!-- ============================================================ -->
+  <h2>Task 7 — Written Response (6 points)</h2>
 
   <p>Answer both questions below. Write 2–4 sentences per question.</p>
 
-  <label class="fill-label" for="q1">Question 1 (4 points): In this lab, every merge used a Left Outer join. Explain in your own words why Left Outer was the right choice for merging Sales with the dimension tables. What would have happened to your Sales data if you had used an Inner join instead?</label>
+  <label class="fill-label" for="q1">Question 1 (3 points): In this lab, every merge used a Left Outer join. Explain in your own words why Left Outer was the right choice for merging Sales with the dimension tables. What would have happened to your Sales data if you had used an Inner join instead?</label>
   <textarea id="q1" class="fill-area" placeholder="Type your answer here..."></textarea>
 
   <label class="fill-label" for="q2">Question 2 (3 points): You created a Reference query (Sales_Summary_ByTruck) and then disabled its loading. Explain the difference between a Reference and a Duplicate. Why did you use a Reference instead of a Duplicate for this task?</label>
@@ -782,6 +899,8 @@
     <li><strong>Sales table includes 5 merged columns:</strong> Item_Name, Category, Truck_Name, First_Name, Last_Name</li>
     <li><strong>Sales row count matches</strong> the original row count (no rows gained or lost)</li>
     <li><strong>1 staging query</strong> (Sales_Summary_ByTruck) that does NOT appear in the Fields pane</li>
+    <li><strong>2 visuals</strong> on the Report View canvas (Card + Bar Chart) using merged columns</li>
+    <li><strong>Screenshot pasted</strong> into this document</li>
     <li><strong>File saved</strong> as <code>Lab2_YourLastName.pbix</code></li>
   </ul>
 
@@ -873,19 +992,25 @@
             <td>No merge attempted, wrong join type, or wrong key column.</td>
           </tr>
           <tr>
-            <td><strong>Task 4:</strong> Configure Loading (8 pts)</td>
+            <td><strong>Task 4:</strong> Configure Loading (6 pts)</td>
             <td>Reference query created from Sales. Renamed to Sales_Summary_ByTruck. Group By applied correctly. Enable Load unchecked (italicized).</td>
             <td>Reference created but Enable Load not disabled, or Group By missing.</td>
             <td>No staging query created.</td>
           </tr>
           <tr>
-            <td><strong>Task 5:</strong> Verify Row Counts (5 pts)</td>
+            <td><strong>Task 5:</strong> Verify Row Counts (3 pts)</td>
             <td>Sales row count matches original — no rows gained or lost.</td>
             <td>Row count is close but slightly off (minor merge issue).</td>
             <td>Row count is significantly different, or verification not performed.</td>
           </tr>
           <tr>
-            <td><strong>Task 6:</strong> Written Response (7 pts)</td>
+            <td><strong>Task 6:</strong> Visual Verification (5 pts)</td>
+            <td>Screenshot shows 2 visuals on Report View: a Card with total sales and a Bar Chart using truck_name. Visuals display correctly, confirming merges loaded.</td>
+            <td>Screenshot shows 1 visual, or visuals use ID columns instead of merged name columns.</td>
+            <td>No screenshot provided, or visuals are blank or show errors.</td>
+          </tr>
+          <tr>
+            <td><strong>Task 7:</strong> Written Response (6 pts)</td>
             <td>Both questions answered clearly (2–4 sentences each). Demonstrates understanding of Left Join behavior and Reference vs. Duplicate.</td>
             <td>One question answered well, or both answered with incomplete reasoning.</td>
             <td>Questions not answered, or answers show fundamental misunderstanding.</td>
@@ -914,10 +1039,58 @@
   <br>
 
   <p style="text-align: center; font-size: 12px; color: #888; margin-top: 20px;">
-    CAP2791C — Power BI: Data Preparation and Modeling · Miami Dade College · Lab #2 v1.0
+    CAP2791C — Power BI: Data Preparation and Modeling · Miami Dade College · Lab #2 v2.0
   </p>
 
 </div><!-- /container -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.paste-zone').forEach(function(zone) {
+    var placeholder = zone.querySelector('.paste-zone-placeholder');
+    var removeBtn = zone.querySelector('.remove-btn');
+
+    // Click to focus for paste
+    zone.addEventListener('click', function() { zone.focus(); });
+    zone.setAttribute('tabindex', '0');
+
+    // Paste handler
+    zone.addEventListener('paste', function(e) {
+      e.preventDefault();
+      var items = e.clipboardData.items;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          var blob = items[i].getAsFile();
+          var reader = new FileReader();
+          reader.onload = function(evt) {
+            var img = document.createElement('img');
+            img.src = evt.target.result;
+            if (placeholder) placeholder.style.display = 'none';
+            // Remove old image if exists
+            var old = zone.querySelector('img');
+            if (old) old.remove();
+            zone.appendChild(img);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          break;
+        }
+      }
+    });
+
+    // Remove button
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var img = zone.querySelector('img');
+        if (img) img.remove();
+        if (placeholder) placeholder.style.display = '';
+        zone.classList.remove('has-image');
+      });
+    }
+  });
+});
+</script>
 
 </body>
 </html>
