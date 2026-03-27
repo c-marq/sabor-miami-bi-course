@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 Session B — Date Table Workshop: Building and Connecting Your Date Table</title>
+<style>
+  /* ============ BASE STYLES ============ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14pt;
+    line-height: 1.6;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    background: #ffffff;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+  }
+
+  h2 {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #2E86C1;
+    margin-top: 36px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #2E86C1;
+  }
+
+  h3 {
+    font-size: 15pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 12px; }
+
+  .subtitle {
+    font-size: 13pt;
+    color: #555;
+    margin-bottom: 2px;
+  }
+
+  .meta {
+    font-size: 11pt;
+    color: #777;
+    margin-bottom: 24px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 28px 0;
+  }
+
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13pt;
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .formula-block {
+    background: #1a1a2e;
+    color: #e8e8e8;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14pt;
+    padding: 14px 20px;
+    border-radius: 6px;
+    margin: 12px 0;
+    letter-spacing: 0.3px;
+  }
+
+  ol, ul { margin-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13pt;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  th {
+    background: #f0f4f8;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+
+  /* ============ STUDENT INFO HEADER ============ */
+  .student-info {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .student-info label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .student-info input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13pt;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  /* ============ LAUNCH PAD ============ */
+  .launch-pad {
+    background: #f0f4f8;
+    border: 2px solid #2E86C1;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .launch-pad-title {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #2E86C1;
+    margin-bottom: 12px;
+  }
+
+  .launch-pad p { margin-bottom: 8px; font-size: 13pt; }
+  .launch-pad strong { color: #1a1a2e; }
+
+  /* ============ UDN BOXES ============ */
+  .udn-box {
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 6px;
+    border-left: 6px solid;
+    font-size: 13pt;
+  }
+
+  .udn-box p { margin-bottom: 8px; }
+  .udn-box p:last-child { margin-bottom: 0; }
+  .udn-box ol, .udn-box ul { margin-bottom: 8px; }
+
+  .do-this { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .udn-label { color: #1E8449; }
+
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+
+  .common-mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .common-mistake .udn-label { color: #7D6608; }
+
+  .stop-check { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .udn-label { color: #922B21; }
+
+  .take-breath { background: #E8DAEF; border-color: #8E44AD; }
+  .take-breath .udn-label { color: #6C3483; }
+
+  .udn-label {
+    font-weight: 700;
+    font-size: 14pt;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* ============ FILLABLE FIELDS ============ */
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13pt;
+    line-height: 1.5;
+    border: 2px solid #adb5bd;
+    border-radius: 6px;
+    background: #fefefe;
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #2E86C1;
+    box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.15);
+  }
+
+  .response-block {
+    margin: 16px 0;
+  }
+
+  .response-block label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ============ SCREENSHOT DROP ZONE ============ */
+  .screenshot-zone {
+    width: 100%;
+    min-height: 180px;
+    border: 2px dashed #adb5bd;
+    border-radius: 8px;
+    background: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 12px 0 16px 0;
+    padding: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+
+  .screenshot-zone:hover,
+  .screenshot-zone.drag-over {
+    border-color: #2E86C1;
+    background: #eaf2f8;
+  }
+
+  .screenshot-zone .placeholder-text {
+    color: #888;
+    font-size: 12pt;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .screenshot-zone .placeholder-icon {
+    font-size: 28pt;
+    color: #bbb;
+    margin-bottom: 8px;
+    pointer-events: none;
+  }
+
+  .screenshot-zone img {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+  .screenshot-zone .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 14pt;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .screenshot-zone.has-image .remove-btn { display: flex; }
+  .screenshot-zone.has-image .placeholder-text,
+  .screenshot-zone.has-image .placeholder-icon { display: none; }
+
+  .screenshot-label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ============ PROGRESS TRACKER ============ */
+  .phase-marker {
+    display: inline-block;
+    background: #2E86C1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11pt;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ============ PRINT STYLES ============ */
+  @media print {
+    body {
+      padding: 10px 20px;
+      font-size: 11pt;
+      max-width: 100%;
+    }
+
+    h1 { font-size: 18pt; }
+    h2 { font-size: 15pt; margin-top: 20px; }
+    h3 { font-size: 13pt; }
+
+    .udn-box, .launch-pad { font-size: 11pt; }
+
+    .formula-block { font-size: 12pt; padding: 10px 14px; }
+
+    .student-info {
+      border-width: 1px;
+      padding: 10px 14px;
+    }
+
+    .student-info input {
+      border: none;
+      border-bottom: 1px solid #333;
+      border-radius: 0;
+      padding: 4px 2px;
+      font-size: 11pt;
+    }
+
+    textarea {
+      border: 1px solid #999;
+      min-height: 50px;
+      font-size: 11pt;
+    }
+
+    .screenshot-zone {
+      min-height: 120px;
+      border: 1px dashed #999;
+      page-break-inside: avoid;
+    }
+
+    .screenshot-zone .remove-btn { display: none !important; }
+    .screenshot-zone .placeholder-text { font-size: 10pt; }
+
+    .no-print { display: none !important; }
+
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .stop-check, .launch-pad { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<h1>Week 12 Session B — Date Table Workshop</h1>
+<p class="subtitle">Building and Connecting Your Date Table</p>
+<p class="meta">Chapter 9: Dimensional Modeling (Section 9.6) &nbsp;|&nbsp; Time Estimate: 25–30 minutes &nbsp;|&nbsp; 15 Steps across 4 Phases</p>
+
+<div class="student-info">
+  <div>
+    <label for="student-name">Name (Last, First):</label>
+    <input type="text" id="student-name" placeholder="e.g., Garcia, Sofia">
+  </div>
+  <div>
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="e.g., April 2, 2026">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="launch-pad">
+  <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+  <p><strong>What you are building:</strong> A complete Date table — a dedicated calendar dimension connected to your Sabor Miami star schema</p>
+  <p><strong>Tool:</strong> Power BI Desktop → Table View (build), Model View (connect), Report View (verify)</p>
+  <p><strong>File to open:</strong> Your Sabor Miami .pbix file from Session 12A — the file with all 5 tables and 3 relationships configured</p>
+  <p><strong>Time estimate:</strong> 25–30 minutes</p>
+  <p><strong>Steps:</strong> 15 steps across 4 phases</p>
+  <p><strong>What "done" looks like:</strong> A six-table star schema with a Date table containing Year, Month Number, Month Name, Quarter, Day of Week, Is Weekend, and Day Number columns — verified with a Matrix visual showing sales by quarter and month in the correct order</p>
+  <p><strong>Start here →</strong> Open your Sabor Miami .pbix file and switch to <strong>Table View</strong> (second icon on the left sidebar — looks like a grid)</p>
+</div>
+
+<!-- ============ WHY: DATE TABLE ============ -->
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>Your <code>sales</code> table already has a <code>date</code> column. You can drag it into a visual and see sales by date. So why build a whole separate table?</p>
+  <p><strong>Three reasons:</strong></p>
+  <ol>
+    <li><strong>Time intelligence requires it.</strong> In Chapter 12, you will write DAX measures like "year-to-date sales" and "same period last year." Those functions <strong>require</strong> a marked Date table to work. Without one, they produce errors.</li>
+    <li><strong>Grouping by month, quarter, or year requires date attributes.</strong> The <code>sales[date]</code> column contains full dates (2024-01-15). If you want to group by "January" or "Q1," you need separate columns for Month Name and Quarter. Those live in the Date table.</li>
+    <li><strong>Continuous date coverage.</strong> What if no sales happened on a holiday? Your <code>sales</code> table has no row for that date. A Date table has <strong>every</strong> date — including days with zero sales — which makes charts continuous and time comparisons accurate.</li>
+  </ol>
+  <p>Almost every Power BI model in the professional world has a Date table. Building one is a standard skill you will use on every project.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 1 ============ -->
+<h2><span class="phase-marker">Phase 1 of 4: Setup</span></h2>
+
+<h3>Step 1: Verify your starting point</h3>
+
+<ol>
+  <li>Open your Sabor Miami .pbix file in Power BI Desktop</li>
+  <li>Make sure you are in the <strong>main Power BI Desktop window</strong> — the ribbon should be <strong>dark blue or gray</strong> (not green). If you see a green ribbon, click <strong>Close &amp; Apply</strong> first</li>
+  <li>Switch to <strong>Table View</strong> — click the <strong>second icon</strong> on the left sidebar (looks like a grid)</li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>In the <strong>Data pane</strong> (right side of the screen), you should see your 5 tables: <code>sales</code>, <code>menu_items</code>, <code>trucks</code>, <code>employees</code>, and <code>events</code>. If any are missing, go back to Model View and check your file.</p>
+</div>
+
+<hr>
+
+<h3>Step 2: Examine the dates in your Sales table</h3>
+
+<ol>
+  <li>In the Data pane, click on the <strong><code>sales</code></strong> table</li>
+  <li>Find the <strong><code>date</code></strong> column and scroll through it</li>
+  <li>Notice the date format and the range — what is the earliest date? What is the latest?</li>
+</ol>
+
+<div class="response-block">
+  <label>What is the earliest date in your Sales table? The latest?</label>
+  <textarea rows="1" placeholder="e.g., Earliest: 1/1/2024, Latest: 12/31/2024"></textarea>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 2 ============ -->
+<h2><span class="phase-marker">Phase 2 of 4: Build the Date Table</span></h2>
+
+<h3>Step 3: Create a new calculated table</h3>
+
+<ol>
+  <li><strong>Find It:</strong> Click the <strong>Modeling tab</strong> in the ribbon at the top of the screen</li>
+  <li><strong>Find It:</strong> In the <strong>Calculations</strong> section (left side of the Modeling ribbon), find the <strong>New Table</strong> button</li>
+  <li><strong>Do It:</strong> Click <strong>New Table</strong></li>
+  <li>A <strong>formula bar</strong> appears at the top of the screen with the cursor blinking</li>
+</ol>
+
+<p><strong>WHERE AM I?</strong> You should be in Table View with the Modeling tab active in the ribbon. The formula bar should be visible at the top of the work area, ready for you to type.</p>
+
+<hr>
+
+<h3>Step 4: Type the CALENDARAUTO formula</h3>
+
+<p>In the formula bar, type the following exactly as shown, then press <strong>Enter</strong>:</p>
+
+<div class="formula-block">Date = CALENDARAUTO()</div>
+
+<p><strong>What this does:</strong> <code>CALENDARAUTO()</code> scans every date column across all tables in your model, finds the earliest and latest dates, and generates a complete calendar covering that full range. For Sabor Miami, that means every day in 2024 (and possibly some days before and after, depending on your data).</p>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>After pressing Enter, a new table called <strong>Date</strong> should appear in the Data pane on the right. It has a single column also called <strong>Date</strong>, containing a list of dates — one row per day.</p>
+  <p>Check the <strong>status bar</strong> at the bottom of the screen — it shows the row count. For Sabor Miami, expect approximately <strong>365–730 rows</strong> (one or two years of dates).</p>
+  <p><strong>If you see an error:</strong> Make sure you typed the formula exactly: <code>Date = CALENDARAUTO()</code> — including the equals sign at the beginning and the parentheses at the end.</p>
+</div>
+
+<div class="response-block">
+  <label>How many rows does your Date table have? (Check the status bar at the bottom of the screen)</label>
+  <textarea rows="1" placeholder="e.g., 366 rows"></textarea>
+</div>
+
+<hr>
+
+<h3>Step 5: Add a Year column</h3>
+
+<p>Now your Date table has dates, but no way to group by year. Let us add that.</p>
+
+<ol>
+  <li>Make sure the <strong>Date</strong> table is selected in the Data pane</li>
+  <li>Click the <strong>Modeling tab</strong> in the ribbon</li>
+  <li>Click <strong>New Column</strong> (in the Calculations section, right next to New Table)</li>
+  <li>In the formula bar, type the following and press <strong>Enter</strong>:</li>
+</ol>
+
+<div class="formula-block">Year = YEAR('Date'[Date])</div>
+
+<p><strong>What this does:</strong> The <code>YEAR()</code> function extracts the four-digit year from each date. A new column called <strong>Year</strong> appears in the Date table with values like 2024.</p>
+
+<hr>
+
+<h3>Step 6: Add Month Number, Month Name, and Quarter columns</h3>
+
+<p>Repeat the <strong>New Column</strong> process three more times. For each formula below, click <strong>New Column</strong> on the Modeling tab, type the formula, and press <strong>Enter</strong>.</p>
+
+<p><strong>Month Number:</strong></p>
+<div class="formula-block">Month Number = MONTH('Date'[Date])</div>
+
+<p><strong>Month Name:</strong></p>
+<div class="formula-block">Month Name = FORMAT('Date'[Date], "MMMM")</div>
+
+<p><strong>Quarter:</strong></p>
+<div class="formula-block">Quarter = "Q" &amp; QUARTER('Date'[Date])</div>
+
+<p><strong>What these do:</strong></p>
+<ul>
+  <li><code>MONTH()</code> returns the month as a number (1–12)</li>
+  <li><code>FORMAT()</code> with <code>"MMMM"</code> (four capital M's) returns the full month name ("January," "February," etc.)</li>
+  <li><code>QUARTER()</code> returns the quarter number (1–4), and the <code>"Q" &amp;</code> adds the letter Q in front ("Q1," "Q2," etc.)</li>
+</ul>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Date table should now have <strong>5 columns</strong>: Date, Year, Month Number, Month Name, and Quarter. Scroll through the data to verify:</p>
+  <ul>
+    <li>Year shows 2024 (and possibly 2023 or 2025 depending on the range)</li>
+    <li>Month Number shows values 1 through 12</li>
+    <li>Month Name shows full names like "January," "February"</li>
+    <li>Quarter shows "Q1" through "Q4"</li>
+  </ul>
+  <p><strong>If Month Name shows numbers instead of names:</strong> Check that you typed <code>"MMMM"</code> (four capital M's) in the FORMAT function, not <code>"MM"</code> (which gives two-digit month numbers).</p>
+</div>
+
+<hr>
+
+<h3>Step 7: Add Day of Week and Is Weekend columns</h3>
+
+<p>Click <strong>New Column</strong> two more times for these formulas:</p>
+
+<p><strong>Day of Week:</strong></p>
+<div class="formula-block">Day of Week = FORMAT('Date'[Date], "dddd")</div>
+
+<p><strong>Is Weekend:</strong></p>
+<div class="formula-block">Is Weekend = IF(WEEKDAY('Date'[Date], 2) > 5, "Weekend", "Weekday")</div>
+
+<p><strong>What these do:</strong></p>
+<ul>
+  <li><code>FORMAT()</code> with <code>"dddd"</code> returns the full day name ("Monday," "Tuesday," etc.)</li>
+  <li><code>WEEKDAY()</code> with the second parameter <code>2</code> uses Monday = 1 through Sunday = 7. If the result is greater than 5 (Saturday = 6 or Sunday = 7), the formula returns "Weekend"; otherwise it returns "Weekday"</li>
+</ul>
+
+<hr>
+
+<h3>Step 8: Add a Day Number column (for sorting)</h3>
+
+<p>Click <strong>New Column</strong> one more time:</p>
+
+<div class="formula-block">Day Number = WEEKDAY('Date'[Date], 2)</div>
+
+<p><strong>What this does:</strong> Returns a number from 1 (Monday) to 7 (Sunday). You will use this column to sort Day of Week correctly — so Monday comes before Tuesday, not after Thursday (which is what happens with alphabetical sorting).</p>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Date table should now have <strong>8 columns</strong>: Date, Year, Month Number, Month Name, Quarter, Day of Week, Is Weekend, and Day Number. Scroll through to verify:</p>
+  <ul>
+    <li>January rows should show Month Number = 1, Month Name = "January," Quarter = "Q1"</li>
+    <li>A Monday row should show Day of Week = "Monday," Day Number = 1, Is Weekend = "Weekday"</li>
+    <li>A Saturday row should show Day Number = 6, Is Weekend = "Weekend"</li>
+  </ul>
+</div>
+
+<div class="response-block">
+  <label>List the 8 columns now in your Date table:</label>
+  <textarea rows="2" placeholder="e.g., Date, Year, Month Number, ..."></textarea>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your Date table in Table View showing all 8 columns</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<!-- ============ TAKE A BREATH ============ -->
+<div class="udn-box take-breath">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>You just built a Date table from scratch using DAX — your first real encounter with the formula bar. That is seven calculated columns, each doing something different. In Chapter 11, you will use the same formula bar to write measures. For now, take a moment. Stretch. The next steps are configuration, not formula writing.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 3 ============ -->
+<h2><span class="phase-marker">Phase 3 of 4: Configure</span></h2>
+
+<h3>Step 9: Sort Month Name by Month Number</h3>
+
+<p>Without this step, Power BI will sort your months <strong>alphabetically</strong> — April before January, December before February. That is wrong. Here is how to fix it:</p>
+
+<ol>
+  <li>Click the <strong>Month Name</strong> column header in the Date table (make sure the column is selected — it should be highlighted)</li>
+  <li>Look at the ribbon — a <strong>Column tools</strong> tab should appear (this tab only shows when a column is selected)</li>
+  <li>Click the <strong>Column tools</strong> tab</li>
+  <li>Click <strong>Sort by Column</strong></li>
+  <li>Select <strong>Month Number</strong> from the dropdown</li>
+</ol>
+
+<p>Now "January" sorts as 1, "February" as 2, and so on — chronological order instead of alphabetical.</p>
+
+<div class="udn-box common-mistake">
+  <span class="udn-label">⚠️ COMMON MISTAKE</span>
+  <p>Forgetting the Sort by Column step is one of the most common issues in Power BI reports. If your charts ever show months in the wrong order (April, August, December, February...), this is the fix. Professionals do this on every Date table they build.</p>
+</div>
+
+<hr>
+
+<h3>Step 10: Sort Day of Week by Day Number</h3>
+
+<p>Same process for days of the week:</p>
+
+<ol>
+  <li>Click the <strong>Day of Week</strong> column header</li>
+  <li>Click the <strong>Column tools</strong> tab in the ribbon</li>
+  <li>Click <strong>Sort by Column</strong></li>
+  <li>Select <strong>Day Number</strong></li>
+</ol>
+
+<p>Now days sort Monday through Sunday instead of alphabetically (which would put Friday before Monday and Wednesday last).</p>
+
+<p>After sorting, hide the Day Number column — it was only needed for sorting:</p>
+
+<ol>
+  <li><strong>Right-click</strong> the <strong>Day Number</strong> column header</li>
+  <li>Select <strong>Hide in report view</strong></li>
+</ol>
+
+<p>The column still exists in the model (and still controls sorting), but it will not clutter the Fields pane when building reports.</p>
+
+<hr>
+
+<h3>Step 11: Mark as Date Table</h3>
+
+<p>This step registers your Date table as the official calendar for the entire model. Without it, time intelligence DAX functions in Chapter 12 will not work.</p>
+
+<ol>
+  <li>Make sure the <strong>Date</strong> table is selected in the Data pane</li>
+  <li>Look at the ribbon — click the <strong>Table tools</strong> tab (this tab appears when a table is selected)</li>
+  <li>Click <strong>Mark as Date Table</strong></li>
+  <li>A dialog appears asking which column contains the dates — select the <strong>Date</strong> column</li>
+  <li>Click <strong>OK</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>After marking the table, the Date table icon in the Data pane should change — it now shows a <strong>small calendar symbol</strong> next to the table name. This confirms Power BI recognizes it as the official calendar.</p>
+  <p><strong>If you see a validation error:</strong> It usually means the Date column has gaps (missing dates) or duplicate dates. <code>CALENDARAUTO()</code> should not produce either. Check that your formula reads exactly <code>Date = CALENDARAUTO()</code> and that the Date column contains continuous dates with no blanks.</p>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>Marking a table as a Date table does two things:</p>
+  <ol>
+    <li>It <strong>disables Power BI's automatic date hierarchy</strong> (which can be confusing and inconsistent)</li>
+    <li>It <strong>enables time intelligence functions</strong> — DAX functions like <code>TOTALYTD</code>, <code>SAMEPERIODLASTYEAR</code>, and <code>DATEADD</code> that you will use in Chapter 12</li>
+  </ol>
+  <p>Think of it as registering your calendar with Power BI: "This is THE calendar. Use this one for all time-based calculations."</p>
+</div>
+
+<hr>
+
+<h3>Step 12: Create the relationship to Sales</h3>
+
+<ol>
+  <li>Switch to <strong>Model View</strong> — click the <strong>third icon</strong> on the left sidebar (three connected boxes)</li>
+  <li>Find the new <strong>Date</strong> table box on the canvas. It may appear off to the side or overlapping other tables — drag it to a clear spot near the <code>sales</code> table</li>
+  <li>Drag the <strong>Date</strong> column from the <strong>Date</strong> table onto the <strong>date</strong> column in the <strong>sales</strong> table</li>
+  <li>A relationship line appears</li>
+  <li><strong>Double-click the line</strong> to verify:
+    <ul>
+      <li>Cardinality: <strong>One to many (1:*)</strong></li>
+      <li>Cross filter direction: <strong>Single</strong></li>
+    </ul>
+  </li>
+  <li>Click <strong>OK</strong></li>
+</ol>
+
+<p>Now rearrange your tables so the star shape is clear: <code>sales</code> in the center, and all dimension tables — including the new Date table — radiating outward.</p>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Model View should now show <strong>6 tables</strong> — the original 5 from Session 12A, plus the new Date table. You should see <strong>4 relationship lines</strong> radiating from <code>sales</code>:</p>
+  <ul>
+    <li>sales → trucks</li>
+    <li>sales → menu_items</li>
+    <li>sales → employees</li>
+    <li>sales → Date</li>
+  </ul>
+  <p>The <code>events</code> table is present but unconnected (correct for now). The overall shape is a star — one fact table in the center, five dimension tables around it.</p>
+</div>
+
+<div class="response-block">
+  <label>What cardinality did the Date-to-Sales relationship show?</label>
+  <textarea rows="1" placeholder="e.g., One to many (1:*)"></textarea>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your completed 6-table star schema in Model View</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 4 ============ -->
+<h2><span class="phase-marker">Phase 4 of 4: Verify</span></h2>
+
+<h3>Step 13: Create a Matrix visual to test quarterly and monthly grouping</h3>
+
+<ol>
+  <li>Switch to <strong>Report View</strong> — click the <strong>first icon</strong> on the left sidebar (bar chart icon)</li>
+  <li>In the <strong>Visualizations pane</strong> (right side), click the <strong>Matrix</strong> visual icon — it looks like a grid with rows and columns (different from the Table icon)</li>
+  <li>An empty Matrix visual appears on the canvas</li>
+  <li>In the <strong>Data pane</strong> (far right), expand the <strong>Date</strong> table</li>
+  <li>Drag <strong>Quarter</strong> to the <strong>Rows</strong> well of the visual</li>
+  <li>Drag <strong>Month Name</strong> to the <strong>Rows</strong> well, <strong>below Quarter</strong> — this creates a drill-down grouping (quarters containing months)</li>
+  <li>From the <strong>sales</strong> table, drag <strong>amount</strong> to the <strong>Values</strong> well</li>
+</ol>
+
+<p>You should see quarterly subtotals (Q1, Q2, Q3, Q4) that you can expand to see monthly breakdowns.</p>
+
+<p><strong>To expand the quarters:</strong> Click the <strong>+</strong> icon next to a quarter label, or use the expand/collapse icons in the visual header (the small arrows at the top of the visual).</p>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Matrix visual should show:</p>
+  <ul>
+    <li><strong>Quarterly rows</strong> (Q1, Q2, Q3, Q4) with sales totals</li>
+    <li>When expanded, <strong>monthly rows</strong> underneath each quarter in <strong>chronological order</strong> (January, February, March under Q1 — not alphabetical)</li>
+    <li><strong>Different amounts</strong> for each month/quarter</li>
+  </ul>
+  <p>✅ <strong>Months in chronological order with different amounts</strong> = Your Date table, relationship, and Sort by Column are all working correctly. 🎉</p>
+  <p>❌ <strong>Months in alphabetical order</strong> (April, August, December...) = Go back and complete Step 9 — sort Month Name by Month Number.</p>
+  <p>❌ <strong>All months show the same amount</strong> = The relationship between Date and Sales is missing or misconfigured. Go to Model View and verify the connection.</p>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your Matrix visual showing sales by Quarter → Month Name (expand at least one quarter)</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<h3>Step 14: Create a Table visual to test Day of Week</h3>
+
+<ol>
+  <li>Click an <strong>empty area</strong> on the canvas to deselect the Matrix visual</li>
+  <li>Click the <strong>Table</strong> visual icon in the Visualizations pane</li>
+  <li>From the <strong>Date</strong> table, check <strong>Day of Week</strong></li>
+  <li>From the <strong>sales</strong> table, check <strong>amount</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Table visual should show <strong>7 rows</strong> (Monday through Sunday) with different sales amounts. The days should be in <strong>Monday-through-Sunday order</strong> — not alphabetical.</p>
+  <p>✅ <strong>Days in correct order</strong> = Your Sort by Column step worked.</p>
+  <p>❌ <strong>Days in alphabetical order</strong> (Friday, Monday, Saturday...) = Go back and complete Step 10 — sort Day of Week by Day Number.</p>
+</div>
+
+<div class="response-block">
+  <label>Which day of the week shows the highest sales amount? Which shows the lowest?</label>
+  <textarea rows="2" placeholder="e.g., Highest: Saturday ($X,XXX), Lowest: Tuesday ($X,XXX)"></textarea>
+</div>
+
+<hr>
+
+<h3>Step 15: Save your file</h3>
+
+<p>Press <strong>Ctrl + S</strong> to save your work.</p>
+
+<hr>
+
+<!-- ============ WHAT SUCCESS LOOKS LIKE ============ -->
+<h2>What Success Looks Like</h2>
+
+<p>When you are done, your file should have:</p>
+
+<p><strong>In Table View — Date table with 8 columns:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>Example Values</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Date</td><td>1/1/2024, 1/2/2024, ...</td><td>One row per day, continuous</td></tr>
+    <tr><td>Year</td><td>2024</td><td>Four-digit year</td></tr>
+    <tr><td>Month Number</td><td>1, 2, 3, ... 12</td><td>Used for sorting Month Name</td></tr>
+    <tr><td>Month Name</td><td>January, February, ...</td><td>Sorted by Month Number</td></tr>
+    <tr><td>Quarter</td><td>Q1, Q2, Q3, Q4</td><td>Text with Q prefix</td></tr>
+    <tr><td>Day of Week</td><td>Monday, Tuesday, ...</td><td>Sorted by Day Number</td></tr>
+    <tr><td>Is Weekend</td><td>Weekday or Weekend</td><td>Based on Saturday/Sunday</td></tr>
+    <tr><td>Day Number</td><td>1–7 (Mon–Sun)</td><td>Hidden — used for sorting only</td></tr>
+  </tbody>
+</table>
+
+<p><strong>In Model View:</strong></p>
+<ul>
+  <li>6 tables in a star pattern with <code>sales</code> at the center</li>
+  <li>4 relationship lines (trucks, menu_items, employees, Date)</li>
+  <li>Date table icon shows a calendar symbol (confirming Mark as Date Table)</li>
+</ul>
+
+<p><strong>In Report View:</strong></p>
+<ul>
+  <li>A Matrix visual showing sales by Quarter → Month Name in chronological order</li>
+  <li>A Table visual showing sales by Day of Week in Monday-through-Sunday order</li>
+</ul>
+
+<hr>
+
+<!-- ============ LOOKING AHEAD ============ -->
+<h2>Looking Ahead</h2>
+
+<p>Your Sabor Miami star schema is now complete — a fact table connected to five dimension tables, including a Date table that will power all your time-based analysis going forward.</p>
+
+<div class="udn-box why-box">
+  <span class="udn-label">📖 BEFORE NEXT MONDAY</span>
+  <p>Next week is DAX — Chapter 11. <strong>Read it before Monday.</strong> This is the hardest content in the course. DAX is where you write your own calculations — Total Sales, Average Ticket, Tip Percentage — using the same formula bar you just used to build the Date table. You already have the foundation. Monday we build on it.</p>
+</div>
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.screenshot-zone').forEach(zone => {
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+
+  zone.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-btn')) return;
+    zone.focus();
+  });
+
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

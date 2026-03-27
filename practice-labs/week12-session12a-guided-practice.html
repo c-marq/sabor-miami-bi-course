@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 12 Session A — Guided Practice: Building the Sabor Miami Star Schema</title>
+<style>
+  /* ============ BASE STYLES ============ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14pt;
+    line-height: 1.6;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    background: #ffffff;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+  }
+
+  h2 {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #2E86C1;
+    margin-top: 36px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #2E86C1;
+  }
+
+  h3 {
+    font-size: 15pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 12px; }
+
+  .subtitle {
+    font-size: 13pt;
+    color: #555;
+    margin-bottom: 2px;
+  }
+
+  .meta {
+    font-size: 11pt;
+    color: #777;
+    margin-bottom: 24px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 28px 0;
+  }
+
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13pt;
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  ol, ul { margin-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 13pt;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  th {
+    background: #f0f4f8;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+
+  /* ============ STUDENT INFO HEADER ============ */
+  .student-info {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .student-info label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .student-info input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13pt;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  /* ============ LAUNCH PAD ============ */
+  .launch-pad {
+    background: #f0f4f8;
+    border: 2px solid #2E86C1;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .launch-pad-title {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #2E86C1;
+    margin-bottom: 12px;
+  }
+
+  .launch-pad p { margin-bottom: 8px; font-size: 13pt; }
+  .launch-pad strong { color: #1a1a2e; }
+
+  /* ============ UDN BOXES ============ */
+  .udn-box {
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 6px;
+    border-left: 6px solid;
+    font-size: 13pt;
+  }
+
+  .udn-box p { margin-bottom: 8px; }
+  .udn-box p:last-child { margin-bottom: 0; }
+  .udn-box ol, .udn-box ul { margin-bottom: 8px; }
+
+  .do-this { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .udn-label { color: #1E8449; }
+
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+
+  .common-mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .common-mistake .udn-label { color: #7D6608; }
+
+  .stop-check { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .udn-label { color: #922B21; }
+
+  .take-breath { background: #E8DAEF; border-color: #8E44AD; }
+  .take-breath .udn-label { color: #6C3483; }
+
+  .udn-label {
+    font-weight: 700;
+    font-size: 14pt;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* ============ FILLABLE FIELDS ============ */
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13pt;
+    line-height: 1.5;
+    border: 2px solid #adb5bd;
+    border-radius: 6px;
+    background: #fefefe;
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #2E86C1;
+    box-shadow: 0 0 0 3px rgba(46, 134, 193, 0.15);
+  }
+
+  .response-block {
+    margin: 16px 0;
+  }
+
+  .response-block label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ============ SCREENSHOT DROP ZONE ============ */
+  .screenshot-zone {
+    width: 100%;
+    min-height: 180px;
+    border: 2px dashed #adb5bd;
+    border-radius: 8px;
+    background: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 12px 0 16px 0;
+    padding: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+
+  .screenshot-zone:hover,
+  .screenshot-zone.drag-over {
+    border-color: #2E86C1;
+    background: #eaf2f8;
+  }
+
+  .screenshot-zone .placeholder-text {
+    color: #888;
+    font-size: 12pt;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .screenshot-zone .placeholder-icon {
+    font-size: 28pt;
+    color: #bbb;
+    margin-bottom: 8px;
+    pointer-events: none;
+  }
+
+  .screenshot-zone img {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+  .screenshot-zone .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 14pt;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .screenshot-zone.has-image .remove-btn { display: flex; }
+  .screenshot-zone.has-image .placeholder-text,
+  .screenshot-zone.has-image .placeholder-icon { display: none; }
+
+  .screenshot-label {
+    font-weight: 700;
+    font-size: 12pt;
+    color: #333;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ============ PROGRESS TRACKER ============ */
+  .phase-marker {
+    display: inline-block;
+    background: #2E86C1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11pt;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ============ PRINT STYLES ============ */
+  @media print {
+    body {
+      padding: 10px 20px;
+      font-size: 11pt;
+      max-width: 100%;
+    }
+
+    h1 { font-size: 18pt; }
+    h2 { font-size: 15pt; margin-top: 20px; }
+    h3 { font-size: 13pt; }
+
+    .udn-box, .launch-pad { font-size: 11pt; }
+
+    .student-info {
+      border-width: 1px;
+      padding: 10px 14px;
+    }
+
+    .student-info input {
+      border: none;
+      border-bottom: 1px solid #333;
+      border-radius: 0;
+      padding: 4px 2px;
+      font-size: 11pt;
+    }
+
+    textarea {
+      border: 1px solid #999;
+      min-height: 50px;
+      font-size: 11pt;
+    }
+
+    .screenshot-zone {
+      min-height: 120px;
+      border: 1px dashed #999;
+      page-break-inside: avoid;
+    }
+
+    .screenshot-zone .remove-btn { display: none !important; }
+
+    .screenshot-zone .placeholder-text { font-size: 10pt; }
+
+    .no-print { display: none !important; }
+
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .stop-check, .launch-pad { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<h1>Week 12 Session A — Guided Practice</h1>
+<p class="subtitle">Building the Sabor Miami Star Schema</p>
+<p class="meta">Chapter 8: Data Modeling Fundamentals &nbsp;|&nbsp; Time Estimate: 20–25 minutes &nbsp;|&nbsp; 12 Steps across 4 Phases</p>
+
+<div class="student-info">
+  <div>
+    <label for="student-name">Name (Last, First):</label>
+    <input type="text" id="student-name" placeholder="e.g., Garcia, Sofia">
+  </div>
+  <div>
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="e.g., March 31, 2026">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="launch-pad">
+  <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+  <p><strong>What you are building:</strong> The complete Sabor Miami data model — relationships between your tables configured and verified in Model View</p>
+  <p><strong>Tool:</strong> Power BI Desktop → Model View (primary), Report View (verification)</p>
+  <p><strong>File to open:</strong> Your Lab #2 file (<code>LastName_FirstName_Lab2.pbix</code>)</p>
+  <p><strong>Time estimate:</strong> 20–25 minutes</p>
+  <p><strong>Steps:</strong> 12 steps across 4 phases</p>
+  <p><strong>What "done" looks like:</strong> A star-shaped model in Model View with Sales in the center, connected to Trucks, Menu Items, and Employees — and two table visuals in Report View confirming the relationships work</p>
+  <p><strong>Start here →</strong> Open your Lab #2 .pbix file and make sure you are in the <strong>main Power BI Desktop window</strong> (dark blue or gray ribbon — NOT the green Power Query ribbon)</p>
+</div>
+
+<!-- ============ WHY: MERGES VS RELATIONSHIPS ============ -->
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>In Lab #2, you merged columns from Trucks, Menu Items, and Employees <strong>into</strong> the Sales table. That brought descriptive data (like <code>truck_name</code> and <code>item_name</code>) directly into Sales so you could inspect it and build visuals.</p>
+  <p>But here is the key insight: <strong>those merged columns are for your convenience. The data model's relationships are for Power BI's engine.</strong></p>
+  <p>When Power BI calculates a total, filters a chart, or answers a question like "Which truck sold the most?" — it does not use the merged columns. It uses <strong>relationships</strong> — the connections between the original tables.</p>
+  <p>Think of it this way:</p>
+  <ul>
+    <li><strong>Merged columns</strong> = you printed a copy of the truck name on every receipt (handy for reading)</li>
+    <li><strong>Relationships</strong> = the cash register system knows which receipts belong to which truck (essential for calculating)</li>
+  </ul>
+  <p>Both matter. But without relationships, Power BI's calculation engine has no way to connect your tables. That is what we build now.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 1 ============ -->
+<h2><span class="phase-marker">Phase 1 of 4: Setup</span></h2>
+
+<h3>Step 1: Open your file and switch to Model View</h3>
+
+<ol>
+  <li>Open your Lab #2 .pbix file in Power BI Desktop</li>
+  <li>If you see a green ribbon at the top, you are still in the Power Query Editor — click <strong>Close &amp; Apply</strong> on the Home tab to return to the main window</li>
+  <li>Look at the left sidebar — you will see a vertical stack of small icons</li>
+  <li>Click the <strong>third icon from the top</strong> — it looks like three small connected boxes. This is <strong>Model View</strong></li>
+</ol>
+
+<p><strong>WHERE AM I?</strong> You should now see your tables as rectangular boxes on a canvas, with column names listed inside each box. The ribbon at the top should be <strong>dark blue or gray</strong> (not green).</p>
+
+<hr>
+
+<h3>Step 2: Identify your tables</h3>
+
+<p>Look at the canvas. You should see boxes for these tables:</p>
+<ul>
+  <li><strong>sales</strong> — your fact table (the largest, with transaction data)</li>
+  <li><strong>menu_items</strong> — menu item names, categories, prices</li>
+  <li><strong>trucks</strong> — truck names, locations, statuses</li>
+  <li><strong>employees</strong> — employee names, roles</li>
+  <li><strong>events</strong> — event names, types, dates</li>
+</ul>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Count the table boxes on your canvas. You should see <strong>5 tables</strong> (sales, menu_items, trucks, employees, events). If any table is missing, go to <strong>Home tab → Transform Data</strong> to open Power Query, then verify that <strong>Enable Load</strong> is checked for all 5 tables. Click <strong>Close &amp; Apply</strong> to return.</p>
+</div>
+
+<div class="response-block">
+  <label>How many tables do you see in Model View?</label>
+  <textarea rows="1" placeholder="Type your count here..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 3: Check for auto-detected relationships</h3>
+
+<p>Power BI sometimes auto-detects relationships based on matching column names. Look for <strong>lines</strong> connecting any of your table boxes.</p>
+<ul>
+  <li><strong>If you see lines:</strong> Good — Power BI guessed some connections. We will verify and fix them in the next phase.</li>
+  <li><strong>If you see no lines:</strong> That is also fine — we will create the relationships from scratch.</li>
+</ul>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>Power BI's auto-detection is helpful but not always correct. It matches columns by name and data type, but it cannot know your business logic. We will verify every relationship it created — and fix anything it got wrong — rather than trusting it blindly.</p>
+</div>
+
+<div class="response-block">
+  <label>Did Power BI auto-detect any relationships? If so, which tables are connected?</label>
+  <textarea rows="2" placeholder="Describe what you see..."></textarea>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 2 ============ -->
+<h2><span class="phase-marker">Phase 2 of 4: Explore</span></h2>
+
+<h3>Step 4: Arrange your tables in a star pattern</h3>
+
+<p>Before building relationships, let us organize the canvas so you can see the model clearly.</p>
+<ol>
+  <li><strong>Drag the <code>sales</code> table</strong> to the <strong>center</strong> of the canvas</li>
+  <li><strong>Drag <code>trucks</code></strong> to the <strong>upper left</strong></li>
+  <li><strong>Drag <code>menu_items</code></strong> to the <strong>upper right</strong></li>
+  <li><strong>Drag <code>employees</code></strong> to the <strong>lower left</strong></li>
+  <li><strong>Drag <code>events</code></strong> to the <strong>lower right</strong></li>
+</ol>
+
+<div class="udn-box take-breath">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>You just arranged your first data model layout. This star shape has a formal name — <strong>star schema</strong> — which you will learn about in Chapter 9. For now, the important thing is that your transaction table (sales) sits at the center, and the tables that <em>describe</em> those transactions surround it. That is the architecture of almost every analytics model in the professional world.</p>
+</div>
+
+<hr>
+
+<h3>Step 5: Identify the key column pairs</h3>
+
+<p>Before dragging any lines, identify which columns connect each table to Sales. These are the <strong>shared key columns</strong> — the same column appearing in both tables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sales Column</th>
+      <th>Connects To</th>
+      <th>Dimension Column</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>truck_id</code></td>
+      <td><strong>trucks</strong></td>
+      <td><code>truck_id</code></td>
+    </tr>
+    <tr>
+      <td><code>menu_item_id</code></td>
+      <td><strong>menu_items</strong></td>
+      <td><code>menu_item_id</code></td>
+    </tr>
+    <tr>
+      <td><code>employee_id</code></td>
+      <td><strong>employees</strong></td>
+      <td><code>employee_id</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These are the same foreign key → primary key connections you learned about in your database course. Same concept, visual interface.</p>
+
+<hr>
+
+<!-- ============ PHASE 3 ============ -->
+<h2><span class="phase-marker">Phase 3 of 4: Build</span></h2>
+
+<h3>Step 6: Verify or create the Sales-to-Trucks relationship</h3>
+
+<p><strong>If Power BI auto-detected this relationship</strong> (you see a line between <code>sales</code> and <code>trucks</code>):</p>
+<ol>
+  <li><strong>Double-click the line</strong> between <code>sales</code> and <code>trucks</code> to open the Edit Relationship dialog</li>
+  <li>Verify these settings:
+    <ul>
+      <li>The matched columns are <strong><code>truck_id</code></strong> on both sides</li>
+      <li>Cardinality says <strong>Many to one (*:1)</strong></li>
+      <li>Cross filter direction says <strong>Single</strong></li>
+    </ul>
+  </li>
+  <li>If everything matches, click <strong>OK</strong> (or Cancel — no changes needed)</li>
+  <li>If the columns or settings are wrong, correct them and click <strong>OK</strong></li>
+</ol>
+
+<p><strong>If no line exists:</strong></p>
+<ol>
+  <li>Click on <strong><code>truck_id</code></strong> inside the <code>sales</code> table box</li>
+  <li><strong>Drag</strong> it to <strong><code>truck_id</code></strong> inside the <code>trucks</code> table box</li>
+  <li>Release the mouse button — the Create Relationship dialog appears</li>
+  <li>Confirm: <strong>Many to one (*:1)</strong> and <strong>Single</strong> cross filter direction</li>
+  <li>Click <strong>OK</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should see a line between <code>sales</code> and <code>trucks</code>. The line should show a <strong>*</strong> (asterisk) on the <code>sales</code> side and a <strong>1</strong> on the <code>trucks</code> side. This means "many sales connect to one truck." If you see different symbols, double-click the line and check the cardinality setting.</p>
+</div>
+
+<div class="udn-box common-mistake">
+  <span class="udn-label">⚠️ COMMON MISTAKE</span>
+  <p><strong>The T005 orphan issue:</strong> Your <code>sales</code> table contains 2 rows that reference <code>truck_id</code> = T005 — but there is no Truck T005 in your <code>trucks</code> table. This is called an <strong>orphan record</strong>: a row that points to a value that does not exist in the related table.</p>
+  <p>You may not notice anything wrong right now — Power BI still creates the relationship. But those 2 orphan rows will not appear in visuals that use truck names (because there is no truck name to look up). We will address what to do about orphan records when we refine the model in a later chapter. For now, just know they exist.</p>
+</div>
+
+<div class="response-block">
+  <label>What cardinality did the Sales-to-Trucks relationship show? (e.g., Many to one, One to one, etc.)</label>
+  <textarea rows="1" placeholder="Type the cardinality here..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 7: Verify or create the Sales-to-Menu Items relationship</h3>
+
+<p>Follow the same process as Step 6:</p>
+<ol>
+  <li><strong>If a line exists:</strong> Double-click it and verify <code>menu_item_id</code> on both sides, <strong>Many to one (*:1)</strong>, <strong>Single</strong></li>
+  <li><strong>If no line exists:</strong> Drag <code>menu_item_id</code> from <code>sales</code> to <code>menu_item_id</code> in <code>menu_items</code>. Confirm settings and click <strong>OK</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should now see <strong>2 relationship lines</strong> radiating from the <code>sales</code> table — one to <code>trucks</code> and one to <code>menu_items</code>. Both should show *:1 (many-to-one) cardinality.</p>
+</div>
+
+<hr>
+
+<h3>Step 8: Verify or create the Sales-to-Employees relationship</h3>
+
+<p>Follow the same process:</p>
+<ol>
+  <li><strong>If a line exists:</strong> Double-click and verify <code>employee_id</code> on both sides, <strong>Many to one (*:1)</strong>, <strong>Single</strong></li>
+  <li><strong>If no line exists:</strong> Drag <code>employee_id</code> from <code>sales</code> to <code>employee_id</code> in <code>employees</code>. Confirm settings and click <strong>OK</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Model View should now show <strong>3 relationship lines</strong> — <code>sales</code> connected to <code>trucks</code>, <code>menu_items</code>, and <code>employees</code>. The <code>events</code> table sits unconnected for now — that is correct. We will revisit the Events connection in a future session.</p>
+  <p>The overall shape should look like a star: <code>sales</code> in the center, three dimension tables around it, each connected by a single line.</p>
+</div>
+
+<hr>
+
+<h3>Step 9: Configure column properties</h3>
+
+<p>Before verifying, let us clean up a few column settings so your model behaves correctly in reports.</p>
+
+<p>For each dimension table (<code>trucks</code>, <code>menu_items</code>, <code>employees</code>), do the following:</p>
+<ol>
+  <li><strong>Click the ID column</strong> (e.g., <code>truck_id</code> in the <code>trucks</code> table)</li>
+  <li>Look at the <strong>Properties pane</strong> on the right side of the screen</li>
+  <li>Find <strong>Summarize by</strong> (it may say "Sum" by default) — change it to <strong>Don't Summarize</strong></li>
+  <li><strong>Right-click</strong> the ID column → select <strong>Hide in report view</strong></li>
+</ol>
+
+<p>Repeat for:</p>
+<ul>
+  <li><code>truck_id</code> in trucks</li>
+  <li><code>menu_item_id</code> in menu_items</li>
+  <li><code>employee_id</code> in employees</li>
+</ul>
+
+<p>Also do this for the key columns in the <code>sales</code> table:</p>
+<ul>
+  <li><code>truck_id</code>, <code>menu_item_id</code>, <code>employee_id</code> — set each to <strong>Don't Summarize</strong> and <strong>Hide in report view</strong></li>
+</ul>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>ID columns are identifiers — they label records, not quantities. Summing T001 + T002 + T003 produces a meaningless number. Setting "Don't Summarize" prevents Power BI from automatically summing them when you drag them into a visual. Hiding them from Report View keeps the Fields pane clean — report builders see <code>truck_name</code> (useful) instead of <code>truck_id</code> (not useful for visuals). The IDs still work behind the scenes for relationships.</p>
+</div>
+
+<div class="response-block">
+  <label>List the columns you changed to "Don't Summarize" and hid in report view:</label>
+  <textarea rows="3" placeholder="e.g., truck_id (trucks), truck_id (sales), ..."></textarea>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 4 ============ -->
+<h2><span class="phase-marker">Phase 4 of 4: Verify</span></h2>
+
+<div class="udn-box take-breath">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>You have built the data model — three relationships connecting your Sales table to Trucks, Menu Items, and Employees. The star shape is visible. Column properties are configured. Now comes the payoff: you test whether the relationships actually work by building two quick visuals.</p>
+</div>
+
+<h3>Step 10: Switch to Report View and test the Trucks relationship</h3>
+
+<ol>
+  <li>Click the <strong>Report View</strong> icon in the left sidebar — first icon from the top, looks like a bar chart</li>
+  <li>In the <strong>Visualizations pane</strong> (right side of the screen), click the <strong>Table</strong> visual icon — it looks like a small grid</li>
+  <li>An empty table visual appears on the canvas</li>
+  <li>In the <strong>Data pane</strong> (far right), expand the <strong>trucks</strong> table</li>
+  <li>Check the box next to <strong><code>truck_name</code></strong> — it appears in the table visual</li>
+  <li>Expand the <strong>sales</strong> table</li>
+  <li>Check the box next to <strong><code>amount</code></strong> — Power BI automatically sums it for each truck</li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your table visual should show <strong>4 rows</strong> — one for each Sabor Miami truck — with <strong>different</strong> sales amounts for each truck.</p>
+  <p>✅ <strong>4 rows with different amounts</strong> = Your Sales-to-Trucks relationship is working. Power BI knows which sales belong to which truck. 🎉</p>
+  <p>❌ <strong>1 row with a grand total</strong> = The relationship is missing. Go back to Model View and verify you created a relationship between <code>sales[truck_id]</code> and <code>trucks[truck_id]</code>.</p>
+  <p>❌ <strong>4 rows with the SAME amount</strong> = The relationship is connecting the wrong columns. Double-click the relationship line in Model View and check that <code>truck_id</code> is matched on both sides.</p>
+</div>
+
+<div class="response-block">
+  <label>How many rows does your Trucks verification visual show? Are the amounts different for each truck?</label>
+  <textarea rows="2" placeholder="e.g., 4 rows, all with different amounts..."></textarea>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your Trucks verification visual (Table showing truck_name and sum of amount)</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<h3>Step 11: Test the Menu Items relationship</h3>
+
+<ol>
+  <li>Click an <strong>empty area</strong> on the canvas to deselect the first visual</li>
+  <li>Click the <strong>Table</strong> visual icon again to create a second table visual</li>
+  <li>From the <strong>menu_items</strong> table, check <strong><code>item_name</code></strong></li>
+  <li>From the <strong>sales</strong> table, check <strong><code>amount</code></strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your second table visual should show <strong>multiple rows</strong> — one per menu item — with <strong>different</strong> amounts. Different amounts confirm the Sales-to-Menu Items relationship is working.</p>
+</div>
+
+<hr>
+
+<h3>Step 12: Save your file</h3>
+
+<p>Press <strong>Ctrl + S</strong> to save your work.</p>
+
+<hr>
+
+<!-- ============ WHAT SUCCESS LOOKS LIKE ============ -->
+<h2>What Success Looks Like</h2>
+
+<p>When you are done, your file should have:</p>
+
+<p><strong>In Model View:</strong></p>
+<ul>
+  <li>5 table boxes arranged in a star pattern</li>
+  <li><code>sales</code> in the center</li>
+  <li>3 relationship lines: sales → trucks, sales → menu_items, sales → employees</li>
+  <li>Each line shows *:1 (many-to-one) cardinality</li>
+  <li><code>events</code> is present but not connected (correct for now)</li>
+  <li>ID columns are hidden (shown with a dimmed eye icon)</li>
+</ul>
+
+<p><strong>In Report View:</strong></p>
+<ul>
+  <li>A table visual showing <code>truck_name</code> with different sales amounts per truck (4 rows)</li>
+  <li>A table visual showing <code>item_name</code> with different sales amounts per menu item</li>
+</ul>
+
+<span class="screenshot-label">📸 Screenshot: Your completed star schema in Model View (all 3 relationships visible)</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ LOOKING AHEAD ============ -->
+<h2>Looking Ahead</h2>
+
+<p>You have built the core of the Sabor Miami star schema. On Wednesday, you will add one more table to the model — a <strong>Date table</strong> — which gives Power BI a complete calendar for time-based calculations. You will also get your first look at the <strong>portfolio checklist</strong> and take <strong>Comprehension Check #3</strong>.</p>
+
+<div class="udn-box why-box">
+  <span class="udn-label">📖 BEFORE WEDNESDAY</span>
+  <p>Read Chapter 9 if you have not already. Pay attention to the terms <strong>fact table</strong>, <strong>dimension table</strong>, <strong>star schema</strong>, and <strong>granularity</strong> — those are the vocabulary for the quiz.</p>
+</div>
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.screenshot-zone').forEach(zone => {
+  // Paste handler
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+
+  // Click to focus for paste
+  zone.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-btn')) return;
+    zone.focus();
+  });
+
+  // Remove button
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+
+  // Drag over visual feedback
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
