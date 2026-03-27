@@ -2,14 +2,7 @@
 
 **Chapter 9 of 12 | Part III: Designing and Building a Data Model**
 
-<!--
-[CHAPTER OPENING IMAGE]
-Prompt: "Five translucent holographic data cubes arranged in a star pattern — one larger coral cube at center, four smaller teal cubes orbiting it — connected by thin pulsing light beams. Holographic classification labels ('FACT', 'DIMENSION') are being applied to the cubes mid-air. On the right, a translucent calendar grid materializes and connects to the central star via a new light beam, its cells filling with dates and months. A modern Miami rooftop terrace at golden hour, Biscayne Bay visible below with sunset reflections on the water, distant skyline silhouettes. Warm golden-hour sunlight from the left, cool holographic glow from the data cubes and calendar grid, teal and coral light reflections on the rooftop surface. Digital illustration, clean geometric forms, Miami color palette (coral #FF6B6B, teal #4ECDC4, warm gold #FFD93D, deep navy #1A1A2E), high-tech but warm atmosphere, no photorealism, slight motion blur on the materializing calendar. No text except 'FACT' and 'DIMENSION' labels on the cubes. No people. No Power BI interface elements. Landscape orientation (16:9)."
-Style: Nano Banana Pro — digital illustration, Miami palette
-Filename: images/ch09/fig-9-0-star-schema-date-table-journey.png
--->
-
-![Chapter 9 opening image: Five holographic data cubes in a star formation on a Miami rooftop at sunset, with classification labels being applied and a calendar grid materializing on the right side](images/ch09/fig-9-0-star-schema-date-table-journey.png)
+<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/a1ff6cf5-7b98-40f8-b90a-818f166eba34" />
 
 ---
 
