@@ -4,19 +4,7 @@
 
 **Competencies:** C4.2, C4.6, C4.9, C5.2–C5.4 | **PL-300 Domain:** Model the Data — Implement the Model
 
-<!-- NANO BANANA PRO | images/ch10/fig-10-0-refining-model-command-center.png
-Subject: A translucent holographic star-schema data model floating in a futuristic control room, with five interconnected table nodes radiating from a central fact table node. One branch extends upward as a glowing hierarchy tree (Year → Quarter → Month labels visible). Two nodes on the right side have translucent amber security shield panels sliding into place around them.
-
-Action/Scene: The hierarchy tree is unfolding upward with a smooth animation feel, the security panels are mid-slide (showing motion), and small floating tags label nodes with icons — a lock icon, a calculator icon, a calendar icon.
-
-Environment: A dark, sleek command center with curved glass panels and ambient teal edge lighting. A panoramic window in the background shows a distant Miami skyline at twilight — recognizable by the Freedom Tower silhouette and Biscayne Bay reflections.
-
-Lighting: Cool teal ambient light from below the holographic display, warm amber glow from the security panels, twilight purple-orange from the skyline window. High contrast between the glowing hologram and the dark room.
-
-Style: Digital illustration, clean vector-influenced aesthetic with subtle gradients. Color palette: deep navy (#1A1A2E), teal (#4ECDC4), coral (#FF6B6B), amber (#F1C40F), soft purple (#BB8FCE). No photorealism — stylized and modern.
-
-Constraints: No people in the image. No readable code or formulas. No Power BI screenshots or UI elements. Text limited to short labels only (Year, Q1, Q2, Month). No corporate logos.
--->
+<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/80a7d1e6-e9b9-4fc1-8f75-97c039e9ff87" />
 
 ---
 
