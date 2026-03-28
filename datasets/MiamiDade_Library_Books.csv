@@ -1,0 +1,16 @@
+book_id,title,author,genre,publication_year
+BK001,The House on Mango Street,Sandra Cisneros,Fiction,1984
+BK002,Becoming,Michelle Obama,Memoir,2018
+BK003,The Alchemist,Paulo Coelho,Fiction,1988
+BK004,Atomic Habits,James Clear,Self-Help,2018
+BK005,Educated,Tara Westover,Memoir,2018
+BK006,The Great Gatsby,F. Scott Fitzgerald,Fiction,1925
+BK007,Sapiens,Yuval Noah Harari,Non-Fiction,2011
+BK008,Born a Crime,Trevor Noah,Memoir,2016
+BK009,The Body Keeps the Score,Bessel van der Kolk,Psychology,2014
+BK010,Cien Anos de Soledad,Gabriel Garcia Marquez,Fiction,1967
+BK011,Dune,Frank Herbert,Science Fiction,1965
+BK012,The Color Purple,Alice Walker,Fiction,1982
+BK013,"Thinking, Fast and Slow",Daniel Kahneman,Psychology,2011
+BK014,Where the Crawdads Sing,Delia Owens,Fiction,2018
+BK015,The Lean Startup,Eric Ries,Business,2011
