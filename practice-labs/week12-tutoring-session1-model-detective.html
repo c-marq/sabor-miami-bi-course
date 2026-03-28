@@ -105,7 +105,13 @@
   <div class="launch-pad-title">🚀 LAUNCH PAD</div>
   <p><strong>What you are building:</strong> A star schema data model for a Miami-Dade County library checkout dataset — a dataset you have never seen before</p>
   <p><strong>Tool:</strong> Power BI Desktop → Power Query (load only), Model View (build), Report View (verify)</p>
-  <p><strong>Files to open:</strong> 4 CSV files — <code>MiamiDade_Library_Checkouts.csv</code>, <code>MiamiDade_Library_Books.csv</code>, <code>MiamiDade_Library_Branches.csv</code>, <code>MiamiDade_Library_Patrons.csv</code></p>
+  <p><strong>Files to download:</strong> 4 CSV files from GitHub → <a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/datasets/" target="_blank">github.com/c-marq/sabor-miami-bi-course/datasets/</a></p>
+  <ul style="margin: 4px 0 8px 20px; font-size: 13pt;">
+    <li><a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/datasets/MiamiDade_Library_Checkouts.csv" target="_blank">MiamiDade_Library_Checkouts.csv</a></li>
+    <li><a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/datasets/MiamiDade_Library_Books.csv" target="_blank">MiamiDade_Library_Books.csv</a></li>
+    <li><a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/datasets/MiamiDade_Library_Branches.csv" target="_blank">MiamiDade_Library_Branches.csv</a></li>
+    <li><a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/datasets/MiamiDade_Library_Patrons.csv" target="_blank">MiamiDade_Library_Patrons.csv</a></li>
+  </ul>
   <p><strong>Time estimate:</strong> 50–60 minutes</p>
   <p><strong>Steps:</strong> 16 steps across 4 phases</p>
   <p><strong>What "done" looks like:</strong> A four-table star schema with the fact table in the center, three dimension tables connected by relationships, verified with two table visuals</p>
@@ -123,15 +129,16 @@
 <!-- ============ PHASE 1 ============ -->
 <h2><span class="phase-marker">Phase 1 of 4: Load the Data</span></h2>
 
-<h3>Step 1: Open Power BI and connect to the CSV files</h3>
+<h3>Step 1: Download the CSV files and connect in Power BI</h3>
 
 <ol>
+  <li><strong>Download all 4 CSV files</strong> from GitHub (links in the Launch Pad above). For each file: click the link → click the <strong>Download raw file</strong> button (the download icon near the top right of the file preview) → save to a folder on your computer (e.g., <code>Desktop\Library_Data</code>)</li>
   <li>Open <strong>Power BI Desktop</strong> and create a <strong>new blank report</strong></li>
   <li>Click <strong>Home tab → Get Data → Text/CSV</strong></li>
-  <li>Navigate to the folder containing the 4 library CSV files</li>
+  <li>Navigate to the folder where you saved the 4 files</li>
   <li>Select <strong>MiamiDade_Library_Checkouts.csv</strong> and click <strong>Open</strong></li>
   <li>In the preview window, verify the data looks correct, then click <strong>Load</strong> (not Transform Data — this data is already clean)</li>
-  <li>Repeat steps 2–5 for the remaining three files:
+  <li>Repeat steps 3–6 for the remaining three files:
     <ul>
       <li><code>MiamiDade_Library_Books.csv</code></li>
       <li><code>MiamiDade_Library_Branches.csv</code></li>
