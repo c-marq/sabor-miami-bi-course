@@ -2,15 +2,7 @@
 
 **Chapter 11 of 12 | Part IV: DAX and Model Optimization**
 
-<!-- [CHAPTER OPENING IMAGE] images/ch11/fig-11-0-dax-kitchen-measures.png
-Nano Banana Pro Prompt:
-Subject: Futuristic food truck kitchen interior with holographic floating numbers and formula annotations
-Action: Chef plating a dish on one side while raw ingredients are being prepped on the other, holographic DAX-like formulas floating between both stations
-Environment: Inside a modern food truck with Miami skyline visible through the serving window, stainless steel surfaces reflecting holographic light
-Lighting: Split lighting — warm amber on the prep side transitioning to cool cyan-teal holographic glow on the calculation side
-Style: Digital illustration, clean futuristic aesthetic, vibrant Miami color palette (coral, turquoise, warm gold), high detail
-Constraints: No text or readable words in the image, no Power BI screenshots, no identifiable real brand logos
--->
+<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/cdb2a3a6-1cca-4dfb-bc5e-751035712aa3" />
 
 ---
 
