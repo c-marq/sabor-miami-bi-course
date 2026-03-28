@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutoring Session — Portfolio Model Audit</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14pt; line-height: 1.6; color: #1a1a1a;
+    max-width: 900px; margin: 0 auto; padding: 30px 40px; background: #fff;
+  }
+  h1 { font-size: 22pt; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  h2 { font-size: 18pt; font-weight: 700; color: #2E86C1; margin-top: 36px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #2E86C1; }
+  h3 { font-size: 15pt; font-weight: 700; color: #1a1a2e; margin-top: 24px; margin-bottom: 8px; }
+  p { margin-bottom: 12px; }
+  .subtitle { font-size: 13pt; color: #555; margin-bottom: 2px; }
+  .meta { font-size: 11pt; color: #777; margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+  code { font-family: 'Consolas', 'Courier New', monospace; font-size: 13pt; background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+  ol, ul { margin-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 13pt; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+  th { background: #f0f4f8; font-weight: 700; color: #1a1a2e; }
+
+  .student-info { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .student-info label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 4px; }
+  .student-info input { width: 100%; padding: 8px 10px; font-size: 13pt; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #adb5bd; border-radius: 4px; background: #fff; }
+
+  .launch-pad { background: #f0f4f8; border: 2px solid #2E86C1; border-radius: 8px; padding: 20px 24px; margin: 20px 0; }
+  .launch-pad-title { font-size: 16pt; font-weight: 700; color: #2E86C1; margin-bottom: 12px; }
+  .launch-pad p { margin-bottom: 8px; font-size: 13pt; }
+  .launch-pad strong { color: #1a1a2e; }
+
+  .udn-box { padding: 16px 20px; margin: 16px 0; border-radius: 6px; border-left: 6px solid; font-size: 13pt; }
+  .udn-box p { margin-bottom: 8px; }
+  .udn-box p:last-child { margin-bottom: 0; }
+  .udn-box ol, .udn-box ul { margin-bottom: 8px; }
+  .do-this { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .udn-label { color: #1E8449; }
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+  .common-mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .common-mistake .udn-label { color: #7D6608; }
+  .stop-check { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .udn-label { color: #922B21; }
+  .take-breath { background: #E8DAEF; border-color: #8E44AD; }
+  .take-breath .udn-label { color: #6C3483; }
+  .udn-label { font-weight: 700; font-size: 14pt; display: block; margin-bottom: 8px; }
+
+  textarea { width: 100%; padding: 10px 12px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 13pt; line-height: 1.5; border: 2px solid #adb5bd; border-radius: 6px; background: #fefefe; resize: vertical; min-height: 60px; }
+  textarea:focus { outline: none; border-color: #2E86C1; box-shadow: 0 0 0 3px rgba(46,134,193,0.15); }
+  .response-block { margin: 16px 0; }
+  .response-block label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 6px; }
+
+  .screenshot-zone { width: 100%; min-height: 180px; border: 2px dashed #adb5bd; border-radius: 8px; background: #fafbfc; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 12px 0 16px 0; padding: 20px; transition: border-color 0.2s, background 0.2s; position: relative; }
+  .screenshot-zone:hover, .screenshot-zone.drag-over { border-color: #2E86C1; background: #eaf2f8; }
+  .screenshot-zone .placeholder-text { color: #888; font-size: 12pt; text-align: center; pointer-events: none; }
+  .screenshot-zone .placeholder-icon { font-size: 28pt; color: #bbb; margin-bottom: 8px; pointer-events: none; }
+  .screenshot-zone img { max-width: 100%; max-height: 500px; border-radius: 4px; border: 1px solid #ddd; }
+  .screenshot-zone .remove-btn { position: absolute; top: 8px; right: 8px; background: #E74C3C; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 14pt; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; }
+  .screenshot-zone.has-image .remove-btn { display: flex; }
+  .screenshot-zone.has-image .placeholder-text, .screenshot-zone.has-image .placeholder-icon { display: none; }
+  .screenshot-label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 4px; }
+
+  .phase-marker { display: inline-block; background: #2E86C1; color: #fff; font-weight: 700; font-size: 11pt; padding: 4px 14px; border-radius: 20px; margin-bottom: 6px; letter-spacing: 0.3px; }
+
+  /* Checklist styling */
+  .audit-check { margin: 10px 0; padding: 10px 14px; background: #f8f9fa; border-radius: 6px; border: 1px solid #e0e0e0; display: flex; align-items: flex-start; gap: 12px; }
+  .audit-check input[type="checkbox"] { margin-top: 5px; width: 20px; height: 20px; flex-shrink: 0; accent-color: #27AE60; }
+  .audit-check label { font-size: 13pt; cursor: pointer; flex: 1; }
+  .audit-check .fix-note { font-size: 12pt; color: #922B21; font-style: italic; margin-top: 4px; }
+
+  .extension-box { background: #FFF8E1; border: 2px dashed #F1C40F; border-radius: 8px; padding: 20px 24px; margin: 24px 0; }
+  .extension-title { font-size: 16pt; font-weight: 700; color: #7D6608; margin-bottom: 12px; }
+
+  @media print {
+    body { padding: 10px 20px; font-size: 11pt; max-width: 100%; }
+    h1 { font-size: 18pt; } h2 { font-size: 15pt; margin-top: 20px; } h3 { font-size: 13pt; }
+    .udn-box, .launch-pad, .extension-box { font-size: 11pt; }
+    .student-info { border-width: 1px; padding: 10px 14px; }
+    .student-info input { border: none; border-bottom: 1px solid #333; border-radius: 0; padding: 4px 2px; font-size: 11pt; }
+    textarea { border: 1px solid #999; min-height: 50px; font-size: 11pt; }
+    .screenshot-zone { min-height: 120px; border: 1px dashed #999; page-break-inside: avoid; }
+    .screenshot-zone .remove-btn { display: none !important; }
+    .screenshot-zone .placeholder-text { font-size: 10pt; }
+    .audit-check { page-break-inside: avoid; }
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .stop-check, .launch-pad { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Tutoring Session — Portfolio Model Audit</h1>
+<p class="subtitle">Verify and Strengthen Your Sabor Miami Data Model</p>
+<p class="meta">Covers: Weeks 8–12 (Cleaning → Transforming → Combining → Modeling → Date Table) &nbsp;|&nbsp; Time Estimate: 45–60 minutes &nbsp;|&nbsp; Ungraded</p>
+
+<div class="student-info">
+  <div>
+    <label for="student-name">Name (Last, First):</label>
+    <input type="text" id="student-name" placeholder="e.g., Garcia, Sofia">
+  </div>
+  <div>
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="e.g., April 3, 2026">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="launch-pad">
+  <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+  <p><strong>What you are doing:</strong> A systematic check of your Sabor Miami .pbix file against the modeling standards from Weeks 8–12. You are not building anything new — you are verifying that everything you already built is correct and portfolio-ready.</p>
+  <p><strong>Tool:</strong> Power BI Desktop → Model View, Table View, Report View</p>
+  <p><strong>File to open:</strong> Your most recent Sabor Miami .pbix file (the one with the Date table from Session 12B)</p>
+  <p><strong>Time estimate:</strong> 45–60 minutes (audit + fixes + optional extension)</p>
+  <p><strong>What "done" looks like:</strong> Every checkbox on this audit is checked, any issues are fixed, and your model is ready for the DAX work starting next week</p>
+  <p><strong>Start here →</strong> Open your Sabor Miami .pbix file</p>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>Your portfolio project (Week 16) builds on everything in your .pbix file — Labs 1 through 4 stack on top of each other. If your data model has a broken relationship, a missing Date table, or an incorrectly configured column, every future lab will have problems.</p>
+  <p>Think of this as a building inspection before adding the next floor. It is much easier to fix a foundation issue now than after you have built three more stories on top of it.</p>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT 1: TABLES ============ -->
+<h2><span class="phase-marker">Audit 1: Tables</span></h2>
+
+<p>Switch to <strong>Model View</strong>. Check each item and fix any issues you find.</p>
+
+<div class="audit-check">
+  <input type="checkbox" id="a1-1">
+  <label for="a1-1"><strong>6 tables present</strong> — sales, menu_items, trucks, employees, events, and Date. All visible in Model View.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a1-2">
+  <label for="a1-2"><strong>sales is centered</strong> — the fact table is in the middle of the canvas with dimension tables arranged around it in a star pattern.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a1-3">
+  <label for="a1-3"><strong>Staging queries are not loaded</strong> — if you have a <code>sales_summary_by_truck</code> or similar staging query, it should NOT appear in Model View. (If it does, go to Power Query → right-click the query → uncheck Enable Load → Close &amp; Apply.)</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a1-4">
+  <label for="a1-4"><strong>Date table shows a calendar icon</strong> — in the Data pane, the Date table should have a small calendar symbol next to it, confirming it is marked as a Date table.</label>
+</div>
+
+<div class="response-block">
+  <label>Did you find any table issues? What did you fix?</label>
+  <textarea rows="2" placeholder="e.g., All good / Staging query was still loading — I disabled it"></textarea>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT 2: RELATIONSHIPS ============ -->
+<h2><span class="phase-marker">Audit 2: Relationships</span></h2>
+
+<p>Still in <strong>Model View</strong>. Double-click each relationship line to verify its settings.</p>
+
+<div class="audit-check">
+  <input type="checkbox" id="a2-1">
+  <label for="a2-1"><strong>sales → trucks</strong> — connected on <code>truck_id</code>, cardinality <strong>Many to one (*:1)</strong>, cross-filter direction <strong>Single</strong></label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a2-2">
+  <label for="a2-2"><strong>sales → menu_items</strong> — connected on <code>menu_item_id</code>, cardinality <strong>Many to one (*:1)</strong>, cross-filter direction <strong>Single</strong></label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a2-3">
+  <label for="a2-3"><strong>sales → employees</strong> — connected on <code>employee_id</code>, cardinality <strong>Many to one (*:1)</strong>, cross-filter direction <strong>Single</strong></label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a2-4">
+  <label for="a2-4"><strong>sales → Date</strong> — connected on <code>date</code> (sales) to <code>Date</code> (Date table), cardinality <strong>One to many (1:*)</strong>, cross-filter direction <strong>Single</strong></label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a2-5">
+  <label for="a2-5"><strong>4 relationship lines total</strong> — no extra relationships, no missing ones. The events table is present but not connected (that is correct).</label>
+</div>
+
+<div class="response-block">
+  <label>Did you find any relationship issues? What did you fix?</label>
+  <textarea rows="2" placeholder="e.g., All correct / Date relationship was missing — I created it"></textarea>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your Model View showing all 6 tables and 4 relationship lines</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT 3: COLUMN PROPERTIES ============ -->
+<h2><span class="phase-marker">Audit 3: Column Properties</span></h2>
+
+<p>Click on individual columns in Model View to check their properties in the Properties pane.</p>
+
+<div class="audit-check">
+  <input type="checkbox" id="a3-1">
+  <label for="a3-1"><strong>All ID columns set to "Don't Summarize"</strong> — this includes <code>truck_id</code>, <code>menu_item_id</code>, <code>employee_id</code> in both the sales table and their respective dimension tables.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a3-2">
+  <label for="a3-2"><strong>ID columns hidden in report view</strong> — ID columns should show a dimmed eye icon in Model View, indicating they are hidden from the Data pane in Report View.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a3-3">
+  <label for="a3-3"><strong>Day Number column hidden</strong> — in the Date table, the Day Number column (used for sorting Day of Week) should be hidden in report view.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a3-4">
+  <label for="a3-4"><strong>Month Name sorted by Month Number</strong> — click the Month Name column in the Date table, check Column tools → Sort by Column. It should say "Month Number."</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a3-5">
+  <label for="a3-5"><strong>Day of Week sorted by Day Number</strong> — same check: click Day of Week, check Sort by Column. It should say "Day Number."</label>
+</div>
+
+<div class="response-block">
+  <label>Did you find any column property issues? What did you fix?</label>
+  <textarea rows="2" placeholder="e.g., Month Name was not sorted — I set Sort by Column to Month Number"></textarea>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT 4: DATE TABLE ============ -->
+<h2><span class="phase-marker">Audit 4: Date Table Completeness</span></h2>
+
+<p>Switch to <strong>Table View</strong> and click on the <strong>Date</strong> table.</p>
+
+<div class="audit-check">
+  <input type="checkbox" id="a4-1">
+  <label for="a4-1"><strong>8 columns present</strong> — Date, Year, Month Number, Month Name, Quarter, Day of Week, Is Weekend, Day Number</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a4-2">
+  <label for="a4-2"><strong>Continuous date coverage</strong> — scroll through the dates. Every day should be represented with no gaps. January 1 through December 31 of the relevant year(s).</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a4-3">
+  <label for="a4-3"><strong>Month Name shows text</strong> — values should be "January," "February," etc. — not numbers. (If you see numbers, the FORMAT formula used "MM" instead of "MMMM".)</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a4-4">
+  <label for="a4-4"><strong>Quarter shows "Q1" through "Q4"</strong> — text with the Q prefix, not just numbers.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a4-5">
+  <label for="a4-5"><strong>Is Weekend shows "Weekend" or "Weekday"</strong> — not TRUE/FALSE or 1/0.</label>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT 5: VISUAL VERIFICATION ============ -->
+<h2><span class="phase-marker">Audit 5: Visual Verification</span></h2>
+
+<p>Switch to <strong>Report View</strong>. Create (or check) these test visuals. If you already have verification visuals from Session 12A/12B, use those.</p>
+
+<div class="audit-check">
+  <input type="checkbox" id="a5-1">
+  <label for="a5-1"><strong>Truck visual works</strong> — a Table visual with <code>truck_name</code> and sum of <code>amount</code> shows 4 rows with different amounts.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a5-2">
+  <label for="a5-2"><strong>Menu item visual works</strong> — a Table visual with <code>item_name</code> and sum of <code>amount</code> shows multiple rows with different amounts.</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a5-3">
+  <label for="a5-3"><strong>Month visual works and sorts correctly</strong> — a Table or Matrix visual with <code>Month Name</code> and sum of <code>amount</code> shows 12 months in <strong>chronological order</strong> (January first, December last).</label>
+</div>
+
+<div class="audit-check">
+  <input type="checkbox" id="a5-4">
+  <label for="a5-4"><strong>Day of Week visual works and sorts correctly</strong> — a Table visual with <code>Day of Week</code> and sum of <code>amount</code> shows 7 rows in <strong>Monday-through-Sunday order</strong>.</label>
+</div>
+
+<div class="response-block">
+  <label>Did any visuals show unexpected results? What did you fix?</label>
+  <textarea rows="2" placeholder="e.g., All good / Months were alphabetical — I fixed Sort by Column"></textarea>
+</div>
+
+<hr>
+
+<!-- ============ AUDIT SUMMARY ============ -->
+<h2>Audit Summary</h2>
+
+<div class="response-block">
+  <label>Total issues found and fixed:</label>
+  <textarea rows="1" placeholder="e.g., 2 issues found — both fixed"></textarea>
+</div>
+
+<div class="response-block">
+  <label>Is your .pbix file ready for next week's DAX work? Any remaining concerns?</label>
+  <textarea rows="2" placeholder="e.g., Yes, everything checks out / I still need help with..."></textarea>
+</div>
+
+<div class="udn-box take-breath">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>If every checkbox above is checked and your visuals are working, your data model is solid. You have a clean, well-structured star schema with a Date table — exactly the foundation that DAX measures need to work correctly. That is a real accomplishment.</p>
+</div>
+
+<hr>
+
+<!-- ============ EXTENSION ============ -->
+<div class="extension-box">
+  <div class="extension-title">⭐ OPTIONAL EXTENSION — The T005 Investigation</div>
+
+  <p><strong>For students who finish the audit early.</strong> This is not required — it is an opportunity to practice detective work with a real data quality issue.</p>
+
+  <p>Your <code>sales</code> table contains 2 rows that reference <code>truck_id</code> = T005. But your <code>trucks</code> table only has trucks T001 through T004. Those 2 rows are <strong>orphan records</strong> — they point to a truck that does not exist.</p>
+
+  <h3>Investigation Steps:</h3>
+
+  <ol>
+    <li>Switch to <strong>Table View</strong> and click on the <strong>sales</strong> table</li>
+    <li>Click the dropdown arrow on the <strong>truck_id</strong> column header to open the filter</li>
+    <li>Uncheck everything except <strong>T005</strong> and click OK</li>
+    <li>Look at the filtered rows — what can you learn about these orphan transactions?</li>
+  </ol>
+
+  <div class="response-block">
+    <label>How many rows have truck_id = T005? What dates are they from? What were the amounts?</label>
+    <textarea rows="3" placeholder="e.g., 2 rows, dated..., amounts..."></textarea>
+  </div>
+
+  <div class="response-block">
+    <label>When you created a Table visual with truck_name and sum of amount, did these 2 rows appear in the total? Why or why not?</label>
+    <textarea rows="3" placeholder="Think about what happens when a sales row has no matching truck..."></textarea>
+  </div>
+
+  <div class="response-block">
+    <label>If you were a data analyst at Sabor Miami and found orphan records like this, what would you recommend? (There is no single right answer — think about the options.)</label>
+    <textarea rows="4" placeholder="Options might include:\n- Remove the rows\n- Add a T005 record to the Trucks table\n- Flag them for investigation\n- Something else?"></textarea>
+  </div>
+
+  <p><strong>Clear the filter when you are done:</strong> Click the dropdown on <code>truck_id</code> again and select <strong>(Select All)</strong> to restore all rows.</p>
+</div>
+
+<hr>
+
+<div class="udn-box why-box">
+  <span class="udn-label">🎯 WHAT YOU DID TODAY</span>
+  <p>You systematically verified every component of your data model — tables, relationships, column properties, Date table, and visual behavior. Any issues you found and fixed now will prevent cascading problems in Labs 3 and 4. Your model is portfolio-ready.</p>
+</div>
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.screenshot-zone').forEach(zone => {
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) { if (!e.target.classList.contains('remove-btn')) zone.focus(); });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

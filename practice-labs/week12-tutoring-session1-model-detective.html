@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutoring Session — Model Detective: Miami-Dade Library Checkouts</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14pt; line-height: 1.6; color: #1a1a1a;
+    max-width: 900px; margin: 0 auto; padding: 30px 40px; background: #fff;
+  }
+  h1 { font-size: 22pt; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  h2 { font-size: 18pt; font-weight: 700; color: #2E86C1; margin-top: 36px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #2E86C1; }
+  h3 { font-size: 15pt; font-weight: 700; color: #1a1a2e; margin-top: 24px; margin-bottom: 8px; }
+  p { margin-bottom: 12px; }
+  .subtitle { font-size: 13pt; color: #555; margin-bottom: 2px; }
+  .meta { font-size: 11pt; color: #777; margin-bottom: 24px; }
+  hr { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+  code { font-family: 'Consolas', 'Courier New', monospace; font-size: 13pt; background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+  ol, ul { margin-left: 24px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 13pt; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+  th { background: #f0f4f8; font-weight: 700; color: #1a1a2e; }
+
+  .student-info { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .student-info label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 4px; }
+  .student-info input { width: 100%; padding: 8px 10px; font-size: 13pt; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #adb5bd; border-radius: 4px; background: #fff; }
+
+  .launch-pad { background: #f0f4f8; border: 2px solid #2E86C1; border-radius: 8px; padding: 20px 24px; margin: 20px 0; }
+  .launch-pad-title { font-size: 16pt; font-weight: 700; color: #2E86C1; margin-bottom: 12px; }
+  .launch-pad p { margin-bottom: 8px; font-size: 13pt; }
+  .launch-pad strong { color: #1a1a2e; }
+
+  .udn-box { padding: 16px 20px; margin: 16px 0; border-radius: 6px; border-left: 6px solid; font-size: 13pt; }
+  .udn-box p { margin-bottom: 8px; }
+  .udn-box p:last-child { margin-bottom: 0; }
+  .udn-box ol, .udn-box ul { margin-bottom: 8px; }
+  .do-this { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .udn-label { color: #1E8449; }
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+  .common-mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .common-mistake .udn-label { color: #7D6608; }
+  .stop-check { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .udn-label { color: #922B21; }
+  .take-breath { background: #E8DAEF; border-color: #8E44AD; }
+  .take-breath .udn-label { color: #6C3483; }
+  .udn-label { font-weight: 700; font-size: 14pt; display: block; margin-bottom: 8px; }
+
+  textarea { width: 100%; padding: 10px 12px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 13pt; line-height: 1.5; border: 2px solid #adb5bd; border-radius: 6px; background: #fefefe; resize: vertical; min-height: 60px; }
+  textarea:focus { outline: none; border-color: #2E86C1; box-shadow: 0 0 0 3px rgba(46,134,193,0.15); }
+  .response-block { margin: 16px 0; }
+  .response-block label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 6px; }
+
+  .screenshot-zone { width: 100%; min-height: 180px; border: 2px dashed #adb5bd; border-radius: 8px; background: #fafbfc; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 12px 0 16px 0; padding: 20px; transition: border-color 0.2s, background 0.2s; position: relative; }
+  .screenshot-zone:hover, .screenshot-zone.drag-over { border-color: #2E86C1; background: #eaf2f8; }
+  .screenshot-zone .placeholder-text { color: #888; font-size: 12pt; text-align: center; pointer-events: none; }
+  .screenshot-zone .placeholder-icon { font-size: 28pt; color: #bbb; margin-bottom: 8px; pointer-events: none; }
+  .screenshot-zone img { max-width: 100%; max-height: 500px; border-radius: 4px; border: 1px solid #ddd; }
+  .screenshot-zone .remove-btn { position: absolute; top: 8px; right: 8px; background: #E74C3C; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 14pt; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; }
+  .screenshot-zone.has-image .remove-btn { display: flex; }
+  .screenshot-zone.has-image .placeholder-text, .screenshot-zone.has-image .placeholder-icon { display: none; }
+  .screenshot-label { font-weight: 700; font-size: 12pt; color: #333; display: block; margin-bottom: 4px; }
+
+  .phase-marker { display: inline-block; background: #2E86C1; color: #fff; font-weight: 700; font-size: 11pt; padding: 4px 14px; border-radius: 20px; margin-bottom: 6px; letter-spacing: 0.3px; }
+
+  @media print {
+    body { padding: 10px 20px; font-size: 11pt; max-width: 100%; }
+    h1 { font-size: 18pt; } h2 { font-size: 15pt; margin-top: 20px; } h3 { font-size: 13pt; }
+    .udn-box, .launch-pad { font-size: 11pt; }
+    .student-info { border-width: 1px; padding: 10px 14px; }
+    .student-info input { border: none; border-bottom: 1px solid #333; border-radius: 0; padding: 4px 2px; font-size: 11pt; }
+    textarea { border: 1px solid #999; min-height: 50px; font-size: 11pt; }
+    .screenshot-zone { min-height: 120px; border: 1px dashed #999; page-break-inside: avoid; }
+    .screenshot-zone .remove-btn { display: none !important; }
+    .screenshot-zone .placeholder-text { font-size: 10pt; }
+    .no-print { display: none !important; }
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .stop-check, .launch-pad { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Tutoring Session — Model Detective</h1>
+<p class="subtitle">Miami-Dade Library Checkouts: Build a Star Schema from a New Dataset</p>
+<p class="meta">Reinforces: Chapter 8 (Relationships) + Chapter 9 (Fact vs. Dimension, Star Schema) &nbsp;|&nbsp; Time Estimate: 50–60 minutes &nbsp;|&nbsp; Ungraded Practice</p>
+
+<div class="student-info">
+  <div>
+    <label for="student-name">Name (Last, First):</label>
+    <input type="text" id="student-name" placeholder="e.g., Garcia, Sofia">
+  </div>
+  <div>
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="e.g., April 1, 2026">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="launch-pad">
+  <div class="launch-pad-title">🚀 LAUNCH PAD</div>
+  <p><strong>What you are building:</strong> A star schema data model for a Miami-Dade County library checkout dataset — a dataset you have never seen before</p>
+  <p><strong>Tool:</strong> Power BI Desktop → Power Query (load only), Model View (build), Report View (verify)</p>
+  <p><strong>Files to open:</strong> 4 CSV files — <code>MiamiDade_Library_Checkouts.csv</code>, <code>MiamiDade_Library_Books.csv</code>, <code>MiamiDade_Library_Branches.csv</code>, <code>MiamiDade_Library_Patrons.csv</code></p>
+  <p><strong>Time estimate:</strong> 50–60 minutes</p>
+  <p><strong>Steps:</strong> 16 steps across 4 phases</p>
+  <p><strong>What "done" looks like:</strong> A four-table star schema with the fact table in the center, three dimension tables connected by relationships, verified with two table visuals</p>
+  <p><strong>Start here →</strong> Open Power BI Desktop and create a new blank report</p>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>In Session 12A, you built the Sabor Miami star schema — but the instructor told you which table was the fact table and which columns to connect. In a real job, nobody tells you. You open a dataset and figure it out yourself.</p>
+  <p>This exercise gives you that experience with a dataset you have never seen before. By the end, you will have proven to yourself that you can look at any set of tables and identify the fact table, the dimensions, the keys, and the relationships — without anyone telling you.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 1 ============ -->
+<h2><span class="phase-marker">Phase 1 of 4: Load the Data</span></h2>
+
+<h3>Step 1: Open Power BI and connect to the CSV files</h3>
+
+<ol>
+  <li>Open <strong>Power BI Desktop</strong> and create a <strong>new blank report</strong></li>
+  <li>Click <strong>Home tab → Get Data → Text/CSV</strong></li>
+  <li>Navigate to the folder containing the 4 library CSV files</li>
+  <li>Select <strong>MiamiDade_Library_Checkouts.csv</strong> and click <strong>Open</strong></li>
+  <li>In the preview window, verify the data looks correct, then click <strong>Load</strong> (not Transform Data — this data is already clean)</li>
+  <li>Repeat steps 2–5 for the remaining three files:
+    <ul>
+      <li><code>MiamiDade_Library_Books.csv</code></li>
+      <li><code>MiamiDade_Library_Branches.csv</code></li>
+      <li><code>MiamiDade_Library_Patrons.csv</code></li>
+    </ul>
+  </li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>In the Data pane (right side of the screen), you should see <strong>4 tables</strong>: MiamiDade_Library_Checkouts, MiamiDade_Library_Books, MiamiDade_Library_Branches, and MiamiDade_Library_Patrons.</p>
+</div>
+
+<hr>
+
+<h3>Step 2: Explore each table in Table View</h3>
+
+<p>Switch to <strong>Table View</strong> (second icon on the left sidebar). Click on each table in the Data pane and look at the columns and rows. For each table, note:</p>
+<ul>
+  <li>How many rows does it have? (Check the status bar at the bottom)</li>
+  <li>What do the columns contain?</li>
+  <li>Does each row represent an <strong>event</strong> (something that happened) or a <strong>description</strong> (something that exists)?</li>
+</ul>
+
+<div class="response-block">
+  <label>Fill in what you observe about each table:</label>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:25%">Table Name</th>
+      <th style="width:15%">Row Count</th>
+      <th style="width:35%">What does each row represent?</th>
+      <th style="width:25%">Event or Description?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Checkouts</td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+    <tr>
+      <td>Books</td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+    <tr>
+      <td>Branches</td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+    <tr>
+      <td>Patrons</td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ============ PHASE 2 ============ -->
+<h2><span class="phase-marker">Phase 2 of 4: Analyze — The Detective Work</span></h2>
+
+<p>This is the phase where you think like a data modeler. No clicking in Power BI yet — just analyzing and writing down your conclusions.</p>
+
+<h3>Step 3: Identify the fact table</h3>
+
+<p>Remember the test from Chapter 9: <strong>Does this table record events, or does it describe events?</strong></p>
+
+<div class="response-block">
+  <label>Which table is the fact table? How do you know? (Name at least 2 clues that helped you decide)</label>
+  <textarea rows="3" placeholder="The fact table is _____ because..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 4: Identify the dimension tables</h3>
+
+<div class="response-block">
+  <label>Which tables are the dimension tables? What does each one describe about the events in the fact table?</label>
+  <textarea rows="4" placeholder="1. _____ describes...\n2. _____ describes...\n3. _____ describes..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 5: Identify the key column pairs</h3>
+
+<p>Look at the columns in each table. Find the <strong>shared key columns</strong> — columns that appear in both the fact table and a dimension table.</p>
+
+<div class="response-block">
+  <label>Fill in the key column pairs that will connect your tables:</label>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fact Table Column</th>
+      <th>Connects To (Dimension Table)</th>
+      <th>Dimension Column</th>
+      <th>Predicted Cardinality</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="e.g., Many to one"></textarea></td>
+    </tr>
+    <tr>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+    <tr>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+      <td><textarea rows="1" style="min-height:30px" placeholder="..."></textarea></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>Step 6: Predict the star schema shape</h3>
+
+<div class="response-block">
+  <label>Before you build it, draw or describe what your star schema will look like. Which table is in the center? Which tables surround it?</label>
+  <textarea rows="3" placeholder="Center: _____ \nSurrounding: ..."></textarea>
+</div>
+
+<div class="udn-box take-breath">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>You just did the hardest part — the thinking. You analyzed four tables you had never seen before, identified the fact table and dimensions, found the key columns, and predicted the cardinality. That is exactly what a data analyst does on Day 1 of any new project. Now you build it and see if your predictions were right.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 3 ============ -->
+<h2><span class="phase-marker">Phase 3 of 4: Build the Star Schema</span></h2>
+
+<h3>Step 7: Switch to Model View and arrange your tables</h3>
+
+<ol>
+  <li>Click the <strong>Model View</strong> icon (third icon on the left sidebar — three connected boxes)</li>
+  <li>Drag the <strong>fact table</strong> to the center of the canvas</li>
+  <li>Drag the three <strong>dimension tables</strong> around it — one above, one to the left, one to the right</li>
+</ol>
+
+<hr>
+
+<h3>Step 8: Delete any auto-detected relationships</h3>
+
+<p>Power BI may have auto-detected some relationships. For this exercise, we want you to build from scratch so you can verify your predictions.</p>
+
+<ol>
+  <li>If you see any relationship lines between tables, <strong>right-click</strong> each line</li>
+  <li>Select <strong>Delete</strong></li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should see <strong>4 table boxes</strong> on the canvas with <strong>no lines between them</strong>. The fact table should be in the center.</p>
+</div>
+
+<hr>
+
+<h3>Step 9: Configure ID columns</h3>
+
+<p>Before creating relationships, set the ID columns to <strong>Don't Summarize</strong> and <strong>Hide in report view</strong>. Do this for every ID column across all 4 tables (both the primary keys in dimension tables and the foreign keys in the fact table).</p>
+
+<div class="response-block">
+  <label>List every column you set to "Don't Summarize":</label>
+  <textarea rows="3" placeholder="e.g., checkout_id (checkouts), patron_id (checkouts), patron_id (patrons), ..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 10: Create the first relationship</h3>
+
+<p>Using the key column pairs you identified in Step 5, create your first relationship:</p>
+
+<ol>
+  <li>Drag the key column from the fact table to the matching column in the first dimension table</li>
+  <li>In the Create Relationship dialog, verify: <strong>Many to one (*:1)</strong> and <strong>Single</strong> cross filter direction</li>
+  <li>Click <strong>OK</strong></li>
+</ol>
+
+<div class="response-block">
+  <label>Which relationship did you create first? Did the cardinality match your prediction from Step 5?</label>
+  <textarea rows="2" placeholder="e.g., checkouts[book_id] → books[book_id], Many to one — matches my prediction"></textarea>
+</div>
+
+<hr>
+
+<h3>Step 11: Create the remaining relationships</h3>
+
+<p>Repeat the process for the other two dimension tables. For each one, drag the key column from the fact table to the matching column in the dimension table, verify <strong>Many to one (*:1)</strong> and <strong>Single</strong>, and click <strong>OK</strong>.</p>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Model View should now show <strong>3 relationship lines</strong> radiating from the fact table to the three dimension tables. Each line should show <strong>*:1</strong> cardinality. The overall shape should look like a <strong>star</strong>.</p>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your completed star schema in Model View (3 relationships visible)</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 4 ============ -->
+<h2><span class="phase-marker">Phase 4 of 4: Verify</span></h2>
+
+<h3>Step 12: Test the Branches relationship</h3>
+
+<ol>
+  <li>Switch to <strong>Report View</strong> (first icon on the left sidebar)</li>
+  <li>Click the <strong>Table</strong> visual icon in the Visualizations pane</li>
+  <li>From the <strong>Branches</strong> table, check <strong>branch_name</strong></li>
+  <li>From the <strong>Checkouts</strong> table, check <strong>checkout_id</strong> — Power BI will count it</li>
+</ol>
+
+<div class="udn-box stop-check">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should see <strong>5 rows</strong> — one per branch — with <strong>different</strong> checkout counts. Different counts = the relationship is working.</p>
+</div>
+
+<hr>
+
+<h3>Step 13: Test the Books relationship</h3>
+
+<ol>
+  <li>Click an <strong>empty area</strong> on the canvas to deselect</li>
+  <li>Create a second <strong>Table</strong> visual</li>
+  <li>From <strong>Books</strong>, check <strong>title</strong></li>
+  <li>From <strong>Checkouts</strong>, check <strong>late_fee</strong> — Power BI will sum it</li>
+</ol>
+
+<p>This visual should show each book title with a different total late fee amount. Some books may show $0.00 (no late returns for that title).</p>
+
+<div class="response-block">
+  <label>Which book title generated the most in late fees?</label>
+  <textarea rows="1" placeholder="e.g., ..."></textarea>
+</div>
+
+<hr>
+
+<h3>Step 14: Test the Patrons relationship</h3>
+
+<ol>
+  <li>Click an <strong>empty area</strong> to deselect</li>
+  <li>Create a third <strong>Table</strong> visual</li>
+  <li>From <strong>Patrons</strong>, check <strong>membership_type</strong></li>
+  <li>From <strong>Checkouts</strong>, check <strong>checkout_id</strong> — Power BI will count it</li>
+</ol>
+
+<div class="response-block">
+  <label>Which membership type has the most checkouts?</label>
+  <textarea rows="1" placeholder="e.g., Standard, Student, Senior, or Child"></textarea>
+</div>
+
+<span class="screenshot-label">📸 Screenshot: Your Report View with all 3 verification visuals</span>
+<div class="screenshot-zone" tabindex="0">
+  <div class="placeholder-icon">📋</div>
+  <div class="placeholder-text">Click here, then paste a screenshot (Ctrl+V)</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<h3>Step 15: Save your file</h3>
+
+<p>Press <strong>Ctrl + S</strong>. Save as <code>Library_Model_Practice.pbix</code>.</p>
+
+<hr>
+
+<!-- ============ REFLECTION ============ -->
+<h2>Reflection</h2>
+
+<h3>Step 16: Compare to Sabor Miami</h3>
+
+<div class="response-block">
+  <label>How is the library checkout model similar to the Sabor Miami model? How is it different? (Think about: fact table structure, number of dimensions, types of measures you could calculate)</label>
+  <textarea rows="5" placeholder="Similarities:\n\nDifferences:\n"></textarea>
+</div>
+
+<div class="response-block">
+  <label>What is the granularity (grain) of the Checkouts table? What does each row represent?</label>
+  <textarea rows="2" placeholder="Each row represents..."></textarea>
+</div>
+
+<div class="response-block">
+  <label>If you were building a Date table for this dataset, which column in the Checkouts table would you connect it to? Why?</label>
+  <textarea rows="2" placeholder="I would connect it to _____ because..."></textarea>
+</div>
+
+<hr>
+
+<div class="udn-box why-box">
+  <span class="udn-label">🎯 WHAT YOU PROVED TODAY</span>
+  <p>You took a dataset you had never seen before, identified the fact table and dimension tables on your own, predicted the relationships, built the star schema, and verified it all worked. That is the core skill of data modeling — and you can now do it with <strong>any</strong> dataset, not just Sabor Miami.</p>
+</div>
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.screenshot-zone').forEach(zone => {
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) { if (!e.target.classList.contains('remove-btn')) zone.focus(); });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
