@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 13 Session A — Guided Practice: Your First DAX Measures</title>
+<style>
+  /* ===== BASE ===== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #f8f9fa;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px 48px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  h2 { font-size: 20px; font-weight: 700; color: #2c3e50; margin-top: 36px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
+  h3 { font-size: 17px; font-weight: 700; color: #34495e; margin-top: 28px; margin-bottom: 10px; }
+  p { margin-bottom: 12px; }
+  .subtitle { font-size: 13px; color: #555; margin-bottom: 2px; }
+  strong { font-weight: 600; }
+  hr { border: none; border-top: 1px solid #e0e0e0; margin: 28px 0; }
+  ol, ul { margin-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ===== STUDENT INFO ===== */
+  .student-info {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 20px 0 28px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .student-info .field { display: flex; align-items: center; gap: 8px; }
+  .student-info label { font-weight: 600; font-size: 13px; color: #555; white-space: nowrap; }
+  .student-info input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    width: 220px;
+  }
+
+  /* ===== UDN BOXES ===== */
+  .udn-box {
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+    font-size: 14px;
+  }
+  .udn-label { font-weight: 700; display: block; margin-bottom: 8px; }
+
+  .launch-box { background: #D6EAF8; border-color: #2E86C1; }
+  .launch-box .udn-label { color: #1A5276; }
+
+  .do-box { background: #D5F5E3; border-color: #27AE60; }
+  .do-box .udn-label { color: #1E8449; }
+
+  .stop-box { background: #FADBD8; border-color: #E74C3C; }
+  .stop-box .udn-label { color: #922B21; }
+
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+
+  .mistake-box { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake-box .udn-label { color: #7D6608; }
+
+  .breath-box { background: #E8DAEF; border-color: #8E44AD; }
+  .breath-box .udn-label { color: #6C3483; }
+
+  /* ===== FORMULA BLOCKS ===== */
+  .formula-block {
+    background: #1e1e2e;
+    color: #e0e0e0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    padding: 14px 20px;
+    border-radius: 6px;
+    margin: 12px 0;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .formula-block .keyword { color: #569cd6; }
+  .formula-block .function { color: #dcdcaa; }
+  .formula-block .table-ref { color: #4ec9b0; }
+  .formula-block .column-ref { color: #ce9178; }
+  .formula-block .string-val { color: #ce9178; }
+  .formula-block .comment { color: #6a9955; font-style: italic; }
+  .formula-block .measure-name { color: #9cdcfe; }
+
+  /* ===== TEXTAREAS ===== */
+  textarea {
+    width: 100%;
+    min-height: 70px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: #2E86C1; outline: none; }
+
+  .response-label { font-weight: 600; font-size: 13px; color: #555; display: block; margin: 12px 0 6px 0; }
+
+  /* ===== SCREENSHOT PASTE ZONES ===== */
+  .paste-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 12px 0 16px 0;
+    padding: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+    outline: none;
+  }
+  .paste-zone:hover, .paste-zone:focus, .paste-zone.drag-over { border-color: #2E86C1; background: #eaf2f8; }
+  .paste-zone-placeholder { color: #888; font-size: 13px; text-align: center; pointer-events: none; }
+  .paste-zone-icon { font-size: 28px; color: #bbb; margin-bottom: 8px; pointer-events: none; }
+  .paste-zone img { max-width: 100%; max-height: 500px; border-radius: 4px; border: 1px solid #ddd; }
+  .paste-zone .remove-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: #E74C3C; color: white; border: none;
+    border-radius: 50%; width: 28px; height: 28px;
+    font-size: 14px; cursor: pointer;
+    display: none; align-items: center; justify-content: center; line-height: 1;
+  }
+  .paste-zone.has-image .remove-btn { display: flex; }
+  .paste-zone.has-image .paste-zone-placeholder,
+  .paste-zone.has-image .paste-zone-icon { display: none; }
+
+  .paste-label { font-weight: 600; font-size: 13px; color: #555; display: block; margin-bottom: 4px; }
+
+  /* ===== PHASE MARKERS ===== */
+  .phase-marker {
+    display: inline-block;
+    background: #2E86C1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ===== TABLE ===== */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  th { background: #f0f4f8; font-weight: 700; }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 11px; }
+    .container { box-shadow: none; padding: 10px 20px; max-width: 100%; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 16px; margin-top: 20px; }
+    h3 { font-size: 14px; }
+    .udn-box, .formula-block { font-size: 11px; }
+    .formula-block { padding: 8px 12px; }
+    .student-info { border-width: 1px; padding: 8px 12px; }
+    .student-info input { border: none; border-bottom: 1px solid #333; border-radius: 0; font-size: 11px; }
+    textarea { border: 1px solid #999; min-height: 40px; font-size: 11px; }
+    .paste-zone { min-height: 100px; border: 1px dashed #999; page-break-inside: avoid; }
+    .paste-zone .remove-btn { display: none !important; }
+    .no-print { display: none !important; }
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .launch-box { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ============ HEADER ============ -->
+<h1>Your First DAX Measures</h1>
+<p class="subtitle">Week 13 Session A — Guided Practice</p>
+<p class="subtitle">CAP2791C: Power BI — Data Preparation and Modeling</p>
+
+<div class="student-info">
+  <div class="field">
+    <label for="student-name">Name:</label>
+    <input type="text" id="student-name" placeholder="Last Name, First Name">
+  </div>
+  <div class="field">
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="MM/DD/YYYY">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="udn-box launch-box">
+  <span class="udn-label">🚀 LAUNCH PAD</span>
+  <table>
+    <tr><td style="width:200px;"><strong>What you are building</strong></td><td>3 DAX measures displayed in Card visuals — your first taste of the formula bar</td></tr>
+    <tr><td><strong>Tool</strong></td><td>Power BI Desktop → Report View</td></tr>
+    <tr><td><strong>File to open</strong></td><td><code>SaborMiami_Lab3_Starter.pbix</code> (download from Canvas or GitHub)</td></tr>
+    <tr><td><strong>Time estimate</strong></td><td>15–20 minutes</td></tr>
+    <tr><td><strong>Steps</strong></td><td>8 steps across 3 phases</td></tr>
+    <tr><td><strong>What "done" looks like</strong></td><td>3 Card visuals on a new report page, each showing a different Sabor Miami statistic</td></tr>
+    <tr><td><strong>Start here →</strong></td><td>Open your .pbix file and confirm you are in Report View</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>Your data model is built — 6 tables, 4 relationships, a Date table. But the model does not answer any questions yet. DAX measures are what make the model calculate. Today you write your first three measures: the highest sale, the lowest sale, and the average tip. These teach you the core DAX workflow — type a formula, press Enter, display it in a visual. On Wednesday, you will use this same workflow to build a full measure library in Lab #3.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 1: SETUP ============ -->
+<span class="phase-marker">Phase 1 of 3 — Setup</span>
+<h2>Get Your File Ready</h2>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p><strong>Step 1.</strong> Open <code>SaborMiami_Lab3_Starter.pbix</code>. You should be in <strong>Report View</strong> — the default view when Power BI opens. You should see an empty canvas in the center and the <strong>Data pane</strong> on the right side showing your tables (sales, menu_items, trucks, employees, events, Date).</p>
+  <p><strong>Step 2.</strong> Save a copy of your file: <strong>File → Save As</strong> → name it <code>LastName_FirstName_Lab3.pbix</code>. You will keep building on this same file for Wednesday's Lab #3.</p>
+  <p><strong>Step 3.</strong> Create a new report page: right-click on the page tab at the bottom of the canvas → select <strong>Add Page</strong>. Double-click the new tab and rename it to <strong>Measure Practice</strong>.</p>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should see a blank report page named <strong>Measure Practice</strong>. The Data pane on the right should show all 6 tables. If you see fewer than 6 tables, check Model View to verify your relationships are intact. If everything looks good, you are ready to write your first measure.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 2: BUILD ============ -->
+<span class="phase-marker">Phase 2 of 3 — Build Your Measures</span>
+<h2>Write Three Measures</h2>
+
+<p>Every measure follows the same workflow: <strong>ask the question in English → write the DAX → display it in a visual.</strong> You will repeat this workflow three times.</p>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 MEASURES vs. CALCULATED COLUMNS</span>
+  <p>Last week you wrote formulas like <code>Year = YEAR('Date'[Date])</code> on the Date table. Those were <strong>calculated columns</strong> — they created a new column visible in Table View, calculated once per row during data refresh.</p>
+  <p>Today's formulas look similar in the formula bar, but they are <strong>measures</strong> — they do NOT create a column. Instead, they create a calculation that Power BI runs on the fly whenever you put it in a visual. Measures respond to filters dynamically. You will see them in the Data pane with a <strong>calculator icon</strong> (not attached to a row of data).</p>
+</div>
+
+<!-- MEASURE 1 -->
+<h3>Measure 1: Highest Sale</h3>
+
+<p><strong>What we want to ask:</strong> "What is the largest single sale amount in the entire dataset?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Highest Sale</span> = <span class="function">MAX</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>])
+</div>
+
+<p><code>MAX</code> looks through every value in the <code>amount</code> column and returns the single largest one.</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p><strong>Step 4.</strong> In the <strong>Data pane</strong> (right side), click on the <strong>sales</strong> table name to select it. This tells Power BI which table will "own" your new measure.</p>
+  <p><strong>Step 5.</strong> On the <strong>Home tab</strong> of the ribbon, click the <strong>New Measure</strong> button (in the Calculations group). The <strong>formula bar</strong> — the white text area below the ribbon — will activate with the cursor ready.</p>
+  <p><strong>Step 6.</strong> Type the following exactly as shown, then press <strong>Enter</strong>:</p>
+  <div class="formula-block">
+    <span class="measure-name">Highest Sale</span> = <span class="function">MAX</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>])
+  </div>
+  <p><strong>Step 7.</strong> Now display it: In the <strong>Visualizations pane</strong> (right side, above the Data pane), click the <strong>Card</strong> visual icon — it looks like a single large number (123). An empty Card appears on the canvas.</p>
+  <p><strong>Step 8.</strong> In the Data pane, expand the <strong>sales</strong> table. Find <strong>Highest Sale</strong> — it has a small <strong>calculator icon</strong> next to it (this icon means it is a measure, not a column). Drag <strong>Highest Sale</strong> into the Card visual, or check the box next to it while the Card is selected.</p>
+  <p>A number appears. That is the single largest transaction in the Sabor Miami dataset.</p>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Your Card visual should display a number — this is the price of the most expensive single transaction. If you see the text "Highest Sale" but no number, make sure you dragged the <strong>measure</strong> (calculator icon), not the <strong>amount column</strong> (sigma Σ icon). If you see an error, click the Card and check the formula bar — the measure name must be on the left of the equals sign and the formula on the right.</p>
+</div>
+
+<div class="udn-box mistake-box">
+  <span class="udn-label">⚠️ COMMON MISTAKE</span>
+  <p><strong>"I clicked New Measure but nothing happened."</strong> — Make sure you clicked <strong>New Measure</strong> on the <strong>Home tab</strong> (or the <strong>Modeling tab</strong>), not "New Column." Both are in similar locations. New Measure creates a measure (calculator icon). New Column creates a calculated column (Σ icon) — that is not what we want here.</p>
+</div>
+
+<hr>
+
+<!-- MEASURE 2 -->
+<h3>Measure 2: Lowest Sale</h3>
+
+<p><strong>What we want to ask:</strong> "What is the smallest single sale amount in the dataset?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Lowest Sale</span> = <span class="function">MIN</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>])
+</div>
+
+<p><code>MIN</code> is the opposite of <code>MAX</code> — it finds the single smallest value. If this number is negative, that is the refund transaction in the dataset. That is valid data, not an error.</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p>Repeat the same workflow:</p>
+  <ol>
+    <li>Click the <strong>sales</strong> table in the Data pane.</li>
+    <li><strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Lowest Sale = MIN(sales[amount])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a new <strong>Card</strong> visual and drag <strong>Lowest Sale</strong> into it.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should now have <strong>2 Card visuals</strong>: Highest Sale and Lowest Sale. The Lowest Sale should be much smaller than Highest Sale. If Lowest Sale is negative, that is the refund in the dataset — it means the data is working correctly.</p>
+</div>
+
+<div class="udn-box breath-box">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>Two measures done. You typed DAX in the formula bar, pressed Enter, and saw a number appear in a visual. That is the core DAX workflow — everything else in this chapter builds on exactly what you just did. One more measure to go.</p>
+</div>
+
+<hr>
+
+<!-- MEASURE 3 -->
+<h3>Measure 3: Average Tip</h3>
+
+<p><strong>What we want to ask:</strong> "What is the average tip amount per transaction?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Average Tip</span> = <span class="function">AVERAGE</span>(<span class="table-ref">sales</span>[<span class="column-ref">tip</span>])
+</div>
+
+<p><code>AVERAGE</code> adds up all the values in the <code>tip</code> column and divides by the number of values. This gives you the typical tip per transaction.</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Average Tip = AVERAGE(sales[tip])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a new <strong>Card</strong> visual and drag <strong>Average Tip</strong> into it.</li>
+    <li>Arrange all 3 Card visuals in a row across the top of your canvas.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should have <strong>3 Card visuals</strong> in a row: Highest Sale, Lowest Sale, Average Tip. Check these relationships between the numbers:</p>
+  <ul>
+    <li>Highest Sale should be the largest number.</li>
+    <li>Lowest Sale should be the smallest (possibly negative if it is a refund).</li>
+    <li>Average Tip should be a small number — it is a per-transaction average, not a total.</li>
+  </ul>
+  <p>If all three check out, you have your first working measures.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 3: VERIFY ============ -->
+<span class="phase-marker">Phase 3 of 3 — See Filter Context in Action</span>
+<h2>Watch Your Measures Respond to Filters</h2>
+
+<p>Right now, your 3 Card visuals show values for <strong>all</strong> Sabor Miami data — every truck, every day, every transaction. But what happens when you add a filter?</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p><strong>Step 8.</strong> Add a slicer to your page:</p>
+  <ol>
+    <li>In the <strong>Visualizations pane</strong>, click the <strong>Slicer</strong> icon — it looks like a funnel with horizontal lines.</li>
+    <li>An empty slicer appears on the canvas.</li>
+    <li>In the Data pane, expand the <strong>trucks</strong> table and drag <strong>truck_name</strong> into the slicer.</li>
+    <li>You should see a list of truck names: La Havana Express, Sabor On Wheels, Caribbean Cruiser, The Plantain Express.</li>
+  </ol>
+  <p>Now click on <strong>La Havana Express</strong> in the slicer. Watch all three Card visuals — every number changes. Click a different truck — the numbers change again. Clear the slicer by clicking the <strong>eraser icon</strong> (top-right corner of the slicer) to return to the full dataset.</p>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 THAT IS FILTER CONTEXT</span>
+  <p>You wrote <strong>one</strong> Highest Sale measure. You did not write "Highest Sale for La Havana Express" and "Highest Sale for Caribbean Cruiser" separately. The slicer creates a <strong>filter context</strong> — it tells Power BI "only show me data for this truck." Your measure automatically calculates using only the filtered data. This is the most powerful idea in DAX: write the measure once, and the visual's filters determine which data it uses.</p>
+  <p>On Wednesday, you will write a measure using <strong>CALCULATE</strong> that <em>overrides</em> this filter — forcing a specific truck's sales even when the slicer says something different.</p>
+</div>
+
+<hr>
+
+<!-- ============ REFLECTION ============ -->
+<h2>Reflection</h2>
+
+<label class="response-label">Look at your 3 Card visuals with no slicer selected (all trucks). Now click one truck in the slicer. What changed, and why?</label>
+<textarea placeholder="Write your response here..."></textarea>
+
+<label class="paste-label">Screenshot: Your 3 Card visuals with the slicer showing all trucks (no selection)</label>
+<div class="paste-zone" tabindex="0">
+  <div class="paste-zone-icon">📋</div>
+  <div class="paste-zone-placeholder">Click here, then press Ctrl+V to paste a screenshot</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ WHAT YOU DID ============ -->
+<div class="udn-box why-box">
+  <span class="udn-label">🎯 WHAT YOU DID TODAY</span>
+  <p>You wrote 3 DAX measures by hand, displayed each in a Card visual, and saw filter context in action with a slicer. On Wednesday, Lab #3 asks you to add 8 more measures to this same file — using SUM, AVERAGE, COUNTROWS, DISTINCTCOUNT, DIVIDE, and CALCULATE. The formula bar workflow you practiced today is the same workflow you will use for every measure in the lab.</p>
+  <p><strong>Save your file.</strong> You will reopen <code>LastName_FirstName_Lab3.pbix</code> on Wednesday and continue building on it.</p>
+</div>
+
+<!-- ============ QUICK REFERENCE ============ -->
+<h2>Quick Reference — Your 3 Measures</h2>
+
+<table>
+  <tr>
+    <th>Measure Name</th>
+    <th>DAX Formula</th>
+    <th>What It Calculates</th>
+  </tr>
+  <tr>
+    <td>Highest Sale</td>
+    <td><code>MAX(sales[amount])</code></td>
+    <td>Largest single sale amount</td>
+  </tr>
+  <tr>
+    <td>Lowest Sale</td>
+    <td><code>MIN(sales[amount])</code></td>
+    <td>Smallest single sale amount</td>
+  </tr>
+  <tr>
+    <td>Average Tip</td>
+    <td><code>AVERAGE(sales[tip])</code></td>
+    <td>Mean tip amount per transaction</td>
+  </tr>
+</table>
+
+<p style="text-align:center; color:#888; font-size:12px; margin-top:32px;">CAP2791C — Power BI: Data Preparation and Modeling | Miami Dade College | Week 13 Session A</p>
+
+</div><!-- end container -->
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.paste-zone').forEach(zone => {
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+        zone.querySelector('.paste-zone-placeholder').style.display = 'none';
+        zone.querySelector('.paste-zone-icon').style.display = 'none';
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
