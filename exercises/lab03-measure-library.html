@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab #3: Measure Library — CAP2791C</title>
+<style>
+  /* ===== BASE ===== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #f8f9fa;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px 48px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  h2 { font-size: 20px; font-weight: 700; color: #2c3e50; margin-top: 36px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
+  h3 { font-size: 17px; font-weight: 700; color: #34495e; margin-top: 28px; margin-bottom: 10px; }
+  p { margin-bottom: 12px; }
+  .subtitle { font-size: 13px; color: #555; margin-bottom: 2px; }
+  strong { font-weight: 600; }
+  hr { border: none; border-top: 1px solid #e0e0e0; margin: 28px 0; }
+  ol, ul { margin-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ===== STUDENT INFO ===== */
+  .student-info {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 20px 0 28px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .student-info .field { display: flex; align-items: center; gap: 8px; }
+  .student-info label { font-weight: 600; font-size: 13px; color: #555; white-space: nowrap; }
+  .student-info input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    width: 220px;
+  }
+
+  /* ===== UDN BOXES ===== */
+  .udn-box {
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+    font-size: 14px;
+  }
+  .udn-label { font-weight: 700; display: block; margin-bottom: 8px; }
+
+  .launch-box { background: #D6EAF8; border-color: #2E86C1; }
+  .launch-box .udn-label { color: #1A5276; }
+
+  .do-box { background: #D5F5E3; border-color: #27AE60; }
+  .do-box .udn-label { color: #1E8449; }
+
+  .stop-box { background: #FADBD8; border-color: #E74C3C; }
+  .stop-box .udn-label { color: #922B21; }
+
+  .why-box { background: #D6EAF8; border-color: #2E86C1; }
+  .why-box .udn-label { color: #1A5276; }
+
+  .mistake-box { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake-box .udn-label { color: #7D6608; }
+
+  .breath-box { background: #E8DAEF; border-color: #8E44AD; }
+  .breath-box .udn-label { color: #6C3483; }
+
+  /* ===== FORMULA BLOCKS ===== */
+  .formula-block {
+    background: #1e1e2e;
+    color: #e0e0e0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    padding: 14px 20px;
+    border-radius: 6px;
+    margin: 12px 0;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .formula-block .function { color: #dcdcaa; }
+  .formula-block .table-ref { color: #4ec9b0; }
+  .formula-block .column-ref { color: #ce9178; }
+  .formula-block .string-val { color: #ce9178; }
+  .formula-block .comment { color: #6a9955; font-style: italic; }
+  .formula-block .measure-name { color: #9cdcfe; }
+
+  /* ===== TEXTAREAS ===== */
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: #2E86C1; outline: none; }
+
+  .response-label { font-weight: 600; font-size: 13px; color: #555; display: block; margin: 12px 0 6px 0; }
+
+  /* ===== SCREENSHOT PASTE ZONES ===== */
+  .paste-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 12px 0 16px 0;
+    padding: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+    outline: none;
+  }
+  .paste-zone:hover, .paste-zone:focus, .paste-zone.drag-over { border-color: #2E86C1; background: #eaf2f8; }
+  .paste-zone-placeholder { color: #888; font-size: 13px; text-align: center; pointer-events: none; }
+  .paste-zone-icon { font-size: 28px; color: #bbb; margin-bottom: 8px; pointer-events: none; }
+  .paste-zone img { max-width: 100%; max-height: 500px; border-radius: 4px; border: 1px solid #ddd; }
+  .paste-zone .remove-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: #E74C3C; color: white; border: none;
+    border-radius: 50%; width: 28px; height: 28px;
+    font-size: 14px; cursor: pointer;
+    display: none; align-items: center; justify-content: center; line-height: 1;
+  }
+  .paste-zone.has-image .remove-btn { display: flex; }
+  .paste-zone.has-image .paste-zone-placeholder,
+  .paste-zone.has-image .paste-zone-icon { display: none; }
+
+  .paste-label { font-weight: 600; font-size: 13px; color: #555; display: block; margin-bottom: 4px; }
+
+  /* ===== PHASE MARKERS ===== */
+  .phase-marker {
+    display: inline-block;
+    background: #2E86C1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ===== TASK POINT BADGES ===== */
+  .pts-badge {
+    display: inline-block;
+    background: #2E86C1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ===== TABLE ===== */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  th { background: #f0f4f8; font-weight: 700; }
+
+  /* ===== RUBRIC ===== */
+  .rubric-table th { font-size: 12px; }
+  .rubric-table td { font-size: 12px; }
+  .rubric-excellent { background: #D5F5E3; }
+  .rubric-good { background: #FEF9E7; }
+  .rubric-needs { background: #FADBD8; }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 11px; }
+    .container { box-shadow: none; padding: 10px 20px; max-width: 100%; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 16px; margin-top: 20px; }
+    h3 { font-size: 14px; }
+    .udn-box, .formula-block { font-size: 11px; }
+    .formula-block { padding: 8px 12px; }
+    .student-info { border-width: 1px; padding: 8px 12px; }
+    .student-info input { border: none; border-bottom: 1px solid #333; border-radius: 0; font-size: 11px; }
+    textarea { border: 1px solid #999; min-height: 40px; font-size: 11px; }
+    .paste-zone { min-height: 100px; border: 1px dashed #999; page-break-inside: avoid; }
+    .paste-zone .remove-btn { display: none !important; }
+    .no-print { display: none !important; }
+    h2, h3, .phase-marker { page-break-after: avoid; }
+    .udn-box, .launch-box { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ============ HEADER ============ -->
+<h1>Lab #3: Measure Library</h1>
+<p class="subtitle">Week 13 Session B — Graded Lab</p>
+<p class="subtitle">CAP2791C: Power BI — Data Preparation and Modeling | 50 Points</p>
+
+<div class="student-info">
+  <div class="field">
+    <label for="student-name">Name:</label>
+    <input type="text" id="student-name" placeholder="Last Name, First Name">
+  </div>
+  <div class="field">
+    <label for="student-date">Date:</label>
+    <input type="text" id="student-date" placeholder="MM/DD/YYYY">
+  </div>
+</div>
+
+<!-- ============ LAUNCH PAD ============ -->
+<div class="udn-box launch-box">
+  <span class="udn-label">🚀 LAUNCH PAD</span>
+  <table>
+    <tr><td style="width:200px;"><strong>What you are building</strong></td><td>8 DAX measures displayed in visuals — a complete measure library for Sabor Miami</td></tr>
+    <tr><td><strong>Tool</strong></td><td>Power BI Desktop → Report View</td></tr>
+    <tr><td><strong>File to open</strong></td><td>Your <code>LastName_FirstName_Lab3.pbix</code> file from Monday's guided practice<br><em>If you were absent Monday:</em> download <a href="https://github.com/c-marq/sabor-miami-bi-course/blob/main/exercises/templates/SaborMiami_Lab3_Starter.pbix">SaborMiami_Lab3_Starter.pbix from GitHub</a>, open it, and Save As <code>LastName_FirstName_Lab3.pbix</code></td></tr>
+    <tr><td><strong>Time estimate</strong></td><td>45–55 minutes</td></tr>
+    <tr><td><strong>Steps</strong></td><td>14 steps across 4 phases</td></tr>
+    <tr><td><strong>What "done" looks like</strong></td><td>8 new measures in the Data pane, each displayed in a visual, plus a Table visual showing CALCULATE behavior</td></tr>
+    <tr><td><strong>Start here →</strong></td><td>Open your Lab3 .pbix file from Monday</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY ARE WE DOING THIS?</span>
+  <p>On Monday, you learned the DAX workflow — formula bar, Card visual, filter context. Today you build a full measure library: the set of standard calculations that a business like Sabor Miami needs to understand its performance. By the end of this lab, your model will answer questions like "What are total sales?", "What percentage of revenue comes from tips?", "How many unique menu items were sold?", and "How did La Havana Express perform?" These are the same questions real analysts answer in professional Power BI reports.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 1: SETUP ============ -->
+<span class="phase-marker">Phase 1 of 4 — Setup</span>
+<h2>Get Your File Ready</h2>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p><strong>Step 1.</strong> Open your <code>LastName_FirstName_Lab3.pbix</code> file — the same file you saved on Monday. You should see your <strong>Measure Practice</strong> report page with the 3 Card visuals (Highest Sale, Lowest Sale, Average Tip) and the truck_name slicer from the guided practice.</p>
+  <p><strong>Step 2.</strong> Create a new report page: right-click on the page tab at the bottom of the canvas → select <strong>Add Page</strong>. Double-click the new tab and rename it to <strong>Measure Library</strong>. This is where you will build all 8 lab measures.</p>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>You should have two report pages: <strong>Measure Practice</strong> (from Monday) and <strong>Measure Library</strong> (new, blank). Make sure you are on the <strong>Measure Library</strong> page before continuing. You should also see your 3 existing measures (Highest Sale, Lowest Sale, Average Tip) in the Data pane under the sales table with calculator icons.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 2: BUILD MEASURES 1-6 ============ -->
+<span class="phase-marker">Phase 2 of 4 — Build Measures 1–6</span>
+<h2>Write Your Core Measures</h2>
+
+<p>For each measure: click the <strong>sales</strong> table in the Data pane → <strong>Home tab → New Measure</strong> → type the formula → press <strong>Enter</strong> → create a <strong>Card</strong> visual → drag the measure into the Card.</p>
+
+<!-- TASK 1 -->
+<h3>Task 1: Total Sales <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "What is the total of all sales amounts?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Total Sales</span> = <span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>])
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table in the Data pane → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Total Sales = SUM(sales[amount])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Total Sales</strong> into it.</li>
+  </ol>
+</div>
+
+<!-- TASK 2 -->
+<h3>Task 2: Total Tips <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "What is the total of all tip amounts?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Total Tips</span> = <span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">tip</span>])
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Total Tips = SUM(sales[tip])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Total Tips</strong> into it.</li>
+  </ol>
+</div>
+
+<!-- TASK 3 -->
+<h3>Task 3: Average Ticket <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "What is the average sale amount per transaction?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Average Ticket</span> = <span class="function">AVERAGE</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>])
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Average Ticket = AVERAGE(sales[amount])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Average Ticket</strong> into it.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK — Checkpoint 1 (15 minutes)</span>
+  <p>You should have <strong>3 Card visuals</strong> on your Measure Library page: Total Sales, Total Tips, and Average Ticket. Verify:</p>
+  <ul>
+    <li>Total Sales is the largest number.</li>
+    <li>Total Tips is smaller than Total Sales.</li>
+    <li>Average Ticket is much smaller than either total (it is a per-transaction average).</li>
+  </ul>
+  <p>If any Card shows an error or blank, click the Card and check the formula bar. The most common issue is a typo in the column name — it must match exactly: <code>sales[amount]</code> and <code>sales[tip]</code>.</p>
+</div>
+
+<!-- TASK 4 -->
+<h3>Task 4: Tip Percentage <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "What percentage of total sales came from tips?"</p>
+
+<p>This measure is more complex — it nests two <code>SUM</code> functions inside <code>DIVIDE</code>:</p>
+
+<div class="formula-block">
+  <span class="measure-name">Tip Percentage</span> = <span class="function">DIVIDE</span>(<span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">tip</span>]), <span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>]))
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 WHY DIVIDE INSTEAD OF ÷?</span>
+  <p>You could write <code>SUM(sales[tip]) / SUM(sales[amount])</code> — and it would work most of the time. But if the denominator (total amount) is ever zero (for example, if a slicer filters to a truck with no sales), the <code>/</code> operator crashes with an error. <code>DIVIDE</code> handles this gracefully — it returns blank instead of an error. Always use <code>DIVIDE</code> for safe division.</p>
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Tip Percentage = DIVIDE(SUM(sales[tip]), SUM(sales[amount]))</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Tip Percentage</strong> into it.</li>
+    <li><strong>Format as percentage:</strong> Click the <strong>Tip Percentage</strong> measure name in the Data pane. On the ribbon, find the <strong>Measure tools</strong> tab → change the format dropdown from <strong>General</strong> to <strong>Percentage</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake-box">
+  <span class="udn-label">⚠️ COMMON MISTAKE</span>
+  <p><strong>Tip Percentage shows a huge number like 1,500%.</strong> — Check that you put <code>sales[tip]</code> as the first argument (numerator) and <code>sales[amount]</code> as the second (denominator). If they are reversed, you are dividing total sales by total tips, which gives an inflated result. Tips as a percentage of sales should be somewhere between 5% and 25%.</p>
+</div>
+
+<!-- TASK 5 -->
+<h3>Task 5: Transaction Count <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "How many sales transactions are in the dataset?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Transaction Count</span> = <span class="function">COUNTROWS</span>(<span class="table-ref">sales</span>)
+</div>
+
+<p>Notice: <code>COUNTROWS</code> takes a <strong>table name</strong> — just <code>sales</code>, no column in brackets. It counts rows, not values in a column.</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Transaction Count = COUNTROWS(sales)</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Transaction Count</strong> into it.</li>
+  </ol>
+</div>
+
+<!-- TASK 6 -->
+<h3>Task 6: Unique Items Sold <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "How many different menu items were sold — not how many total items, but how many <em>unique</em> items?"</p>
+
+<div class="formula-block">
+  <span class="measure-name">Unique Items Sold</span> = <span class="function">DISTINCTCOUNT</span>(<span class="table-ref">sales</span>[<span class="column-ref">menu_item_id</span>])
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 DISTINCTCOUNT vs. COUNTROWS</span>
+  <p>Think of it as counting heads at a family reunion. <code>COUNTROWS</code> tells you how many plates were served (including people who came back for seconds). <code>DISTINCTCOUNT</code> tells you how many unique people showed up. If Sabor Miami has 15 menu items but only 12 were sold, DISTINCTCOUNT returns 12.</p>
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type <code>Unique Items Sold = DISTINCTCOUNT(sales[menu_item_id])</code> and press <strong>Enter</strong>.</li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>Unique Items Sold</strong> into it.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK — Checkpoint 2 (35 minutes)</span>
+  <p>You should have <strong>6 Card visuals</strong> on your Measure Library page. Verify:</p>
+  <ul>
+    <li>Total Sales — large number (tens or hundreds of thousands)</li>
+    <li>Total Tips — smaller than Total Sales</li>
+    <li>Average Ticket — much smaller (per-transaction average)</li>
+    <li>Tip Percentage — displayed as a percentage between 5% and 25%</li>
+    <li>Transaction Count — a whole number in the hundreds or thousands</li>
+    <li>Unique Items Sold — a small number (under 30 — Sabor Miami has a limited menu)</li>
+  </ul>
+  <p>If any Card shows an error, click it and check the formula bar for typos. The column name must match exactly what is in your Data pane.</p>
+</div>
+
+<div class="udn-box breath-box">
+  <span class="udn-label">💜 TAKE A BREATH</span>
+  <p>Six measures done. You have used SUM, AVERAGE, DIVIDE, COUNTROWS, and DISTINCTCOUNT. The next two measures introduce new territory — CALCULATE (which overrides filter context) and a measure you design yourself. Take a moment to stretch or get some water before the final push.</p>
+</div>
+
+<hr>
+
+<!-- ============ PHASE 3: BUILD MEASURES 7-8 ============ -->
+<span class="phase-marker">Phase 3 of 4 — CALCULATE and Your Choice</span>
+<h2>Write Measures 7–8</h2>
+
+<!-- TASK 7 -->
+<h3>Task 7: La Havana Express Sales <span class="pts-badge">8 pts</span></h3>
+
+<p><strong>What we want to ask:</strong> "What is the total sales for La Havana Express — regardless of any other filters on the page?"</p>
+
+<p>Every measure you have written so far respects filter context — when you click a slicer, the numbers change. But sometimes you need to <strong>force</strong> a specific filter. <code>CALCULATE</code> lets you do that.</p>
+
+<div class="formula-block">
+  <span class="measure-name">La Havana Express Sales</span> = <span class="function">CALCULATE</span>(<span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>]), <span class="table-ref">trucks</span>[<span class="column-ref">truck_name</span>] = <span class="string-val">"La Havana Express"</span>)
+</div>
+
+<p>Let's break this down:</p>
+
+<div class="formula-block">
+  <span class="measure-name">La Havana Express Sales</span> =
+    <span class="function">CALCULATE</span>(              <span class="comment">← take this calculation...</span>
+        <span class="function">SUM</span>(<span class="table-ref">sales</span>[<span class="column-ref">amount</span>]),   <span class="comment">← (the sum of all sale amounts)</span>
+        <span class="table-ref">trucks</span>[<span class="column-ref">truck_name</span>] = <span class="string-val">"La Havana Express"</span>  <span class="comment">← ...but ONLY for this truck</span>
+    )
+</div>
+
+<div class="udn-box why-box">
+  <span class="udn-label">💡 HOW CALCULATE WORKS</span>
+  <p><code>CALCULATE</code> takes two things: (1) the calculation you want to run, and (2) a filter to apply. It <strong>overrides</strong> the filter context from the visual. So even if a slicer is set to "Caribbean Cruiser," this measure still shows La Havana Express's sales — because CALCULATE forces its own filter.</p>
+  <p>Notice that the filter references <code>trucks[truck_name]</code> — a column in the <strong>trucks</strong> table, not the sales table. This works because the trucks table is connected to sales through a relationship. The filter flows through the relationship.</p>
+</div>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>sales</strong> table → <strong>Home tab → New Measure</strong>.</li>
+    <li>Type the following and press <strong>Enter</strong>:<br>
+    <code>La Havana Express Sales = CALCULATE(SUM(sales[amount]), trucks[truck_name] = "La Havana Express")</code></li>
+    <li>Create a <strong>Card</strong> visual and drag <strong>La Havana Express Sales</strong> into it.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>Compare your <strong>La Havana Express Sales</strong> Card to your <strong>Total Sales</strong> Card. La Havana Express Sales should be <strong>smaller</strong> — it only includes one truck's transactions. If both numbers are the same, check that you typed the truck name correctly inside the quotes: <code>"La Havana Express"</code> — spelling, capitalization, and spaces must match exactly.</p>
+</div>
+
+<div class="udn-box mistake-box">
+  <span class="udn-label">⚠️ COMMON MISTAKE</span>
+  <p><strong>The measure returns blank or zero.</strong> — The truck name in quotes must match <em>exactly</em> what is in the data. Check the trucks table in Table View for the exact spelling. Common issues: extra space, wrong capitalization, or a different truck name than expected.</p>
+</div>
+
+<!-- TASK 8 -->
+<h3>Task 8: Your Choice <span class="pts-badge">5 pts</span></h3>
+
+<p><strong>Write one measure of your own design.</strong> Use the <strong>English First, DAX Second</strong> pattern: state your question in plain English, then write the DAX.</p>
+
+<p>Here are some ideas to get you started:</p>
+
+<table>
+  <tr>
+    <th>English Question</th>
+    <th>Possible DAX</th>
+  </tr>
+  <tr>
+    <td>"What are total sales for entrées only?"</td>
+    <td><code>CALCULATE(SUM(sales[amount]), menu_items[category] = "Entrée")</code></td>
+  </tr>
+  <tr>
+    <td>"How many cash transactions were there?"</td>
+    <td><code>CALCULATE(COUNTROWS(sales), sales[payment_method] = "Cash")</code></td>
+  </tr>
+  <tr>
+    <td>"What is the average tip amount?"</td>
+    <td><code>AVERAGE(sales[tip])</code></td>
+  </tr>
+  <tr>
+    <td>"What is the total amount including tips?"</td>
+    <td><code>SUM(sales[total_amount_with_tip])</code></td>
+  </tr>
+</table>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <ol>
+    <li>Decide what question you want to answer.</li>
+    <li>Write the measure using the same workflow: sales table → New Measure → type → Enter.</li>
+    <li>Display it in a <strong>Card</strong> visual (or another visual type if it makes sense for your measure).</li>
+  </ol>
+</div>
+
+<label class="response-label">What question does your custom measure answer? Write the question in plain English and the DAX formula you used.</label>
+<textarea placeholder="English question: &#10;&#10;DAX formula: "></textarea>
+
+<hr>
+
+<!-- ============ PHASE 4: VERIFY ============ -->
+<span class="phase-marker">Phase 4 of 4 — Verify with Filter Context</span>
+<h2>See CALCULATE in Action</h2>
+
+<p>Now let's prove that CALCULATE overrides filter context while your other measures respect it.</p>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ DO THIS</span>
+  <p><strong>Step 13.</strong> Create a <strong>Table</strong> visual on your Measure Library page:</p>
+  <ol>
+    <li>In the Visualizations pane, click the <strong>Table</strong> visual icon (it looks like a grid).</li>
+    <li>Drag <strong>truck_name</strong> from the <strong>trucks</strong> table into the table visual.</li>
+    <li>Drag <strong>Total Sales</strong> into the table visual.</li>
+    <li>Drag <strong>La Havana Express Sales</strong> into the table visual.</li>
+  </ol>
+  <p><strong>Step 14.</strong> Look at the result. Total Sales shows a <strong>different</strong> number for each truck row. La Havana Express Sales shows the <strong>same</strong> number on every row.</p>
+</div>
+
+<div class="udn-box stop-box">
+  <span class="udn-label">🛑 STOP AND CHECK</span>
+  <p>In your Table visual:</p>
+  <ul>
+    <li><strong>Total Sales</strong> column — different number per truck (filter context: each row filters to that truck).</li>
+    <li><strong>La Havana Express Sales</strong> column — same number on every row (CALCULATE overrides the row's filter and forces La Havana Express).</li>
+  </ul>
+  <p>This is the key difference: Total Sales <em>respects</em> filter context. La Havana Express Sales <em>overrides</em> it.</p>
+</div>
+
+<label class="paste-label">Screenshot: Your Table visual showing truck_name, Total Sales, and La Havana Express Sales</label>
+<div class="paste-zone" tabindex="0">
+  <div class="paste-zone-icon">📋</div>
+  <div class="paste-zone-placeholder">Click here, then press Ctrl+V to paste a screenshot</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<label class="paste-label">Screenshot: Your full Measure Library report page showing all 8 Card visuals</label>
+<div class="paste-zone" tabindex="0">
+  <div class="paste-zone-icon">📋</div>
+  <div class="paste-zone-placeholder">Click here, then press Ctrl+V to paste a screenshot</div>
+  <button class="remove-btn" title="Remove screenshot">&times;</button>
+</div>
+
+<hr>
+
+<!-- ============ WRITTEN RESPONSE ============ -->
+<h2>Written Response <span class="pts-badge">7 pts</span></h2>
+
+<p>Answer both questions in 2–4 sentences each.</p>
+
+<label class="response-label">Question 1 (3 pts): You created a Table visual with truck_name on the rows and Total Sales as a value. Each truck shows a different Total Sales number — even though you only wrote ONE measure. In your own words, explain why each truck row shows a different number. Use the term "filter context" in your answer.</label>
+<textarea placeholder="Write your response here..."></textarea>
+
+<label class="response-label">Question 2 (4 pts): In the same Table visual, the La Havana Express Sales column shows the SAME number on every row, while Total Sales shows different numbers. Explain why the CALCULATE measure behaves differently from Total Sales. What would happen to the La Havana Express Sales number if you added a Month Name slicer and selected "March"?</label>
+<textarea placeholder="Write your response here..."></textarea>
+
+<hr>
+
+<!-- ============ SUBMISSION ============ -->
+<h2>Submission Checklist</h2>
+
+<div class="udn-box do-box">
+  <span class="udn-label">✅ BEFORE YOU SUBMIT</span>
+  <p>Verify you have all of the following:</p>
+  <ol>
+    <li><strong>8 new measures</strong> visible in the Data pane with calculator icons (Total Sales, Total Tips, Average Ticket, Tip Percentage, Transaction Count, Unique Items Sold, La Havana Express Sales, and your custom measure).</li>
+    <li><strong>8 Card visuals</strong> on your Measure Library page, each displaying a number (no blanks, no errors).</li>
+    <li><strong>1 Table visual</strong> with truck_name, Total Sales, and La Havana Express Sales — showing different behavior.</li>
+    <li><strong>Tip Percentage</strong> formatted as a percentage (not a raw decimal).</li>
+    <li><strong>Written responses</strong> to both questions above.</li>
+    <li><strong>Screenshots</strong> pasted into both screenshot zones above.</li>
+  </ol>
+  <p><strong>Save your file</strong> (<strong>Ctrl+S</strong>).</p>
+  <p><strong>Submit to Canvas:</strong> Upload your <code>LastName_FirstName_Lab3.pbix</code> file AND print this page to PDF (<strong>Ctrl+P → Save as PDF</strong>) and upload the PDF.</p>
+</div>
+
+<hr>
+
+<!-- ============ RUBRIC ============ -->
+<h2>Grading Rubric — 50 Points</h2>
+
+<table class="rubric-table">
+  <tr>
+    <th style="width:30%;">Component</th>
+    <th style="width:10%;">Points</th>
+    <th style="width:60%;">What Earns Full Credit</th>
+  </tr>
+  <tr>
+    <td>Task 1: Total Sales</td>
+    <td>5</td>
+    <td>Correct formula using SUM, displayed in a Card visual, shows a number</td>
+  </tr>
+  <tr>
+    <td>Task 2: Total Tips</td>
+    <td>5</td>
+    <td>Correct formula using SUM on tip column, displayed in a Card visual</td>
+  </tr>
+  <tr>
+    <td>Task 3: Average Ticket</td>
+    <td>5</td>
+    <td>Correct formula using AVERAGE, displayed in a Card visual</td>
+  </tr>
+  <tr>
+    <td>Task 4: Tip Percentage</td>
+    <td>5</td>
+    <td>Correct formula using DIVIDE with SUM in both arguments, formatted as percentage, displayed in Card</td>
+  </tr>
+  <tr>
+    <td>Task 5: Transaction Count</td>
+    <td>5</td>
+    <td>Correct formula using COUNTROWS, displayed in a Card visual</td>
+  </tr>
+  <tr>
+    <td>Task 6: Unique Items Sold</td>
+    <td>5</td>
+    <td>Correct formula using DISTINCTCOUNT, displayed in a Card visual</td>
+  </tr>
+  <tr>
+    <td>Task 7: La Havana Express Sales</td>
+    <td>8</td>
+    <td>Correct CALCULATE formula with truck_name filter, shows a single truck's total, value stays constant in the Table visual regardless of row</td>
+  </tr>
+  <tr>
+    <td>Task 8: Student's Choice</td>
+    <td>5</td>
+    <td>Valid DAX measure that returns a number, displayed in a visual, with English question and formula documented</td>
+  </tr>
+  <tr>
+    <td>Written Response</td>
+    <td>7</td>
+    <td>Q1 (3 pts): Correctly explains filter context — each row filters the data, and the measure calculates within that filter. Q2 (4 pts): Correctly explains CALCULATE overrides the truck filter; addresses that a Month slicer would still reduce the number because CALCULATE only overrides the truck filter, not the date filter.</td>
+  </tr>
+</table>
+
+<h3>Grading Tiers</h3>
+<table class="rubric-table">
+  <tr class="rubric-excellent">
+    <td><strong>Excellent</strong></td>
+    <td><strong>45–50 pts</strong></td>
+    <td>All 8 measures correct and displayed. CALCULATE works as expected. Written responses demonstrate clear understanding of filter context.</td>
+  </tr>
+  <tr class="rubric-good">
+    <td><strong>Good</strong></td>
+    <td><strong>30–44 pts</strong></td>
+    <td>Most measures correct with minor formula or formatting issues. Written responses show partial understanding. CALCULATE attempted.</td>
+  </tr>
+  <tr class="rubric-needs">
+    <td><strong>Needs Work</strong></td>
+    <td><strong>0–29 pts</strong></td>
+    <td>Multiple measures missing or incorrect. Written responses missing or do not address filter context. Eligible for redo — resubmit for up to "Good" tier.</td>
+  </tr>
+</table>
+
+<p style="font-size:13px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period (no penalty). After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> If you score below Good (30 pts), you may revise and resubmit once for up to 44 pts.</p>
+
+<p style="text-align:center; color:#888; font-size:12px; margin-top:32px;">CAP2791C — Power BI: Data Preparation and Modeling | Miami Dade College | Week 13 Session B</p>
+
+</div><!-- end container -->
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.paste-zone').forEach(zone => {
+  zone.addEventListener('paste', function(e) {
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const existingImg = zone.querySelector('img');
+        if (existingImg) existingImg.remove();
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        zone.appendChild(img);
+        zone.classList.add('has-image');
+        zone.querySelector('.paste-zone-placeholder').style.display = 'none';
+        zone.querySelector('.paste-zone-icon').style.display = 'none';
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
