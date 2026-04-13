@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Week 14 Session A — Guided Demo: NAICS Manufacturing Review</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14pt;
+    line-height: 1.55;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    color: #1a1a1a;
+    background: #fafafa;
+  }
+  h1 {
+    color: #0b3d91;
+    border-bottom: 4px solid #0b3d91;
+    padding-bottom: 10px;
+    font-size: 24pt;
+  }
+  h2 {
+    color: #0b3d91;
+    margin-top: 35px;
+    font-size: 18pt;
+    border-bottom: 2px solid #cfd8e8;
+    padding-bottom: 6px;
+  }
+  h3 {
+    color: #1a5276;
+    font-size: 15pt;
+    margin-top: 25px;
+  }
+  .header-fields {
+    background: #ffffff;
+    border: 2px solid #0b3d91;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .header-fields label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    color: #0b3d91;
+  }
+  .header-fields input {
+    padding: 8px;
+    font-size: 13pt;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    width: 260px;
+    font-family: inherit;
+  }
+  .launch-pad {
+    background: #ffffff;
+    border: 3px solid #0b3d91;
+    border-radius: 8px;
+    padding: 20px 25px;
+    margin: 25px 0;
+    box-shadow: 0 2px 6px rgba(11,61,145,0.1);
+  }
+  .launch-pad h3 {
+    margin-top: 0;
+    color: #0b3d91;
+    font-size: 16pt;
+  }
+  .launch-pad ul {
+    list-style: none;
+    padding: 0;
+  }
+  .launch-pad li {
+    padding: 6px 0;
+    border-bottom: 1px dashed #cfd8e8;
+  }
+  .launch-pad li:last-child { border-bottom: none; }
+  .launch-pad strong { color: #0b3d91; }
+
+  .review-compass {
+    background: #fff8e1;
+    border: 2px solid #d4a017;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin: 20px 0;
+  }
+  .review-compass strong { color: #7d5a00; }
+
+  .do-this, .why, .mistake, .check, .breath {
+    padding: 15px 20px;
+    margin: 18px 0;
+    border-radius: 4px;
+    border-left: 6px solid;
+  }
+  .do-this { background: #D5F5E3; border-left-color: #27AE60; }
+  .do-this strong { color: #1E8449; }
+  .why { background: #D6EAF8; border-left-color: #2E86C1; }
+  .why strong { color: #1A5276; }
+  .mistake { background: #FEF9E7; border-left-color: #F1C40F; }
+  .mistake strong { color: #7D6608; }
+  .check { background: #FADBD8; border-left-color: #E74C3C; }
+  .check strong { color: #922B21; }
+  .breath { background: #E8DAEF; border-left-color: #8E44AD; text-align: center; font-style: italic; }
+  .breath strong { color: #6C3483; font-style: normal; }
+
+  .do-this ol, .do-this ul { margin: 8px 0 0 0; padding-left: 22px; }
+  .do-this li { margin: 6px 0; }
+
+  .phase-header {
+    background: #0b3d91;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px 6px 0 0;
+    margin-top: 35px;
+    font-size: 16pt;
+    font-weight: bold;
+  }
+  .phase-meta {
+    background: #e8edf5;
+    padding: 8px 20px;
+    font-size: 12pt;
+    color: #333;
+    border-left: 3px solid #0b3d91;
+    border-right: 3px solid #0b3d91;
+    margin-bottom: 10px;
+  }
+
+  .paste-zone {
+    border: 3px dashed #0b3d91;
+    background: #f0f4fa;
+    padding: 30px;
+    text-align: center;
+    margin: 15px 0;
+    border-radius: 6px;
+    min-height: 100px;
+    position: relative;
+    cursor: pointer;
+  }
+  .paste-zone.has-image { border-style: solid; background: white; padding: 10px; }
+  .paste-zone img { max-width: 100%; display: block; margin: 0 auto; }
+  .paste-zone .hint { color: #0b3d91; font-weight: bold; font-size: 12pt; }
+  .paste-zone .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 13pt;
+    border: 2px solid #cfd8e8;
+    border-radius: 4px;
+    resize: vertical;
+  }
+
+  code, .code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13pt;
+    color: #c0392b;
+  }
+
+  .click-path {
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    font-size: 12pt;
+    color: #1a5276;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+    font-size: 12pt;
+  }
+  th, td { border: 1px solid #cfd8e8; padding: 8px 12px; text-align: left; }
+  th { background: #e8edf5; color: #0b3d91; }
+
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .paste-zone .remove-btn { display: none !important; }
+    .phase-header { page-break-after: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    .do-this, .why, .mistake, .check, .breath { page-break-inside: avoid; }
+    textarea { border: 1px solid #888; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Week 14 Session A — Guided Demo</h1>
+<h2 style="border: none; margin-top: 5px;">NAICS Manufacturing Review: Clean and Transform</h2>
+
+<div class="header-fields">
+  <div><label>Student Name</label><input type="text" placeholder="First Last"></div>
+  <div><label>Date</label><input type="text" placeholder="MM/DD/YYYY"></div>
+</div>
+
+<div class="review-compass">
+  <strong>🧭 Review Compass — Where This Sits</strong><br>
+  Today you rebuild the <strong>data preparation pipeline</strong> on a brand new dataset — the NAICS Manufacturing survey. No Sabor Miami today. The point of this week is simple: <em>can you do the moves on a dataset you have never seen before?</em> That is what a working BI analyst does every week.
+  <ul style="margin-top: 10px;">
+    <li>Phases 1–2 review <strong>Week 8</strong> (connecting and profiling)</li>
+    <li>Phases 3–5 review <strong>Weeks 9–10</strong> (cleaning and transforming)</li>
+    <li>Phases 6–7 review <strong>Week 12</strong> (Data view, data categories, Don't Summarize)</li>
+  </ul>
+</div>
+
+<div class="launch-pad">
+  <h3>🚀 LAUNCH PAD</h3>
+  <ul>
+    <li><strong>What you're building:</strong> A clean, typed, renamed Manufacturing query ready to model</li>
+    <li><strong>Tool:</strong> Power BI Desktop</li>
+    <li><strong>File to open:</strong> Brand new, blank Power BI file</li>
+    <li><strong>Save as:</strong> <code>LastName_FirstName_Week14_Manufacturing.pbix</code></li>
+    <li><strong>Data source:</strong> <code>manufacturing_data.csv</code> from the course GitHub (Web connector, raw URL)</li>
+    <li><strong>Time estimate:</strong> 55–70 minutes</li>
+    <li><strong>Phases:</strong> 8</li>
+    <li><strong>What "done" looks like:</strong> A Manufacturing table with clean headers, correct data types, <code>lowercase_underscore</code> column names, one log-transformed payroll column, and a state field categorized as geography</li>
+    <li><strong>Start here →</strong> Open Power BI Desktop and save the empty file first</li>
+  </ul>
+</div>
+
+<div class="why">
+  <strong>💡 WHY ARE WE DOING THIS?</strong><br>
+  Every real-world dataset comes in messy. Headers are in the wrong place. Numbers are stored as text. Columns are named like <code>PAYANN</code> instead of something a human can read. The cleaning pipeline you practiced in Weeks 9–10 is not a Sabor Miami trick — it is the same pipeline you use on <em>every</em> dataset for the rest of your career. Today we prove that to ourselves on a dataset you have never touched.
+</div>
+
+<!-- =========================== PHASE 1 =========================== -->
+<div class="phase-header">Phase 1 · Open Power BI and Connect to the Data</div>
+<div class="phase-meta">⏱ About 6 minutes · Reviews: Week 8 (connecting to data sources)</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS</strong>
+  <ol>
+    <li>Open <strong>Power BI Desktop</strong>. You should land on the start screen. Close any "Welcome" splash that pops up.</li>
+    <li>Click <strong>File</strong> (top-left) → <strong>Save As</strong> and save the blank file to your Documents folder as <code>LastName_FirstName_Week14_Manufacturing.pbix</code>. Saving first means you never lose work to a crash.</li>
+    <li>On the Home ribbon, click <strong>Get data</strong> → <strong>Web</strong>. We are loading from GitHub today, not a local file.</li>
+    <li>In the URL field, paste this exact address:
+      <div style="background:#fff; border:2px solid #27AE60; padding:10px; margin:10px 0; font-family:Consolas,monospace; font-size:12pt; word-break:break-all;">
+        https://github.com/c-marq/sabor-miami-bi-course/raw/main/datasets/manufacturing_data.csv
+      </div>
+    </li>
+    <li>Click <strong>OK</strong>. When the preview appears, click <strong>Transform Data</strong> (not Load). We want Power Query, not the report canvas.</li>
+  </ol>
+</div>
+
+<div class="why">
+  <strong>💡 WHY Web instead of Text/CSV?</strong><br>
+  Loading from a GitHub raw URL means every student in the room opens the exact same file from the exact same place. No "file not found" errors, no one on the wrong version. This is also how real BI teams share source data — through a URL, not email attachments.
+</div>
+
+<div class="check">
+  <strong>🛑 STOP AND CHECK</strong><br>
+  You should now be inside the <strong>Power Query Editor</strong>. You can tell because the window title says "Power Query Editor" and you see a query called <code>manufacturing_data</code> on the left. If you are looking at a report canvas with visual icons on the right, you clicked Load instead of Transform Data — close the report, delete the data, and redo step 5.
+</div>
+
+<div class="paste-zone" onclick="triggerPaste(this)">
+  <button class="remove-btn" onclick="event.stopPropagation(); removeImage(this.parentNode);">Remove</button>
+  <div class="hint">📋 Click here and press Ctrl+V to paste a screenshot of your Power Query Editor with manufacturing_data loaded</div>
+</div>
+
+<!-- =========================== PHASE 2 =========================== -->
+<div class="phase-header">Phase 2 · Fix the Two-Header-Row Problem</div>
+<div class="phase-meta">⏱ About 10 minutes · Reviews: Week 8 profiling + Week 9 cleaning</div>
+
+<div class="why">
+  <strong>💡 WHY does this file need a header fix?</strong><br>
+  Look at row 1 of your data. You should see short codes like <code>GEO_ID</code>, <code>NAICS2017</code>, <code>PAYANN</code>. Now look at row 2 — you should see descriptive labels like <code>Geographic Area Name</code>, <code>Annual payroll ($1,000)</code>. Both rows look like headers! This dataset came from the US Census Bureau, and they packed <em>two</em> header rows into the file. We need the descriptive labels as our column names, not the codes. That takes four moves.
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — The Four-Move Header Fix</strong>
+  <ol>
+    <li><strong>Move 1 — Demote the current headers.</strong> Right now Power BI auto-promoted the short codes (GEO_ID, NAICS2017…) as column headers. Go to the <strong>Transform</strong> tab in the top ribbon → click the dropdown arrow under <strong>Use First Row as Headers</strong> → choose <strong>Use Headers as First Row</strong>. The short codes should drop down into row 1 of the data, and your headers should now read <code>Column1</code>, <code>Column2</code>, etc.</li>
+    <li><strong>Move 2 — Remove the short-code row.</strong> On the <strong>Home</strong> tab → <strong>Remove Rows</strong> → <strong>Remove Top Rows</strong>. Enter <code>1</code> and click OK. The short codes row is gone. Row 1 should now be the descriptive labels.</li>
+    <li><strong>Move 3 — Promote the descriptive labels.</strong> On the <strong>Home</strong> tab → click <strong>Use First Row as Headers</strong>. Your column headers should now read <code>id</code>, <code>Geographic Area Name</code>, <code>Geo Footnote</code>, and so on.</li>
+    <li><strong>Move 4 — Look at the Applied Steps pane on the right.</strong> You should see: Source → Promoted Headers (from auto-load) → Changed Type → Demoted Headers → Removed Top Rows → Promoted Headers. Every move you made is a line in that list. This is the thing that makes Power Query powerful — it remembers everything.</li>
+  </ol>
+</div>
+
+<div class="mistake">
+  <strong>⚠️ COMMON MISTAKE</strong><br>
+  Students skip Move 1 (demoting) and try to go straight from "short code headers" to "descriptive label headers." It does not work because <strong>Use First Row as Headers</strong> promotes the first <em>data</em> row — and right now your first data row is the descriptive labels, but Power BI does not know that yet. Demoting first is the trick. Write this down: <em>when you need to swap headers, demote before you promote</em>.
+</div>
+
+<div class="check">
+  <strong>🛑 STOP AND CHECK</strong><br>
+  Look at your column headers. The second column should read <strong>Geographic Area Name</strong>, not <code>NAME</code>. The column that was <code>PAYANN</code> should now read <strong>Annual payroll ($1,000)</strong>. If you still see the short codes, you skipped a move. Raise your hand.
+</div>
+
+<div class="paste-zone" onclick="triggerPaste(this)">
+  <button class="remove-btn" onclick="event.stopPropagation(); removeImage(this.parentNode);">Remove</button>
+  <div class="hint">📋 Paste a screenshot of your query with the descriptive label headers in place</div>
+</div>
+
+<!-- =========================== PHASE 3 =========================== -->
+<div class="phase-header">Phase 3 · Fix Data Types</div>
+<div class="phase-meta">⏱ About 8 minutes · Reviews: Week 9 cleaning — data type errors</div>
+
+<div class="why">
+  <strong>💡 WHY do data types matter?</strong><br>
+  Power Query guesses data types when it loads a file. Most of the time it guesses right. Sometimes it guesses wrong — and a wrong guess quietly breaks things downstream. A classic example: an ID column that is actually a <em>label</em> (like <code>31-33</code>) gets guessed as a whole number and loses the dash. Or NAICS codes lose their leading zeros. Fixing types early saves pain later.
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS</strong>
+  <ol>
+    <li>Scroll across your query and look at the small icon next to each column header. <code>ABC</code> = text. <code>1.2</code> = decimal. <code>123</code> = whole number. <code>📅</code> = date.</li>
+    <li>Find the <strong>Industry group</strong> column. Power BI likely guessed it as whole number. Click the icon next to "Industry group" and choose <strong>Text</strong>.</li>
+    <li>When the "Change Column Type" dialog appears, click <strong>Replace Current</strong> (not Add New Step). We want to fix the existing type conversion, not stack a second one on top.</li>
+    <li>Do the same check on <strong>2017 NAICS code</strong> — it should be <strong>Text</strong>, not whole number. If it is already text, leave it alone.</li>
+    <li>Verify that <strong>Annual payroll ($1,000)</strong> and <strong>Number of employees</strong> are both typed as <strong>Whole Number</strong>. These are the values we will actually calculate on later.</li>
+  </ol>
+</div>
+
+<div class="mistake">
+  <strong>⚠️ COMMON MISTAKE</strong><br>
+  Clicking <strong>Add New Step</strong> instead of <strong>Replace Current</strong> leaves a bad type conversion in your Applied Steps and stacks a correction on top of it. It works, but it is messy and slow. Always Replace Current when you are fixing Power BI's first guess.
+</div>
+
+<div class="breath">
+  <strong>💜 TAKE A BREATH</strong><br>
+  You just did on a brand-new dataset exactly what you did on Sabor Miami four weeks ago. The pipeline is the pipeline. Stretch, sip water, reset. Three more phases of cleaning, then we load.
+</div>
+
+<!-- =========================== PHASE 4 =========================== -->
+<div class="phase-header">Phase 4 · Transformations — Text Moves</div>
+<div class="phase-meta">⏱ About 10 minutes · Reviews: Week 10 transforming text</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Lowercase the NAICS meaning</strong>
+  <ol>
+    <li>Find the column called <strong>Meaning of NAICS code</strong>. Click the column header once to select the whole column.</li>
+    <li>Go to the <strong>Transform</strong> tab in the top ribbon → click <strong>Format</strong> → <strong>lowercase</strong>.</li>
+    <li>Every value in that column should now be lowercase: <code>manufacturing</code> instead of <code>Manufacturing</code>.</li>
+  </ol>
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Add a "Code: " prefix to Industry group</strong>
+  <ol>
+    <li>Click the header of the <strong>Industry group</strong> column to select it.</li>
+    <li><strong>Transform</strong> tab → <strong>Format</strong> → <strong>Add Prefix</strong>.</li>
+    <li>In the dialog, type exactly: <code>Code: </code> (that is <code>Code</code> then a colon then a space). Click OK.</li>
+    <li>Every value in Industry group should now start with <code>Code: </code> — for example, <code>Code: 31-33</code>.</li>
+  </ol>
+</div>
+
+<div class="why">
+  <strong>💡 WHY two transformations that look small?</strong><br>
+  These are the two most common text moves you will ever make in Power Query: <em>standardize casing</em> and <em>add context to codes</em>. In a real job you will lowercase customer emails to match them, or prefix product IDs with their category. The point is not the lowercase itself — it is getting the muscle memory for <em>where the Format menu lives</em>.
+</div>
+
+<div class="check">
+  <strong>🛑 STOP AND CHECK</strong><br>
+  Look at both columns. Meaning of NAICS code should be all lowercase. Industry group should start with <code>Code: </code>. If either one is wrong, click the X next to the bad step in Applied Steps (right side) to undo, and redo it.
+</div>
+
+<!-- =========================== PHASE 5 =========================== -->
+<div class="phase-header">Phase 5 · Transformations — One Math Move</div>
+<div class="phase-meta">⏱ About 7 minutes · Reviews: Week 10 transforming numerical data</div>
+
+<div class="why">
+  <strong>💡 WHY take the log of payroll?</strong><br>
+  Annual payroll ranges from a few million dollars to hundreds of billions across the states. When you chart numbers with that kind of spread, California crushes every other state and you cannot see the pattern in the smaller ones. Taking the <strong>natural log</strong> flattens the scale so every state is visible. This is one of the most common tricks in data visualization, and Power Query can do it in two clicks.
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS</strong>
+  <ol>
+    <li>Find the <strong>Annual payroll ($1,000)</strong> column. Click the header to select it.</li>
+    <li>Important — we want to <em>add a new column</em> with the log, not replace the original. Go to the <strong>Add Column</strong> tab in the top ribbon (not Transform this time).</li>
+    <li>Click <strong>Scientific</strong> → <strong>Natural Logarithm</strong>. A new column appears at the far right of the table, called something like <code>Natural Logarithm</code>.</li>
+    <li>Double-click the header of that new column and rename it to <code>ln_annual_payroll</code> (all lowercase, underscore, no spaces).</li>
+  </ol>
+</div>
+
+<div class="mistake">
+  <strong>⚠️ COMMON MISTAKE — Transform vs. Add Column</strong><br>
+  The <strong>Transform</strong> tab <em>changes the existing column</em>. The <strong>Add Column</strong> tab <em>creates a new column</em> and leaves the original alone. Students mix these up constantly. Rule of thumb: if you want to keep the original value AND have the transformed one, use <strong>Add Column</strong>. If you want to replace, use <strong>Transform</strong>. For the log, we always want the original payroll kept — so Add Column.
+</div>
+
+<div class="mistake">
+  <strong>⚠️ Dr. Lee's warning about rounding</strong><br>
+  If you ever round numbers in Power Query, the rounding is <strong>permanent</strong>. The original value is gone. If you only want to <em>display</em> fewer decimals, do that in the report view, not Power Query. Power Query is where you change data; report view is where you change how data looks.
+</div>
+
+<!-- =========================== PHASE 6 =========================== -->
+<div class="phase-header">Phase 6 · Rename Columns to lowercase_underscore</div>
+<div class="phase-meta">⏱ About 10 minutes · Reviews: Week 9 naming conventions</div>
+
+<div class="why">
+  <strong>💡 WHY rename everything?</strong><br>
+  Column names with spaces, parentheses, and dollar signs work, but they make DAX measures ugly and error-prone. <code>SUM('manufacturing_data'[Annual payroll ($1,000)])</code> is a nightmare to type. <code>SUM(manufacturing[annual_payroll_thousands])</code> is clean. This is the exact naming convention we have used all semester — today we prove we can apply it to a dataset we did not design.
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Double-click each header and rename</strong>
+  <p>Go column by column from left to right. Double-click the header to rename. Use this table:</p>
+  <table>
+    <tr><th>Original (descriptive label)</th><th>Rename to</th></tr>
+    <tr><td>id</td><td><code>row_id</code></td></tr>
+    <tr><td>Geographic Area Name</td><td><code>state_name</code></td></tr>
+    <tr><td>Geo Footnote</td><td><code>geo_footnote</code></td></tr>
+    <tr><td>2017 NAICS code</td><td><code>naics_code</code></td></tr>
+    <tr><td>Industry group</td><td><code>industry_group</code></td></tr>
+    <tr><td>2017 NAICS Footnote</td><td><code>naics_footnote</code></td></tr>
+    <tr><td>Meaning of NAICS code</td><td><code>naics_meaning</code></td></tr>
+    <tr><td>NAICS economic sector</td><td><code>sector_code</code></td></tr>
+    <tr><td>SUBSECTOR</td><td><code>subsector_code</code></td></tr>
+    <tr><td>Industry level</td><td><code>industry_level</code></td></tr>
+    <tr><td>Year</td><td><code>year</code></td></tr>
+    <tr><td>Sales, value of shipments, or revenue ($1,000)</td><td><code>revenue_thousands</code></td></tr>
+    <tr><td>Relative standard error...</td><td><code>revenue_rse</code></td></tr>
+    <tr><td>Annual payroll ($1,000)</td><td><code>annual_payroll_thousands</code></td></tr>
+    <tr><td>First-quarter payroll ($1,000)</td><td><code>q1_payroll_thousands</code></td></tr>
+    <tr><td>Number of employees</td><td><code>number_of_employees</code></td></tr>
+    <tr><td>Production workers for pay period...</td><td><code>production_workers</code></td></tr>
+    <tr><td>Range indicating percent of total annual payroll imputed</td><td><code>payroll_imputed_range</code></td></tr>
+    <tr><td>Range indicating percent of total employees imputed</td><td><code>employees_imputed_range</code></td></tr>
+  </table>
+  <p>Then rename the <strong>query itself</strong>: in the Queries pane on the left, right-click <code>manufacturing_data</code> → <strong>Rename</strong> → <code>manufacturing</code>.</p>
+</div>
+
+<div class="check">
+  <strong>🛑 STOP AND CHECK</strong><br>
+  Scroll across your query. Every single column header should be lowercase with underscores. No spaces. No parentheses. No dollar signs. The query name on the left should say <code>manufacturing</code>. Your <code>ln_annual_payroll</code> column should still be at the far right.
+</div>
+
+<!-- =========================== PHASE 7 =========================== -->
+<div class="phase-header">Phase 7 · Close &amp; Apply, then Fix the Data View</div>
+<div class="phase-meta">⏱ About 10 minutes · Reviews: Week 12 Data view settings</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Load the query</strong>
+  <ol>
+    <li>On the Home tab of Power Query → click <strong>Close &amp; Apply</strong> (top-left).</li>
+    <li>Power BI will think for a few seconds while it loads. When it is done, you are back in the main Power BI window.</li>
+    <li>Click the <strong>Data view</strong> icon on the far-left toolbar — it is the middle of three icons (Report view, Data view, Model view). Data view is the one that looks like a spreadsheet grid.</li>
+    <li>In the Fields pane on the right, click <code>manufacturing</code> to open it. You should see all your renamed columns.</li>
+  </ol>
+</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Three Data view fixes</strong>
+  <ol>
+    <li><strong>Don't Summarize the sector code.</strong> Click on <code>sector_code</code> in the Fields pane. Go to the <strong>Column tools</strong> tab in the top ribbon. Find the <strong>Summarization</strong> dropdown → change it from "Sum" to <strong>Don't summarize</strong>. Do the same for <code>subsector_code</code>, <code>naics_code</code>, and <code>year</code>. These are <em>labels</em> that happen to be numbers — we do not want Power BI adding them up.</li>
+    <li><strong>Tag state_name as geography.</strong> Click <code>state_name</code>. In the <strong>Column tools</strong> tab → find <strong>Data category</strong> → change from "Uncategorized" to <strong>State or Province</strong>. This tells Power BI that these values are real US states and can be plotted on a map.</li>
+    <li><strong>Hide the footnote columns.</strong> In the Fields pane, right-click <code>geo_footnote</code> → <strong>Hide in report view</strong>. Do the same for <code>naics_footnote</code>. These columns are mostly null and would clutter any report.</li>
+  </ol>
+</div>
+
+<div class="why">
+  <strong>💡 WHY Don't Summarize?</strong><br>
+  By default, Power BI assumes every numeric column is something you want to sum. But codes like <code>31</code> for Manufacturing are <em>identifiers</em>, not quantities. If you drop <code>sector_code</code> into a visual and Power BI adds them up, you get garbage numbers. <strong>Don't Summarize</strong> tells Power BI "treat this as a label, not a measure." This is a Week 12 move — we applied it to the IDs in Sabor Miami too.
+</div>
+
+<div class="check">
+  <strong>🛑 STOP AND CHECK</strong><br>
+  In the Fields pane, <code>state_name</code> should have a small globe icon next to it, showing the geographic category is set. <code>sector_code</code> and <code>year</code> should have the Σ symbol removed (Don't Summarize). <code>geo_footnote</code> and <code>naics_footnote</code> should be grayed out (hidden).
+</div>
+
+<div class="paste-zone" onclick="triggerPaste(this)">
+  <button class="remove-btn" onclick="event.stopPropagation(); removeImage(this.parentNode);">Remove</button>
+  <div class="hint">📋 Paste a screenshot of the Fields pane showing your renamed manufacturing table with the globe icon on state_name</div>
+</div>
+
+<!-- =========================== PHASE 8 =========================== -->
+<div class="phase-header">Phase 8 · Verify and Save</div>
+<div class="phase-meta">⏱ About 5 minutes</div>
+
+<div class="do-this">
+  <strong>✅ DO THIS — Quick sanity visual</strong>
+  <ol>
+    <li>Click the <strong>Report view</strong> icon on the far-left toolbar (the top icon, looks like a bar chart).</li>
+    <li>In the Visualizations pane on the right, click the <strong>Table</strong> visual icon (a small grid).</li>
+    <li>With the table visual selected, check <code>state_name</code> and <code>annual_payroll_thousands</code> in the Fields pane. Both should appear in your table visual.</li>
+    <li>You should see a list of states with their annual payroll values. This confirms the data actually loaded and the names and types are working.</li>
+    <li>Save the file: <strong>Ctrl+S</strong>.</li>
+  </ol>
+</div>
+
+<div class="check">
+  <strong>🛑 FINAL CHECK</strong><br>
+  Your table visual should show a row per state with a payroll number. If you see "Sum of state_name" or nothing at all, something upstream is wrong — flag it.
+</div>
+
+<!-- =========================== REFLECTION =========================== -->
+<h2>Reflection</h2>
+
+<div class="why">
+  <strong>💡 Review Debrief</strong><br>
+  Today was a test of whether the moves transfer. Take three minutes and answer these honestly. Not for a grade — for your own check-in.
+</div>
+
+<p><strong>1. Which phase felt most familiar — like muscle memory from Sabor Miami?</strong></p>
+<textarea></textarea>
+
+<p><strong>2. Which phase did you have to slow down and think about? (Nobody is judging — this is the phase to review before Lab #4.)</strong></p>
+<textarea></textarea>
+
+<p><strong>3. The two-header-row fix (Phase 2) is a move you may not have seen before. Write one sentence describing when you would use it in your own words.</strong></p>
+<textarea></textarea>
+
+<hr style="margin-top: 40px;">
+<p style="text-align: center; color: #666; font-size: 11pt;">
+  CAP2791C · Power BI: Data Preparation and Modeling · Week 14 Session A · Guided Demo
+</p>
+
+<script>
+  function triggerPaste(zone) {
+    zone.focus();
+  }
+  document.addEventListener('paste', function(e) {
+    const items = (e.clipboardData || window.clipboardData).items;
+    for (let item of items) {
+      if (item.type.indexOf('image') !== -1) {
+        const blob = item.getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const activeZone = document.querySelector('.paste-zone:hover') || document.querySelector('.paste-zone:focus-within') || document.querySelector('.paste-zone:not(.has-image)');
+          if (activeZone) {
+            activeZone.classList.add('has-image');
+            const existing = activeZone.querySelector('img');
+            if (existing) existing.remove();
+            const existingHint = activeZone.querySelector('.hint');
+            if (existingHint) existingHint.style.display = 'none';
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            activeZone.appendChild(img);
+          }
+        };
+        reader.readAsDataURL(blob);
+        e.preventDefault();
+        break;
+      }
+    }
+  });
+  function removeImage(zone) {
+    zone.classList.remove('has-image');
+    const img = zone.querySelector('img');
+    if (img) img.remove();
+    const hint = zone.querySelector('.hint');
+    if (hint) hint.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
