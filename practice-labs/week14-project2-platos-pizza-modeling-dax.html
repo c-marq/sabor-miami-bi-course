@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 · Project 2 — Plato's Pizza Star Schema &amp; DAX Review</title>
+<style>
+  /* ============ BASE ============ */
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 30px 40px 60px;
+    color: #2c3e50;
+    line-height: 1.65;
+    font-size: 14pt;
+    background: #f7f9fb;
+  }
+  h1 {
+    color: #1A5276;
+    border-bottom: 4px solid #2E86C1;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    font-size: 28pt;
+    line-height: 1.2;
+  }
+  .subtitle {
+    color: #5D6D7E;
+    font-size: 14pt;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  h2 {
+    color: #1A5276;
+    margin-top: 0;
+    font-size: 20pt;
+  }
+  h3 {
+    color: #2874A6;
+    margin-top: 28px;
+    font-size: 16pt;
+  }
+  p { margin: 12px 0; }
+  strong { color: #1A5276; }
+  code {
+    background: #ECF0F1;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12pt;
+    color: #922B21;
+  }
+  pre.dax {
+    background: #2C3E50;
+    color: #ECF0F1;
+    padding: 16px 20px;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12pt;
+    line-height: 1.5;
+    overflow-x: auto;
+    border-left: 5px solid #F39C12;
+    margin: 14px 0;
+  }
+  pre.dax .comment { color: #95A5A6; font-style: italic; }
+  pre.dax .keyword { color: #F39C12; font-weight: bold; }
+  pre.dax .func { color: #5DADE2; }
+  pre.dax .string { color: #A9DFBF; }
+
+  /* ============ HEADER INFO ============ */
+  .header-info {
+    background: #ffffff;
+    border: 2px solid #2E86C1;
+    padding: 18px 22px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .header-info p { margin: 8px 0; }
+  .header-info label {
+    display: inline-block;
+    font-weight: bold;
+    color: #1A5276;
+    margin-right: 12px;
+    min-width: 140px;
+  }
+  .header-info input {
+    border: none;
+    border-bottom: 1.5px solid #888;
+    padding: 4px 8px;
+    font-size: 13pt;
+    font-family: inherit;
+    width: 320px;
+    background: transparent;
+  }
+  .header-info input:focus {
+    outline: none;
+    border-bottom-color: #2E86C1;
+  }
+
+  /* ============ LAUNCH PAD ============ */
+  .launch-pad {
+    background: linear-gradient(135deg, #EBF5FB 0%, #D6EAF8 100%);
+    border: 2px solid #2E86C1;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 30px 0;
+    box-shadow: 0 3px 8px rgba(46,134,193,0.1);
+  }
+  .launch-pad h3 {
+    margin-top: 0;
+    color: #1A5276;
+    font-size: 18pt;
+    border-bottom: 2px solid #AED6F1;
+    padding-bottom: 8px;
+  }
+  .launch-pad ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0 0;
+  }
+  .launch-pad li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #AED6F1;
+  }
+  .launch-pad li:last-child { border-bottom: none; }
+
+  /* ============ UDN BOXES ============ */
+  .do-this, .why, .common-mistake, .stop-check, .take-a-breath {
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-radius: 6px;
+  }
+  .do-this {
+    background-color: #D5F5E3;
+    border-left: 6px solid #27AE60;
+  }
+  .do-this .label { color: #1E8449; }
+  .why {
+    background-color: #D6EAF8;
+    border-left: 6px solid #2E86C1;
+  }
+  .why .label { color: #1A5276; }
+  .common-mistake {
+    background-color: #FEF9E7;
+    border-left: 6px solid #F1C40F;
+  }
+  .common-mistake .label { color: #7D6608; }
+  .stop-check {
+    background-color: #FADBD8;
+    border-left: 6px solid #E74C3C;
+  }
+  .stop-check .label { color: #922B21; }
+  .take-a-breath {
+    background-color: #E8DAEF;
+    border-left: 6px solid #8E44AD;
+  }
+  .take-a-breath .label { color: #6C3483; }
+
+  .label {
+    display: block;
+    font-weight: bold;
+    font-size: 13pt;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ============ PHASE BLOCKS ============ */
+  .phase {
+    background: #ffffff;
+    border: 2px solid #AED6F1;
+    border-radius: 10px;
+    padding: 0 28px 24px;
+    margin: 35px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .phase-header {
+    background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%);
+    color: #ffffff;
+    padding: 16px 24px;
+    margin: 0 -28px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 17pt;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .phase-time {
+    font-size: 12pt;
+    background: rgba(255,255,255,0.25);
+    padding: 5px 14px;
+    border-radius: 15px;
+    font-weight: normal;
+  }
+
+  /* ============ STEP LISTS ============ */
+  ol.steps {
+    padding-left: 28px;
+    margin: 15px 0;
+  }
+  ol.steps > li {
+    padding: 8px 0;
+    margin-bottom: 6px;
+  }
+  ol.steps > li::marker {
+    font-weight: bold;
+    color: #1A5276;
+  }
+  ul.sub {
+    padding-left: 22px;
+    margin: 8px 0;
+  }
+  ul.sub li {
+    padding: 4px 0;
+    list-style: disc;
+  }
+
+  /* ============ URL BLOCK ============ */
+  .url-block {
+    background: #F4F6F7;
+    border: 1px dashed #7F8C8D;
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-family: 'Consolas', monospace;
+    font-size: 11pt;
+    word-break: break-all;
+    border-radius: 4px;
+    color: #283747;
+  }
+
+  /* ============ PASTE ZONES ============ */
+  .paste-zone {
+    border: 3px dashed #2E86C1;
+    background: #F8FBFD;
+    padding: 30px 20px;
+    margin: 15px 0;
+    text-align: center;
+    border-radius: 8px;
+    min-height: 120px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .paste-zone:hover {
+    background: #EBF5FB;
+  }
+  .paste-zone.has-image {
+    padding: 10px;
+    cursor: default;
+  }
+  .paste-zone-placeholder {
+    color: #5D6D7E;
+    font-style: italic;
+    font-size: 12pt;
+  }
+  .paste-zone img {
+    max-width: 100%;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+  }
+  .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11pt;
+    font-weight: bold;
+    display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  /* ============ REFLECTION TEXTAREA ============ */
+  textarea.reflection {
+    width: 100%;
+    min-height: 140px;
+    border: 2px solid #AED6F1;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 13pt;
+    line-height: 1.6;
+    resize: vertical;
+    background: #ffffff;
+  }
+  textarea.reflection:focus {
+    outline: none;
+    border-color: #2E86C1;
+  }
+
+  /* ============ HALFWAY / CC MARKERS ============ */
+  .halfway-marker {
+    background: linear-gradient(90deg, #F39C12 0%, #E67E22 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 26px 30px;
+    margin: 50px 0;
+    border-radius: 12px;
+    font-size: 16pt;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(230,126,34,0.25);
+  }
+  .halfway-marker .big {
+    font-size: 22pt;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .cc-marker {
+    background: linear-gradient(90deg, #8E44AD 0%, #6C3483 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 22px 30px;
+    margin: 30px 0;
+    border-radius: 12px;
+    font-size: 15pt;
+    box-shadow: 0 4px 12px rgba(108,52,131,0.25);
+  }
+
+  /* ============ PROGRESS BAR ============ */
+  .progress {
+    display: flex;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #AED6F1;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 20px 0 30px;
+    font-size: 10pt;
+    gap: 4px;
+  }
+  .progress-step {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    color: #7F8C8D;
+    border-radius: 4px;
+  }
+
+  /* ============ PRINT STYLES ============ */
+  @media print {
+    body {
+      background: white;
+      font-size: 10.5pt;
+      padding: 10px 15px;
+      max-width: 100%;
+      color: #000;
+    }
+    h1 { font-size: 20pt; }
+    h2 { font-size: 14pt; }
+    h3 { font-size: 12pt; }
+    .phase, .launch-pad, .header-info, .do-this, .why,
+    .common-mistake, .stop-check, .take-a-breath, pre.dax {
+      page-break-inside: avoid;
+      box-shadow: none !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .paste-zone {
+      border: 1px solid #888;
+      background: #fff !important;
+    }
+    .paste-zone-placeholder { display: none; }
+    .remove-btn { display: none !important; }
+    .halfway-marker, .cc-marker {
+      -webkit-print-color-adjust: exact;
+    }
+    textarea.reflection {
+      border: 1px solid #888;
+      min-height: 100px;
+    }
+    .phase-header {
+      background: #1A5276 !important;
+      color: #fff !important;
+      -webkit-print-color-adjust: exact;
+    }
+    input {
+      border-bottom: 1px solid #000 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Week 14 · Project 2</h1>
+<p class="subtitle">Plato's Pizza — Star Schema Modeling and DAX Review</p>
+
+<div class="header-info">
+  <p><label>Student Name:</label><input type="text" placeholder="Your name"></p>
+  <p><label>Date:</label><input type="text" placeholder="Today's date"></p>
+  <p><label>Session:</label> Wednesday (Session 14B class + tutoring block right after)</p>
+</div>
+
+<div class="why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  Project 1 reviewed the full Power Query pipeline on a dataset you already know. Project 2 does the same thing with <em>modeling and DAX</em>, on a dataset you have never used. The goal is to prove the skills are <strong>yours</strong> — not something that only works on Sabor Miami. If you can build a star schema and write working measures on a brand new dataset, you are ready for your portfolio.
+</div>
+
+<div class="why">
+  <span class="label">💡 MEET PLATO'S PIZZA</span>
+  Plato's Pizza is a pizzeria with a full year of 2015 transaction data. It has four CSV files:
+  <ul class="sub">
+    <li><code>order_details</code> — every pizza on every order (48,620 rows). This is your <strong>fact table</strong>.</li>
+    <li><code>orders</code> — one row per order with date and time (21,350 rows).</li>
+    <li><code>pizzas</code> — the pizza catalog with size and price (96 rows).</li>
+    <li><code>pizza_types</code> — the pizza recipe catalog with category and ingredients (32 rows).</li>
+  </ul>
+  Compared to Sabor Miami, this data is <strong>clean</strong>. No typos, no messy casing, no weird nulls. That means you can focus on what matters this time: the <strong>structure</strong> and the <strong>measures</strong>.
+</div>
+
+<div class="launch-pad">
+  <h3>🚀 LAUNCH PAD</h3>
+  <ul>
+    <li><strong>What you are building:</strong> A complete Power BI model of Plato's Pizza — clean star schema, Date table, five DAX measures including one CALCULATE, and a verification visual that confirms the filter context override.</li>
+    <li><strong>Tool:</strong> Power BI Desktop</li>
+    <li><strong>File to open:</strong> A new, blank Power BI file. Save it as <code>LastName_FirstName_Week14_Project2.pbix</code> before you start.</li>
+    <li><strong>Data source:</strong> Four CSV files loaded directly from the course GitHub repository. URLs are provided in Phase 1.</li>
+    <li><strong>Time estimate:</strong> Phases 1–8 in Wednesday's class session (covers connect, model, Date table). Phases 9–11 in the tutoring block right after class (covers measures, visuals, reflection).</li>
+    <li><strong>Phases:</strong> 11 total — Connect → Date Fix → Flatten → line_total → Data Types → Load → Star Schema → Date Table → (CC #4) → Measures → Visual → Reflect</li>
+    <li><strong>What "done" looks like:</strong> A star-schema Power BI model with 4 tables loaded (order_details, orders, pizzas, Date), 3 active relationships, 5 working measures, and a table visual showing revenue by category with a Classic Category Revenue column that demonstrates CALCULATE overriding filter context.</li>
+    <li><strong>Start here →</strong> Open Power BI Desktop, create a new blank file, and save it with the filename above.</li>
+  </ul>
+</div>
+
+<div class="progress">
+  <div class="progress-step">1 · Connect</div>
+  <div class="progress-step">2 · Date Fix</div>
+  <div class="progress-step">3 · Flatten</div>
+  <div class="progress-step">4 · line_total</div>
+  <div class="progress-step">5 · Types</div>
+  <div class="progress-step">6 · Load</div>
+  <div class="progress-step">7 · Schema</div>
+  <div class="progress-step">8 · Date Table</div>
+  <div class="progress-step">9 · Measures</div>
+  <div class="progress-step">10 · Visual</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 1 — CONNECT                                            -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 1 · Connect to the Four Plato's Pizza Files</span>
+    <span class="phase-time">⏱ 5 min</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>In Power BI Desktop, click <strong>Home</strong> tab → <strong>Get data</strong> → <strong>Web</strong>.</li>
+      <li>Paste the first URL below → OK → <strong>Transform Data</strong>. Power Query Editor opens.</li>
+      <li>Inside Power Query Editor, repeat for the remaining three files: <strong>Home</strong> → <strong>New Source</strong> → <strong>Web</strong> → paste URL → OK.</li>
+      <li>Check the query names in the <strong>Queries</strong> pane on the left. If any query loaded with a weird name (like <code>order_details__1_</code>), double-click it and rename it to match the target name below.</li>
+    </ol>
+  </div>
+
+  <h3>The four URLs:</h3>
+  <div class="url-block">https://github.com/c-marq/sabor-miami-bi-course/raw/main/datasets/order_details.csv</div>
+  <div class="url-block">https://github.com/c-marq/sabor-miami-bi-course/raw/main/datasets/orders.csv</div>
+  <div class="url-block">https://github.com/c-marq/sabor-miami-bi-course/raw/main/datasets/pizzas.csv</div>
+  <div class="url-block">https://github.com/c-marq/sabor-miami-bi-course/raw/main/datasets/pizza_types.csv</div>
+
+  <h3>Target query names:</h3>
+  <ul class="sub">
+    <li><code>order_details</code></li>
+    <li><code>orders</code></li>
+    <li><code>pizzas</code></li>
+    <li><code>pizza_types</code></li>
+  </ul>
+
+  <div class="why">
+    <span class="label">💡 GOOD NEWS</span>
+    Unlike Sabor Miami, the Plato's Pizza CSVs already use lowercase_underscore column names. No column renaming phase this time. That is a gift — use the saved time on the modeling, which is where Project 2 actually puts the effort.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    You should have exactly <strong>4 queries</strong> in the Queries pane, named <code>order_details</code>, <code>orders</code>, <code>pizzas</code>, <code>pizza_types</code>. Click each one to verify it loaded with real column headers.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 2 — DATE LOCALE FIX                                    -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 2 · Fix the Date Column — It's UK Format</span>
+    <span class="phase-time">⏱ 7 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY — A NEW TWIST ON AN OLD LESSON</span>
+    In Project 1 you dealt with two different date formats mixed in the same column. Plato's Pizza is simpler: just one format. But that format is <strong>DD/MM/YYYY</strong> (UK/European), not MM/DD/YYYY (US). If you just click Data Type → Date, Power BI will apply your machine's default locale — which is probably English (United States) — and mis-read every date where the day is greater than 12. Half your data would silently become wrong dates with no error message.
+    <br><br>
+    The fix is <strong>Using Locale</strong>, same tool you used in Project 1, different locale picked.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>Click the <code>orders</code> query.</li>
+      <li>Click the <code>date</code> column header to select it.</li>
+      <li>Go to <strong>Transform</strong> tab → <strong>Data Type</strong> → <strong>Using Locale…</strong></li>
+      <li>In the dialog:
+        <ul class="sub">
+          <li>Data Type: <strong>Date</strong></li>
+          <li>Locale: <strong>English (United Kingdom)</strong></li>
+        </ul>
+      </li>
+      <li>You can sample the preview at the bottom of the dialog to confirm the parse looks right. Click <strong>OK</strong>.</li>
+      <li>The <code>date</code> column now shows a calendar icon in its header and clean parsed dates like <code>1/13/2015</code> (Power BI will display them in your local format, but the underlying values are correct).</li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    Do <strong>not</strong> use the regular <strong>Data Type → Date</strong> option — use <strong>Using Locale</strong> specifically. The regular option will silently apply your machine's default locale and get half the dates wrong.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    The <code>date</code> column in <code>orders</code> should show a calendar icon and real date values. Click the filter dropdown on the column to see the date range — it should span the full year 2015 (January to December), not weird gaps. If you see errors or gaps, your locale was wrong.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 3 — FLATTEN                                            -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 3 · Flatten pizza_types Into pizzas</span>
+    <span class="phase-time">⏱ 10 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY — THE SHAPE PROBLEM</span>
+    Right now the dimension side of the model is in two tables: <code>pizzas</code> (size, price) and <code>pizza_types</code> (category, name, ingredients). These are linked by <code>pizza_type_id</code>. That is called a <strong>snowflake</strong>, and Power BI can technically handle it — but a <strong>star schema</strong> is cleaner. A star schema flattens dimension tables so every pizza row directly carries its category. The way to flatten is a merge in Power Query, which you did four times in Lab #2.
+    <br><br>
+    After this phase, <code>pizzas</code> will have a <code>category</code> column directly on it, and <code>pizza_types</code> will no longer load into the model.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — merge pizza_types into pizzas</span>
+    <ol class="steps">
+      <li>Click the <code>pizzas</code> query.</li>
+      <li><strong>Home</strong> tab → <strong>Merge Queries</strong> → <strong>Merge Queries</strong> (not "as new").</li>
+      <li>In the dialog:
+        <ul class="sub">
+          <li>Top table: <code>pizzas</code> (already selected)</li>
+          <li>Click the <code>pizza_type_id</code> column in the top preview</li>
+          <li>Bottom table dropdown: pick <code>pizza_types</code></li>
+          <li>Click the <code>pizza_type_id</code> column in the bottom preview</li>
+          <li>Join Kind: <strong>Left Outer (all from first, matching from second)</strong></li>
+        </ul>
+      </li>
+      <li>Click <strong>OK</strong>. A new column called <code>pizza_types</code> appears at the right end of <code>pizzas</code>, containing nested Table values.</li>
+      <li>Click the <strong>expand icon</strong> (two small arrows) on the new column header.</li>
+      <li>In the expand dialog, uncheck <strong>everything</strong>, then check only <strong>category</strong>. Also uncheck <strong>Use original column name as prefix</strong>. Click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY ONLY CATEGORY?</span>
+    <code>pizza_types</code> has four columns: <code>pizza_type_id</code>, <code>name</code>, <code>category</code>, <code>ingredients</code>. For your measures, you only need <code>category</code> — it is what you will use in the CALCULATE filter later. Pulling in <code>name</code> and <code>ingredients</code> would bloat the <code>pizzas</code> table without giving you anything useful for this project. When in doubt: <strong>only bring in what you actually need</strong>.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — disable loading on pizza_types</span>
+    <ol class="steps">
+      <li>In the Queries pane, right-click <code>pizza_types</code>.</li>
+      <li>Uncheck <strong>Enable load</strong>. The query name should now appear in italics.</li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    Do not <strong>Delete</strong> <code>pizza_types</code> from the Queries pane. If you delete it, the merge step in <code>pizzas</code> will break. <strong>Disable load</strong> keeps the query alive for internal use but hides it from the model.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    Click <code>pizzas</code>. You should see the original 4 columns (<code>pizza_id</code>, <code>pizza_type_id</code>, <code>size</code>, <code>price</code>) <strong>plus</strong> a new <code>category</code> column at the right end. Every row should show one of these 4 values in category: <strong>Chicken</strong>, <strong>Classic</strong>, <strong>Supreme</strong>, or <strong>Veggie</strong>. If category is blank or missing, your merge failed — check the join keys.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 4 — LINE TOTAL                                         -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 4 · Compute line_total in order_details</span>
+    <span class="phase-time">⏱ 12 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY — REVENUE LIVES IN THE FACT TABLE</span>
+    To write DAX measures like "Total Revenue," we need a revenue value we can sum. But the fact table (<code>order_details</code>) only has <code>quantity</code> — the price is in <code>pizzas</code>. We could write a DAX formula that multiplies across tables, but that introduces a new pattern you have not practiced yet. For review week, we keep DAX simple: we compute <code>line_total</code> directly inside <code>order_details</code> using Power Query, so every measure can be a pure <code>SUM</code> — exactly like you wrote in Lab #3.
+    <br><br>
+    The trick: merge <code>pizzas</code> into <code>order_details</code> <strong>temporarily</strong> to pull in <code>price</code>, compute <code>line_total = quantity × price</code>, then drop the <code>price</code> column so <code>order_details</code> stays lean.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — temporary merge to pull in price</span>
+    <ol class="steps">
+      <li>Click the <code>order_details</code> query.</li>
+      <li><strong>Home</strong> → <strong>Merge Queries</strong> → <strong>Merge Queries</strong>.</li>
+      <li>In the dialog:
+        <ul class="sub">
+          <li>Top table: <code>order_details</code></li>
+          <li>Click the <code>pizza_id</code> column in the top preview</li>
+          <li>Bottom table dropdown: pick <code>pizzas</code></li>
+          <li>Click the <code>pizza_id</code> column in the bottom preview</li>
+          <li>Join Kind: <strong>Left Outer</strong></li>
+        </ul>
+      </li>
+      <li>Click <strong>OK</strong>. A new <code>pizzas</code> column appears at the right end.</li>
+      <li>Click the <strong>expand icon</strong> on the new column. Uncheck everything, then check only <strong>price</strong>. Uncheck the prefix option. Click OK.</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — add a custom column for line_total</span>
+    <ol class="steps">
+      <li>Still on <code>order_details</code>, go to <strong>Add Column</strong> tab → <strong>Custom Column</strong>.</li>
+      <li>New column name: <code>line_total</code></li>
+      <li>In the formula box, type (or copy) exactly this:
+        <br><code>= [quantity] * [price]</code>
+      </li>
+      <li>Click <strong>OK</strong>. A new <code>line_total</code> column appears at the right end.</li>
+      <li>If the column type is "ABC123" (any), change it to <strong>Decimal Number</strong> using the icon at the left of the column header.</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — drop the price column</span>
+    <ol class="steps">
+      <li>Right-click the <code>price</code> column header in <code>order_details</code> → <strong>Remove</strong>.</li>
+      <li>Your fact table now has its own revenue (<code>line_total</code>) and does not need price anymore. <code>pizzas</code> still has <code>price</code> — we just do not need it duplicated on every transaction row.</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY DROP IT?</span>
+    Carrying <code>price</code> on every row of <code>order_details</code> (48,620 rows) when it really belongs in <code>pizzas</code> (96 rows) is wasteful. <code>line_total</code> is different — it is the result of a calculation that needs to live at the row level. That one is earning its place in the fact table. <code>price</code> is not.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    <code>order_details</code> should now have these columns: <code>order_details_id</code>, <code>order_id</code>, <code>pizza_id</code>, <code>quantity</code>, <code>line_total</code>. That is it. No <code>price</code> column. Row count still around 48,620. Click on any row and mentally check: does <code>line_total</code> look like <code>quantity</code> × a reasonable pizza price? For a quantity of 1 the value should be somewhere between $9 and $36.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 5 — DATA TYPES                                         -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 5 · Set Final Data Types</span>
+    <span class="phase-time">⏱ 5 min</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    Click through each query and verify or set the types listed below. Use the icon at the left of each column header, or <strong>Transform</strong> tab → <strong>Data Type</strong>.
+    <br><br>
+    <strong>order_details:</strong>
+    <ul class="sub">
+      <li><code>order_details_id</code> → Whole Number</li>
+      <li><code>order_id</code> → Whole Number</li>
+      <li><code>pizza_id</code> → Text</li>
+      <li><code>quantity</code> → Whole Number</li>
+      <li><code>line_total</code> → Decimal Number</li>
+    </ul>
+    <strong>orders:</strong>
+    <ul class="sub">
+      <li><code>order_id</code> → Whole Number</li>
+      <li><code>date</code> → Date <em>(already set in Phase 2 — confirm)</em></li>
+      <li><code>time</code> → Time</li>
+    </ul>
+    <strong>pizzas:</strong>
+    <ul class="sub">
+      <li><code>pizza_id</code> → Text</li>
+      <li><code>pizza_type_id</code> → Text</li>
+      <li><code>size</code> → Text</li>
+      <li><code>price</code> → Decimal Number</li>
+      <li><code>category</code> → Text</li>
+    </ul>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY order_id IS A NUMBER HERE</span>
+    In Sabor Miami we set <code>transaction_id</code> to Text because the IDs had letter prefixes (<code>TXN00001</code>). Plato's Pizza uses simple integer IDs (<code>1</code>, <code>2</code>, <code>3</code>…) with no prefix, so Whole Number is fine. The rule is: <strong>Text if the ID has letters or leading zeros; Whole Number if it is a plain integer</strong>. Either choice works for relationships as long as both sides match.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    No column should show the "any" (ABC123) icon. Dates should show a calendar icon. Text should show ABC. Numbers should show 1.2 or 123. If anything is ambiguous, fix it now.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 6 — CLOSE & APPLY                                      -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 6 · Close &amp; Apply</span>
+    <span class="phase-time">⏱ 3 min</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li><strong>Home</strong> tab → <strong>Close &amp; Apply</strong>.</li>
+      <li>Power BI runs all the steps and loads the model. This may take 30–60 seconds because <code>order_details</code> has ~48,000 rows.</li>
+      <li>When it finishes, you are back in the main Power BI window.</li>
+    </ol>
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    In the <strong>Data</strong> pane on the right of the main window, you should see exactly <strong>3 tables</strong>: <code>order_details</code>, <code>orders</code>, <code>pizzas</code>. No <code>pizza_types</code> (you disabled its load in Phase 3). If you see 4 tables, go back to Power Query and disable load on <code>pizza_types</code>.
+  </div>
+</div>
+
+<div class="take-a-breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You have loaded a clean model from 4 raw CSVs in about 40 minutes. The data is shaped. The prep work is behind you. The rest of this session is where Project 2 earns its name — building the star schema and the Date table, then writing measures that turn this data into insight. Stand up. Stretch. Then open the Model view.
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 7 — STAR SCHEMA                                        -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 7 · Build the Star Schema in Model View</span>
+    <span class="phase-time">⏱ 10 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY MODEL VIEW MATTERS</span>
+    Model View is where relationships live. A relationship tells Power BI: "when someone filters <code>pizzas</code> by category, the filter should travel through to <code>order_details</code> automatically." Without relationships, your measures cannot respond to slicers or filters correctly. This is the piece Lab #3's starter file gave you for free. In Project 2 you build it yourself.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — open Model View</span>
+    <ol class="steps">
+      <li>On the left sidebar of the main Power BI window, click the <strong>Model view</strong> icon (third icon from the top — looks like two connected rectangles).</li>
+      <li>You should see three boxes on the canvas, one for each table: <code>order_details</code>, <code>orders</code>, <code>pizzas</code>.</li>
+      <li>Arrange them so <code>order_details</code> is in the middle and <code>orders</code> and <code>pizzas</code> are on either side. Drag the headers to reposition.</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — check for auto-detected relationships</span>
+    Power BI may have auto-detected relationships when you loaded the data. Look at the canvas:
+    <ul class="sub">
+      <li>If there is a line connecting <code>order_details[order_id]</code> to <code>orders[order_id]</code>, good.</li>
+      <li>If there is a line connecting <code>order_details[pizza_id]</code> to <code>pizzas[pizza_id]</code>, good.</li>
+      <li>If both lines already exist, skip ahead to the STOP AND CHECK.</li>
+      <li>If either is missing, follow the steps below to create them manually.</li>
+    </ul>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — manually create any missing relationships</span>
+    <ol class="steps">
+      <li><strong>Home</strong> tab → <strong>Manage Relationships</strong> → <strong>New</strong>.</li>
+      <li>For the order_details ↔ orders relationship:
+        <ul class="sub">
+          <li>Top table: <code>order_details</code>, column <code>order_id</code></li>
+          <li>Bottom table: <code>orders</code>, column <code>order_id</code></li>
+          <li>Cardinality: <strong>Many to one (*:1)</strong></li>
+          <li>Cross filter direction: <strong>Single</strong></li>
+          <li>Check <strong>Make this relationship active</strong></li>
+          <li>Click OK</li>
+        </ul>
+      </li>
+      <li>Repeat for order_details ↔ pizzas:
+        <ul class="sub">
+          <li>Top table: <code>order_details</code>, column <code>pizza_id</code></li>
+          <li>Bottom table: <code>pizzas</code>, column <code>pizza_id</code></li>
+          <li>Cardinality: <strong>Many to one (*:1)</strong></li>
+          <li>Cross filter direction: <strong>Single</strong></li>
+          <li>Active: Yes</li>
+          <li>Click OK, then Close</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    Your Model view should now show:
+    <ul class="sub">
+      <li>A line from <code>order_details</code> to <code>orders</code> with a <strong>*</strong> on the order_details side and a <strong>1</strong> on the orders side</li>
+      <li>A line from <code>order_details</code> to <code>pizzas</code> with a <strong>*</strong> on the order_details side and a <strong>1</strong> on the pizzas side</li>
+      <li>An arrow on each line pointing from the 1-side (dimension) to the *-side (fact)</li>
+    </ul>
+    If the lines exist but the cardinality is backwards or the filter direction is "Both," double-click the line and fix it. The * always belongs on the fact table side.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 8 — DATE TABLE                                         -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 8 · Create the Date Table</span>
+    <span class="phase-time">⏱ 12 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY A SEPARATE DATE TABLE?</span>
+    You already have a <code>date</code> column in <code>orders</code>. Why create a whole separate Date table? Three reasons:
+    <ul class="sub">
+      <li>A Date table has one row per day, even on days with zero orders — that keeps your time analysis honest.</li>
+      <li>A Date table has calendar columns (Year, Month, Quarter) ready to drag into visuals without extra work.</li>
+      <li>Time intelligence DAX functions (like TOTALYTD) <strong>require</strong> a proper Date table with every date present.</li>
+    </ul>
+    You built one of these in Week 12. This is the same pattern.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — create the Date table using a DAX formula</span>
+    <ol class="steps">
+      <li>On the left sidebar, click the <strong>Table view</strong> icon (second icon — looks like a data grid).</li>
+      <li>On the <strong>Home</strong> tab (or <strong>Modeling</strong> tab depending on view), click <strong>New table</strong>.</li>
+      <li>A formula bar appears at the top. Delete whatever is there and paste this formula exactly:</li>
+    </ol>
+  </div>
+
+<pre class="dax"><span class="keyword">Date</span> =
+<span class="func">ADDCOLUMNS</span> (
+    <span class="func">CALENDAR</span> ( <span class="func">DATE</span> ( 2015, 1, 1 ), <span class="func">DATE</span> ( 2015, 12, 31 ) ),
+    <span class="string">"Year"</span>, <span class="func">YEAR</span> ( [Date] ),
+    <span class="string">"Month Number"</span>, <span class="func">MONTH</span> ( [Date] ),
+    <span class="string">"Month Name"</span>, <span class="func">FORMAT</span> ( [Date], <span class="string">"mmmm"</span> ),
+    <span class="string">"Quarter"</span>, <span class="string">"Q"</span> &amp; <span class="func">QUARTER</span> ( [Date] ),
+    <span class="string">"Day Number"</span>, <span class="func">WEEKDAY</span> ( [Date] ),
+    <span class="string">"Day of Week"</span>, <span class="func">FORMAT</span> ( [Date], <span class="string">"dddd"</span> )
+)</pre>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — continue</span>
+    <ol class="steps">
+      <li>Press <strong>Enter</strong> or click the checkmark to confirm the formula.</li>
+      <li>A new table called <code>Date</code> appears in your Data pane. It should have 365 rows (one per day in 2015) and 7 columns.</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHAT THIS FORMULA DOES</span>
+    <code>CALENDAR</code> creates a table with one column, <code>[Date]</code>, filled with every day from Jan 1, 2015 through Dec 31, 2015. <code>ADDCOLUMNS</code> wraps around that and adds 6 calendar columns computed from each date. This is the same pattern you used in Week 12 — just with hardcoded 2015 dates matching the Plato's Pizza data range.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — mark as Date table</span>
+    <ol class="steps">
+      <li>With the <code>Date</code> table selected in the Data pane, click the <strong>Table tools</strong> tab at the top of Power BI (it appears when a table is selected).</li>
+      <li>Click <strong>Mark as date table</strong>.</li>
+      <li>In the dialog, pick <code>Date</code> as the date column and click <strong>OK</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — sort Month Name and Day of Week properly</span>
+    By default, "Month Name" sorts alphabetically (April, August, December...) which is wrong. We want chronological (January, February, March...).
+    <ol class="steps">
+      <li>In the Data pane, click the <code>Month Name</code> column under the <code>Date</code> table.</li>
+      <li>Go to <strong>Column tools</strong> tab at the top → <strong>Sort by column</strong> → pick <code>Month Number</code>.</li>
+      <li>Now click the <code>Day of Week</code> column.</li>
+      <li><strong>Column tools</strong> → <strong>Sort by column</strong> → pick <code>Day Number</code>.</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — connect Date table to orders</span>
+    <ol class="steps">
+      <li>Go back to <strong>Model view</strong> (left sidebar, third icon).</li>
+      <li>The <code>Date</code> table should appear as a new box on the canvas.</li>
+      <li>Drag <code>Date[Date]</code> onto <code>orders[date]</code> to create a relationship.</li>
+      <li>If a dialog appears, confirm: Many-to-one from <code>orders</code> to <code>Date</code>, single cross-filter direction, active.</li>
+    </ol>
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    Your Model view should now show 4 tables with 3 relationships forming a clean star:
+    <ul class="sub">
+      <li><code>order_details</code> (fact, in the middle) connected to <code>orders</code> and <code>pizzas</code> on both sides</li>
+      <li><code>orders</code> connected to <code>Date</code> through the <code>date</code> column</li>
+      <li>Every line has a <strong>*</strong> on the fact/order side and a <strong>1</strong> on the dimension/Date side</li>
+    </ul>
+    If the star looks right, save your file (<strong>Ctrl+S</strong>). You are ready for the Comp Check.
+  </div>
+
+  <h3>Screenshot — your star schema</h3>
+  <p><em>Paste a screenshot (Ctrl+V) of your Model view showing all 4 tables and relationships:</em></p>
+  <div class="paste-zone" data-zone="zone1">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- CC #4 MARKER                                                 -->
+<!-- ============================================================ -->
+<div class="cc-marker">
+  <strong>📝 TAKE COMPREHENSION CHECK #4 NOW</strong><br>
+  Session 14B wraps up with the Week 14 comprehension check — a cumulative quiz on everything from Week 8 through today. Go to Canvas and open it. Untimed, 3 attempts, highest score kept.
+</div>
+
+<div class="halfway-marker">
+  <span class="big">⏸ END OF SESSION 14B</span>
+  Save your file (<strong>Ctrl+S</strong>) and close Power BI.<br>
+  Pick up in the tutoring block right after class with the measures.
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 9 — MEASURES                                           -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 9 · Write Five DAX Measures</span>
+    <span class="phase-time">⏱ 30 min · Tutoring Block</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WELCOME BACK</span>
+    Open your Project 2 file. Your star schema is built, your Date table is live, your relationships are in place. All the plumbing is done. Now you write the 5 measures that prove it works.
+    <br><br>
+    Every one of these measures uses DAX patterns you already wrote in Lab #3. You have done all of this before — on Sabor Miami. This is the same work on a new dataset.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — how to create a measure</span>
+    For each of the 5 measures below:
+    <ol class="steps">
+      <li>Go to <strong>Report view</strong> (left sidebar, top icon).</li>
+      <li>In the <strong>Data</strong> pane on the right, right-click the <code>order_details</code> table → <strong>New measure</strong>.</li>
+      <li>Type or paste the measure in the formula bar.</li>
+      <li>Press <strong>Enter</strong> or click the checkmark.</li>
+      <li>Optional but recommended: with the new measure selected, go to <strong>Measure tools</strong> at the top and set the format (Currency for revenue measures, Whole Number for counts, Decimal with 2 digits for averages).</li>
+    </ol>
+  </div>
+
+  <h3>Measure 1 · Total Revenue</h3>
+<pre class="dax"><span class="keyword">Total Revenue</span> = <span class="func">SUM</span> ( order_details[line_total] )</pre>
+  <div class="why">
+    <span class="label">💡 WHY</span>
+    Same pattern as Lab #3's Total Sales = SUM(sales[amount]). We built <code>line_total</code> in Power Query specifically so this measure could be a simple SUM. Format as <strong>Currency</strong>.
+  </div>
+
+  <h3>Measure 2 · Total Orders</h3>
+<pre class="dax"><span class="keyword">Total Orders</span> = <span class="func">DISTINCTCOUNT</span> ( order_details[order_id] )</pre>
+  <div class="why">
+    <span class="label">💡 WHY DISTINCTCOUNT AND NOT COUNT?</span>
+    A single order can have multiple pizzas — so <code>order_id</code> appears multiple times in <code>order_details</code> (once per pizza on that order). <code>COUNT</code> would give you the total number of pizza lines, not the number of orders. <code>DISTINCTCOUNT</code> counts each unique order_id only once. This is the same pattern as Lab #3's Unique Items Sold measure.
+  </div>
+
+  <h3>Measure 3 · Total Pizzas Sold</h3>
+<pre class="dax"><span class="keyword">Total Pizzas Sold</span> = <span class="func">SUM</span> ( order_details[quantity] )</pre>
+  <div class="why">
+    <span class="label">💡 WHY</span>
+    Each row in <code>order_details</code> represents a pizza on an order, and <code>quantity</code> tells you how many of that pizza were ordered. Summing <code>quantity</code> across all rows gives total pizzas sold. Pure SUM, same pattern as Lab #3.
+  </div>
+
+  <h3>Measure 4 · Average Order Value</h3>
+<pre class="dax"><span class="keyword">Average Order Value</span> = <span class="func">DIVIDE</span> ( [Total Revenue], [Total Orders] )</pre>
+  <div class="why">
+    <span class="label">💡 A MEASURE THAT USES MEASURES</span>
+    Notice this measure calls <strong>other measures</strong> — <code>[Total Revenue]</code> and <code>[Total Orders]</code>. You do this by typing the square brackets and Power BI will autocomplete. This pattern is powerful: once you define a measure, you can reuse it inside other measures. <code>DIVIDE</code> is also the same safe-division function you used in Lab #3 for Tip Percentage. Format as <strong>Currency</strong>.
+  </div>
+
+  <h3>Measure 5 · Classic Category Revenue (the CALCULATE)</h3>
+<pre class="dax"><span class="keyword">Classic Category Revenue</span> =
+<span class="func">CALCULATE</span> (
+    [Total Revenue],
+    pizzas[category] = <span class="string">"Classic"</span>
+)</pre>
+  <div class="why">
+    <span class="label">💡 THIS IS THE SAME THING YOU DID WITH LA HAVANA EXPRESS</span>
+    In Lab #3, you wrote <code>CALCULATE(SUM(sales[amount]), trucks[truck_name] = "La Havana Express")</code>. This is the exact same pattern on a new dataset:
+    <ul class="sub">
+      <li>The expression is <code>[Total Revenue]</code> (instead of SUM) — using a measure is cleaner than rewriting the SUM</li>
+      <li>The filter is <code>pizzas[category] = "Classic"</code> — filtering the dimension table by a column value, just like filtering trucks by truck_name</li>
+    </ul>
+    This measure will return the revenue <strong>only</strong> from pizzas in the Classic category, no matter what other filters are applied by visuals or slicers. That is the override behavior of CALCULATE. Format as <strong>Currency</strong>.
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    Case matters in the filter string. <code>"Classic"</code> works. <code>"classic"</code> does not match anything because the data has a capital C. If your measure returns 0 instead of a real number, check the capitalization of your filter string against the actual data.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    You should now have <strong>5 measures</strong> visible under the <code>order_details</code> table in the Data pane. They should all show the calculator icon (not the column icon). None should show a red error indicator. If any has an error, click it to read the message — usually it is a typo in a column reference.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 10 — VERIFICATION VISUAL                               -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 10 · Build the Verification Visual</span>
+    <span class="phase-time">⏱ 15 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY THIS VISUAL</span>
+    The verification visual is a copy of the table you built in Lab #3 to see CALCULATE override filter context. The setup: a table with category on the rows, <code>[Total Revenue]</code> next to it, and <code>[Classic Category Revenue]</code> in another column. When you read the table, you will see:
+    <ul class="sub">
+      <li>Chicken row: Total Revenue shows Chicken revenue. Classic Category Revenue shows Classic revenue (ignores the Chicken row filter).</li>
+      <li>Classic row: Both columns show the same number (Classic revenue filtering + Classic revenue override land on the same answer).</li>
+      <li>Supreme row: Total Revenue shows Supreme revenue. Classic Category Revenue still shows Classic revenue.</li>
+      <li>Veggie row: Same pattern.</li>
+    </ul>
+    That behavior — the CALCULATE column showing the same number in every row regardless of what the row filter says — is filter context override in action. This is the same thing you saw with La Havana Express Sales in Lab #3.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — build the table</span>
+    <ol class="steps">
+      <li>Go to <strong>Report view</strong>.</li>
+      <li>In the <strong>Visualizations</strong> pane, click the <strong>Table</strong> icon (small grid).</li>
+      <li>A blank table appears on the canvas.</li>
+      <li>In the <strong>Data</strong> pane, expand <code>pizzas</code> and drag <code>category</code> into the table's Columns well.</li>
+      <li>Expand <code>order_details</code>. Drag <code>[Total Revenue]</code> into the Columns well.</li>
+      <li>Drag <code>[Classic Category Revenue]</code> into the Columns well too.</li>
+      <li>Resize the visual so all three columns are readable.</li>
+    </ol>
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK — The Filter Context Override Test</span>
+    Your table should show 4 rows (Chicken, Classic, Supreme, Veggie). The key observation:
+    <ul class="sub">
+      <li>The <strong>Total Revenue</strong> column varies row by row — each row shows the revenue for that category.</li>
+      <li>The <strong>Classic Category Revenue</strong> column shows the <strong>same number</strong> in every row.</li>
+    </ul>
+    If that is what you see, CALCULATE is overriding the row filter exactly like it is supposed to. If Classic Category Revenue also varies by row, something is wrong with your measure — check that the filter is <code>pizzas[category] = "Classic"</code> and that <code>pizzas</code> has a real <code>category</code> column (Phase 3).
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — add a revenue-by-category bar chart</span>
+    <ol class="steps">
+      <li>Click on blank canvas space (not on the existing table) to deselect.</li>
+      <li>In the Visualizations pane, click the <strong>Clustered bar chart</strong> icon.</li>
+      <li>Drag <code>pizzas[category]</code> into the <strong>Y-axis</strong> well.</li>
+      <li>Drag <code>[Total Revenue]</code> into the <strong>X-axis</strong> well.</li>
+      <li>Resize the chart so you can see all 4 categories clearly.</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 THE MEANINGFUL SECOND VISUAL</span>
+    The table proves your CALCULATE works. The bar chart answers a real business question: which pizza category is driving the most revenue at Plato's Pizza? You should see Classic and Supreme as the top categories, Veggie and Chicken smaller. That is how pizza businesses typically shake out.
+  </div>
+
+  <h3>Screenshot — your verification visuals</h3>
+  <p><em>Paste a screenshot (Ctrl+V) showing both the table and the bar chart:</em></p>
+  <div class="paste-zone" data-zone="zone2">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 11 — REFLECTION + SAVE                                 -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 11 · Save and Reflect</span>
+    <span class="phase-time">⏱ 5 min</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li><strong>File → Save</strong>. Your file is now a complete star schema Power BI model with working measures, built from scratch on a dataset you had never seen before this week.</li>
+      <li>Answer the two reflection questions below.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="take-a-breath">
+  <span class="label">💜 TAKE A BREATH — What You Just Did</span>
+  Project 1 was review on a dataset you knew. Project 2 was review on a dataset you had never opened. You connected to raw CSVs, fixed a locale trap, merged two dimensions, computed a calculation column, built a star schema, wrote a Date table from scratch, wrote 5 measures including a CALCULATE, and built two visuals that prove it all works. That is not "school work." That is what a junior BI analyst does on week one of a new job.
+</div>
+
+<!-- ============================================================ -->
+<!-- REFLECTION                                                   -->
+<!-- ============================================================ -->
+<h2>Reflection</h2>
+<p>Two questions. For you, not for a grade.</p>
+
+<p><strong>1. Project 2 was a new dataset you had not seen before. What felt the same as working with Sabor Miami, and what felt different?</strong></p>
+<textarea class="reflection" placeholder="Example: The merges and measures felt identical — same buttons, same formulas. What felt different was the date locale trick, which I had not seen before. And not having to clean anything first was a relief."></textarea>
+
+<p style="margin-top: 20px;"><strong>2. Now that you have written DAX measures on two different datasets, what is the one DAX pattern you feel most confident about, and the one you want more practice on before your portfolio?</strong></p>
+<textarea class="reflection" placeholder="Example: I feel confident about SUM and DISTINCTCOUNT — those feel automatic now. I still want more practice on CALCULATE because I can follow the pattern but I am not sure I could come up with the filter argument on my own from scratch."></textarea>
+
+<!-- ============================================================ -->
+<!-- PASTE ZONE SCRIPT                                            -->
+<!-- ============================================================ -->
+<script>
+document.querySelectorAll('.paste-zone').forEach(zone => {
+  zone.addEventListener('click', () => zone.focus());
+  zone.setAttribute('tabindex', '0');
+
+  zone.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const items = (e.clipboardData || window.clipboardData).items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const placeholder = zone.querySelector('.paste-zone-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        return;
+      }
+    }
+  });
+
+  const removeBtn = zone.querySelector('.remove-btn');
+  if (removeBtn) {
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const img = zone.querySelector('img');
+      if (img) img.remove();
+      const placeholder = zone.querySelector('.paste-zone-placeholder');
+      if (placeholder) placeholder.style.display = 'block';
+      zone.classList.remove('has-image');
+    });
+  }
+});
+</script>
+
+</body>
+</html>
