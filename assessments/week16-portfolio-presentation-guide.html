@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Presentation Guide — Week 16</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; max-width: 920px; margin: 0 auto; padding: 30px 40px 60px; color: #2c3e50; line-height: 1.65; font-size: 14pt; background: #f7f9fb; }
+  h1 { color: #1A5276; border-bottom: 4px solid #2E86C1; padding-bottom: 12px; margin-bottom: 8px; font-size: 28pt; line-height: 1.2; }
+  .subtitle { color: #5D6D7E; font-size: 14pt; margin-top: 0; margin-bottom: 30px; }
+  h2 { color: #1A5276; margin-top: 40px; font-size: 20pt; }
+  h3 { color: #2874A6; margin-top: 28px; font-size: 16pt; }
+  p { margin: 12px 0; }
+  strong { color: #1A5276; }
+
+  .header-info { background: #fff; border: 2px solid #2E86C1; padding: 18px 22px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .header-info p { margin: 8px 0; }
+  .header-info label { display: inline-block; font-weight: bold; color: #1A5276; margin-right: 12px; min-width: 140px; }
+  .header-info input { border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 320px; background: transparent; }
+  .header-info input:focus { outline: none; border-bottom-color: #2E86C1; }
+
+  .why { background-color: #D6EAF8; border-left: 6px solid #2E86C1; padding: 16px 20px; margin: 18px 0; border-radius: 6px; }
+  .why .label { color: #1A5276; display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; }
+  .do-this { background-color: #D5F5E3; border-left: 6px solid #27AE60; padding: 16px 20px; margin: 18px 0; border-radius: 6px; }
+  .do-this .label { color: #1E8449; display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; }
+  .stop-check { background-color: #FADBD8; border-left: 6px solid #E74C3C; padding: 16px 20px; margin: 18px 0; border-radius: 6px; }
+  .stop-check .label { color: #922B21; display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; }
+
+  ul.sub { padding-left: 22px; margin: 8px 0; }
+  ul.sub li { padding: 4px 0; list-style: disc; }
+
+  textarea.plan { width: 100%; min-height: 100px; border: 2px solid #AED6F1; border-radius: 8px; padding: 14px; font-family: inherit; font-size: 13pt; line-height: 1.6; resize: vertical; background: #fff; }
+  textarea.plan:focus { outline: none; border-color: #2E86C1; }
+
+  .segment { background: #fff; border: 2px solid #AED6F1; border-radius: 10px; padding: 0 28px 24px; margin: 30px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .segment-header { background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%); color: #fff; padding: 16px 24px; margin: 0 -28px 20px; border-radius: 8px 8px 0 0; font-size: 17pt; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+  .segment-time { font-size: 14pt; background: rgba(255,255,255,0.25); padding: 5px 14px; border-radius: 15px; font-weight: normal; }
+
+  .checklist { background: #fff; border: 2px solid #27AE60; border-radius: 10px; padding: 22px 28px; margin: 30px 0; }
+  .checklist h2 { color: #27AE60; margin-top: 0; }
+  .checklist label { display: block; padding: 8px 0; font-size: 13pt; cursor: pointer; border-bottom: 1px dashed #D5F5E3; }
+  .checklist label:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] { margin-right: 10px; transform: scale(1.3); vertical-align: middle; }
+
+  .presentation-box { background: linear-gradient(135deg, #8E44AD 0%, #6C3483 100%); color: #fff; padding: 26px 30px; margin: 30px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(108,52,131,0.25); }
+  .presentation-box h2 { color: #fff; margin-top: 0; }
+
+  @media print {
+    body { background: white; font-size: 10.5pt; padding: 10px 15px; max-width: 100%; color: #000; }
+    h1 { font-size: 20pt; } h2 { font-size: 14pt; } h3 { font-size: 12pt; }
+    .segment, .header-info, .why, .do-this, .stop-check, .checklist, .presentation-box { page-break-inside: avoid; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .segment-header, .presentation-box { -webkit-print-color-adjust: exact; }
+    textarea.plan { border: 1px solid #888; min-height: 80px; }
+    input[type="text"] { border-bottom: 1px solid #000 !important; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Portfolio Presentation Guide</h1>
+<p class="subtitle">Week 16 · Monday · Group Presentation · 150 Points</p>
+
+<div class="header-info">
+  <p><label>Partner A:</label><input type="text" placeholder="Name"></p>
+  <p><label>Partner B:</label><input type="text" placeholder="Name"></p>
+  <p><label>Presentation Date:</label><input type="text" placeholder="Monday, Week 16"></p>
+</div>
+
+<div class="why">
+  <span class="label">💡 WHAT YOU ARE PRESENTING</span>
+  You and your partner are presenting the Sabor Miami Power BI portfolio that you have been building all semester. In 5 minutes, you will walk the class through what you discovered in the data, the challenges you faced, how you overcame those challenges, and what you would do next with more time. You are presenting from a single shared .pbix file.
+</div>
+
+<!-- ============================================================ -->
+<!-- WEDNESDAY TUTORING PLAN                                      -->
+<!-- ============================================================ -->
+<h2>Step 1 — Wednesday Tutoring Clinic</h2>
+
+<div class="do-this">
+  <span class="label">✅ DO THIS — during the Wednesday tutoring block</span>
+  <ol>
+    <li><strong>Both partners open their Lab 4 files side by side.</strong> Compare: whose file has the cleaner model? The better dashboard layout? The more complete set of measures?</li>
+    <li><strong>Pick one file as the base.</strong> Save it as <code>Team_LastName1_LastName2_Portfolio.pbix</code>. This is your shared portfolio file from now on.</li>
+    <li><strong>Cherry-pick from the other file.</strong> If your partner has a visual you like, recreate it in the shared file. If they have a measure you do not have, add it. The goal is one file that represents the best of both partners' work.</li>
+    <li><strong>Polish the dashboard page.</strong> Add a title text box. Align your visuals. Make sure the slicer works. Think about what story this page tells about Sabor Miami's food truck business.</li>
+    <li><strong>Plan who says what.</strong> Use the presentation structure below to assign each segment to a partner. Fill in the planning worksheet.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- PRESENTATION STRUCTURE                                       -->
+<!-- ============================================================ -->
+<h2>Step 2 — The 5-Minute Presentation</h2>
+
+<div class="presentation-box">
+  <h2>🎤 Presentation Format</h2>
+  <p>Both partners present from the same Power BI file, projected on screen. Each partner speaks. You do not need slides — the Power BI report IS your visual. Navigate through it as you talk.</p>
+  <p><strong>Total time:</strong> 5 minutes. Your instructor will give a 1-minute warning.</p>
+</div>
+
+<div class="segment">
+  <div class="segment-header">
+    <span>Segment 1 · The Data Story</span>
+    <span class="segment-time">~1.5 min</span>
+  </div>
+  <p><strong>Who speaks:</strong> <input type="text" placeholder="Partner A or B" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+  <p>Tell the class about the Sabor Miami data. Cover:</p>
+  <ul class="sub">
+    <li>What is Sabor Miami? (food truck company, 4 trucks, Miami area)</li>
+    <li>What did the raw data look like? What was messy about it?</li>
+    <li>Pick 1–2 specific data quality issues you fixed and explain what you did and why.</li>
+    <li>How did you combine the tables? What was the fact table vs. the dimensions?</li>
+  </ul>
+  <p><strong>Key talking points (plan here):</strong></p>
+  <textarea class="plan" placeholder="Example: I'll talk about the mixed date formats — slashes vs dashes — and how we used the Using Locale trick to fix them. Then I'll mention the null tips decision."></textarea>
+</div>
+
+<div class="segment">
+  <div class="segment-header">
+    <span>Segment 2 · The Model and Insights</span>
+    <span class="segment-time">~1.5 min</span>
+  </div>
+  <p><strong>Who speaks:</strong> <input type="text" placeholder="Partner A or B" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+  <p>Walk through the model and dashboard. Cover:</p>
+  <ul class="sub">
+    <li>Show the star schema briefly (switch to Model View, point out the relationships).</li>
+    <li>Switch to the dashboard page. Walk through 2–3 visuals and explain what they reveal about the business.</li>
+    <li>Demonstrate the drill-down hierarchy: click from Year → Quarter → Month and narrate what you see.</li>
+    <li>Click the slicer to filter to one truck. Show how the whole page updates.</li>
+  </ul>
+  <p><strong>Key talking points (plan here):</strong></p>
+  <textarea class="plan" placeholder="Example: I'll show the star schema for 10 seconds, then switch to the dashboard. I'll highlight the revenue-by-truck bar chart and point out that La Havana Express is the top earner. Then I'll drill down by month to show which months are strongest."></textarea>
+</div>
+
+<div class="segment">
+  <div class="segment-header">
+    <span>Segment 3 · Challenges and Next Steps</span>
+    <span class="segment-time">~2 min</span>
+  </div>
+  <p><strong>Who speaks:</strong> Both partners</p>
+  <p>This is the most important part. Be honest. Cover:</p>
+  <ul class="sub">
+    <li><strong>What was the hardest part of this project?</strong> Pick one specific challenge — not "everything was hard." Name the task, the tool, and the moment it felt stuck.</li>
+    <li><strong>How did you overcome it?</strong> Did you re-read the textbook? Ask a classmate? Undo and try again? Trace the error message? Name the specific action that got you unstuck.</li>
+    <li><strong>What would you do next with more time?</strong> More measures? Better visuals? A second dashboard page for a different audience? Time intelligence? RLS for different truck managers? This shows you are thinking beyond the assignment.</li>
+  </ul>
+  <p><strong>Partner A's challenge and solution:</strong></p>
+  <textarea class="plan" placeholder="Example: The hardest part for me was the CALCULATE measure. I kept getting the wrong number until I realized my filter was on the fact table instead of the dimension table."></textarea>
+  <p><strong>Partner B's challenge and solution:</strong></p>
+  <textarea class="plan" placeholder="Example: I struggled with the date hierarchy. The months kept appearing alphabetically and I had to figure out the Sort by Column trick. I found it in the Chapter 10 textbook."></textarea>
+  <p><strong>What we would do next:</strong></p>
+  <textarea class="plan" placeholder="Example: We would add time intelligence measures — YTD sales and month-over-month comparisons. We would also create RLS roles for each truck manager so they only see their own truck's data."></textarea>
+</div>
+
+<!-- ============================================================ -->
+<!-- PORTFOLIO CHECKLIST                                           -->
+<!-- ============================================================ -->
+<h2>Step 3 — Portfolio Final Checklist</h2>
+
+<div class="why">
+  <span class="label">💡 USE THIS CHECKLIST BEFORE MONDAY</span>
+  Open your shared portfolio .pbix file and verify every item below. Check the box when confirmed. If anything is missing, fix it before the presentation.
+</div>
+
+<div class="checklist">
+  <h2>✅ Portfolio Checklist</h2>
+
+  <h3>Data Preparation (from Labs 1 &amp; 2)</h3>
+  <label><input type="checkbox"> All 5 Sabor Miami tables are loaded (or staging queries are properly disabled)</label>
+  <label><input type="checkbox"> Null tips replaced with 0; null phone numbers left as null</label>
+  <label><input type="checkbox"> Text inconsistencies cleaned (casing, typos, category standardization)</label>
+  <label><input type="checkbox"> Dollar signs removed from menu_items price before type change</label>
+  <label><input type="checkbox"> Date column correctly parsed (both formats resolved)</label>
+  <label><input type="checkbox"> All column names are lowercase_underscore</label>
+  <label><input type="checkbox"> Dimension data merged into sales (or proper star schema relationships active)</label>
+
+  <h3>Data Model (from Week 12)</h3>
+  <label><input type="checkbox"> Star schema visible in Model View with active relationships</label>
+  <label><input type="checkbox"> All relationships are Many-to-one (*:1), single direction, from fact to dimension</label>
+  <label><input type="checkbox"> Date table exists with Year, Quarter, Month Name, Month Number, Day of Week, Day Number</label>
+  <label><input type="checkbox"> Date table marked as Date table</label>
+  <label><input type="checkbox"> Month Name sorted by Month Number</label>
+
+  <h3>DAX Measures (from Lab 3)</h3>
+  <label><input type="checkbox"> At least 6 measures present (Total Sales, Total Tips, Average Ticket, Tip Percentage, Transaction Count, Unique Items Sold, or equivalents)</label>
+  <label><input type="checkbox"> At least 1 CALCULATE measure (La Havana Express Sales or similar)</label>
+  <label><input type="checkbox"> All measures show the calculator icon (not the column icon)</label>
+
+  <h3>Optimization (from Lab 4)</h3>
+  <label><input type="checkbox"> Date Hierarchy present: Year → Quarter → Month Name</label>
+  <label><input type="checkbox"> At least 3 unnecessary columns removed or hidden</label>
+
+  <h3>Dashboard</h3>
+  <label><input type="checkbox"> Dashboard page exists with at least 4 visuals</label>
+  <label><input type="checkbox"> At least 2 different visual types</label>
+  <label><input type="checkbox"> At least 1 working slicer</label>
+  <label><input type="checkbox"> Page has a title</label>
+  <label><input type="checkbox"> Visuals are aligned and the layout looks intentional</label>
+
+  <h3>Presentation Ready</h3>
+  <label><input type="checkbox"> Both partners know which segment they are speaking to</label>
+  <label><input type="checkbox"> Each partner can name one specific challenge and how they overcame it</label>
+  <label><input type="checkbox"> "What we would do next" answer is prepared</label>
+  <label><input type="checkbox"> File is saved as <code>Team_LastName1_LastName2_Portfolio.pbix</code></label>
+</div>
+
+<div class="stop-check">
+  <span class="label">🛑 FINAL CHECK</span>
+  Open the portfolio file one last time before Monday. Click every visual. Click the slicer. Drill down through the hierarchy. If everything responds correctly, you are ready to present. If anything is broken, fix it now — not Monday morning.
+</div>
+
+</body>
+</html>
