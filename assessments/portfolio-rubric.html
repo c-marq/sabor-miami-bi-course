@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Project Rubric — 150 Points</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; max-width: 960px; margin: 0 auto; padding: 30px 40px 50px; color: #2c3e50; line-height: 1.6; font-size: 13pt; background: #f7f9fb; }
+  h1 { color: #1A5276; border-bottom: 4px solid #2E86C1; padding-bottom: 12px; margin-bottom: 8px; font-size: 26pt; }
+  .subtitle { color: #5D6D7E; font-size: 13pt; margin-top: 0; margin-bottom: 28px; }
+  h2 { color: #1A5276; font-size: 18pt; margin-top: 32px; }
+  p { margin: 12px 0; }
+  strong { color: #1A5276; }
+
+  .overview { background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%); color: #fff; padding: 24px 28px; border-radius: 12px; margin-bottom: 28px; box-shadow: 0 4px 12px rgba(26,82,118,0.2); }
+  .overview h2 { color: #fff; margin-top: 0; }
+  .overview p { color: rgba(255,255,255,0.9); }
+  .overview strong { color: #fff; }
+
+  ul.clean { padding-left: 22px; margin: 10px 0; }
+  ul.clean li { padding: 4px 0; }
+
+  /* ============ RUBRIC TABLE ============ */
+  .rubric-section { background: #fff; border: 2px solid #AED6F1; border-radius: 10px; margin: 24px 0; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .rubric-header { background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%); color: #fff; padding: 16px 24px; font-size: 16pt; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+  .rubric-pts { font-size: 14pt; background: rgba(255,255,255,0.25); padding: 5px 14px; border-radius: 15px; font-weight: normal; }
+  .rubric-body { padding: 20px 24px; }
+  .rubric-body p { margin: 8px 0; }
+
+  .tier-row { display: flex; gap: 12px; margin-top: 14px; }
+  .tier { flex: 1; padding: 14px 16px; border-radius: 8px; font-size: 12pt; }
+  .tier-label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 13pt; }
+  .tier-e { background: #D5F5E3; border: 1px solid #27AE60; }
+  .tier-e .tier-label { color: #1E8449; }
+  .tier-g { background: #D6EAF8; border: 1px solid #2E86C1; }
+  .tier-g .tier-label { color: #1A5276; }
+  .tier-n { background: #FADBD8; border: 1px solid #E74C3C; }
+  .tier-n .tier-label { color: #922B21; }
+
+  /* ============ SUMMARY TABLE ============ */
+  .summary { background: #fff; border: 2px solid #1A5276; border-radius: 10px; padding: 22px 28px; margin: 32px 0; }
+  .summary h2 { margin-top: 0; }
+  .summary table { width: 100%; border-collapse: collapse; font-size: 13pt; margin-top: 12px; }
+  .summary th, .summary td { border: 1px solid #AED6F1; padding: 10px 14px; text-align: left; }
+  .summary th { background: #1A5276; color: #fff; }
+  .summary tr:nth-child(even) td { background: #F8FBFD; }
+  .summary .total td { font-weight: bold; background: #EBF5FB; border-top: 3px solid #1A5276; }
+
+  /* ============ POLICIES ============ */
+  .policies { background-color: #FEF9E7; border-left: 6px solid #F1C40F; padding: 16px 20px; margin: 24px 0; border-radius: 6px; }
+  .policies .label { color: #7D6608; display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; }
+
+  @media print {
+    body { background: white; font-size: 10.5pt; padding: 10px 15px; max-width: 100%; }
+    .overview, .rubric-section, .summary, .policies { box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+    .rubric-header { -webkit-print-color-adjust: exact; }
+    .tier-row { flex-wrap: wrap; }
+    .tier { flex-basis: 100%; margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Portfolio Project Rubric</h1>
+<p class="subtitle">Week 16 · Monday · Group Presentation · 150 Points</p>
+
+<div class="overview">
+  <h2>What You Are Submitting</h2>
+  <p>Your portfolio is the culmination of Labs 1–4, assembled into a single polished Power BI file and presented live to the class. You and your partner submit <strong>one shared .pbix file</strong> and deliver a <strong>5-minute group presentation</strong>. Both partners receive the same grade.</p>
+  <p><strong>File name:</strong> <code style="background: rgba(255,255,255,0.2); color: #fff;">Team_LastName1_LastName2_Portfolio.pbix</code></p>
+  <p><strong>Submit to:</strong> Canvas (one partner uploads the .pbix; both partners present in class)</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 1 — CLEANED DATASET                                -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>1. Cleaned and Combined Dataset</span>
+    <span class="rubric-pts">30 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The foundation: data connected from source, profiled, cleaned, and combined. This is the work from Labs 1 and 2.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (25–30)</span>
+        All 5 Sabor Miami tables connected. Null tips replaced with 0, null phones left as null. Text inconsistencies resolved (casing, typos, category standardization). Dollar signs removed before type change. Mixed date formats correctly parsed. All columns lowercase_underscore. Dimension data merged or properly related. No duplicate rows.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (15–24)</span>
+        Data is connected and mostly clean. 1–2 cleaning steps missing or incomplete (e.g., a casing issue remains, or one date format was not parsed correctly). Merges are present but may have minor issues.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–14)</span>
+        Significant cleaning steps missing. Data types not set correctly. Merges missing or broken. Column naming convention not applied.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 2 — DATA MODEL                                     -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>2. Data Model with Relationships</span>
+    <span class="rubric-pts">25 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The star schema: fact table in the center, dimension tables around it, proper relationships. This is the work from Week 12.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (20–25)</span>
+        Star schema visible in Model View. All relationships are Many-to-one (*:1), single cross-filter direction, active. Date table exists with Year, Quarter, Month Name, Month Number, Day of Week columns. Date table marked as Date table. Month Name sorted by Month Number.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (12–19)</span>
+        Relationships exist and are mostly correct. Minor issues: one relationship may have wrong cardinality or direction, or the Date table is missing a column or the Sort by Column setting.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–11)</span>
+        Relationships missing or broken. No Date table. Star schema not recognizable in Model View.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 3 — MEASURE LIBRARY                                -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>3. Measure Library</span>
+    <span class="rubric-pts">25 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The DAX measures that make the data talk. This is the work from Lab 3.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (20–25)</span>
+        At least 6 working measures present (Total Sales, Total Tips, Average Ticket, Tip Percentage, Transaction Count, Unique Items Sold, or equivalents). At least 1 CALCULATE measure that filters by a dimension column (e.g., La Havana Express Sales). All measures show the calculator icon. Measures produce correct, reasonable numbers when placed in visuals.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (12–19)</span>
+        4–5 measures present and working. CALCULATE measure may be missing or returning incorrect results. Minor formula errors that produce slightly wrong numbers.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–11)</span>
+        Fewer than 4 measures. Measures show errors. No CALCULATE measure attempted.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 4 — OPTIMIZATION                                   -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>4. Model Optimization</span>
+    <span class="rubric-pts">20 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The polish: hierarchy, column removal, and evidence of Performance Analyzer use. This is the work from Lab 4.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (16–20)</span>
+        Date Hierarchy present with correct levels (Year → Quarter → Month Name). Drill-down works in at least one visual. At least 3 unnecessary columns removed or hidden. No essential columns (relationship keys, measure sources, sort-by targets) were removed.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (10–15)</span>
+        Hierarchy present but levels may be in wrong order or drill-down not verified. 1–2 columns removed. Minor issues with column removal choices.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–9)</span>
+        No hierarchy. No columns removed. Or column removal broke the model.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 5 — DASHBOARD                                      -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>5. Dashboard Page</span>
+    <span class="rubric-pts">25 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The visual layer: a report page that tells a story about Sabor Miami's business at a glance.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (20–25)</span>
+        Dashboard page has 4+ visuals using at least 2 different visual types. Includes a working slicer that filters all visuals. Layout is intentional: aligned edges, readable labels, a title text box. Visuals use the measures from the measure library. The page tells a coherent story about the business.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (12–19)</span>
+        3 visuals present, or slicer is missing/non-functional. Layout is present but could be cleaner. Visuals work but the page does not tell a clear story.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–11)</span>
+        Fewer than 3 visuals. No slicer. Visuals show errors. No dashboard page created.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPONENT 6 — PRESENTATION                                   -->
+<!-- ============================================================ -->
+<div class="rubric-section">
+  <div class="rubric-header">
+    <span>6. Group Presentation</span>
+    <span class="rubric-pts">25 pts</span>
+  </div>
+  <div class="rubric-body">
+    <p>The 5-minute live presentation where both partners walk the class through the portfolio.</p>
+    <div class="tier-row">
+      <div class="tier tier-e">
+        <span class="tier-label">Excellent (20–25)</span>
+        Both partners speak. Presentation covers all three segments: the data story (what was discovered and fixed), the model and insights (dashboard walkthrough with drill-down and slicer interaction), and challenges/next steps (specific challenges named with specific solutions, and a thoughtful "what we would do next"). Stays within 5 minutes. Presenters navigate the Power BI file live and speak to their own work with confidence.
+      </div>
+      <div class="tier tier-g">
+        <span class="tier-label">Good (12–19)</span>
+        Both partners speak but coverage is uneven (one partner dominates). One of the three segments is missing or surface-level. Presenters read from notes rather than speaking naturally about their work. Slightly over or under time.
+      </div>
+      <div class="tier tier-n">
+        <span class="tier-label">Needs Work (0–11)</span>
+        Only one partner speaks. Presentation is under 2 minutes or over 8 minutes. No live navigation of the Power BI file. Challenges/next steps segment is missing entirely.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUMMARY TABLE                                                -->
+<!-- ============================================================ -->
+<div class="summary">
+  <h2>📊 Point Summary</h2>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>Points</th>
+      <th>Assessed Through</th>
+    </tr>
+    <tr>
+      <td>1. Cleaned and Combined Dataset</td>
+      <td>30</td>
+      <td>.pbix file (Power Query steps)</td>
+    </tr>
+    <tr>
+      <td>2. Data Model with Relationships</td>
+      <td>25</td>
+      <td>.pbix file (Model View)</td>
+    </tr>
+    <tr>
+      <td>3. Measure Library</td>
+      <td>25</td>
+      <td>.pbix file (measures in Data pane)</td>
+    </tr>
+    <tr>
+      <td>4. Model Optimization</td>
+      <td>20</td>
+      <td>.pbix file (hierarchy, hidden/removed columns)</td>
+    </tr>
+    <tr>
+      <td>5. Dashboard Page</td>
+      <td>25</td>
+      <td>.pbix file (Report View)</td>
+    </tr>
+    <tr>
+      <td>6. Group Presentation</td>
+      <td>25</td>
+      <td>Live in class, Monday Week 16</td>
+    </tr>
+    <tr class="total">
+      <td>TOTAL</td>
+      <td>150</td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+<h2>Grading Tiers</h2>
+<ul class="clean">
+  <li><strong>Excellent:</strong> 130–150 points</li>
+  <li><strong>Good:</strong> 90–129 points</li>
+  <li><strong>Needs Work:</strong> 0–89 points</li>
+</ul>
+
+<div class="policies">
+  <span class="label">📌 POLICIES</span>
+  <ul class="clean">
+    <li><strong>Group grade:</strong> Both partners receive the same grade on all 6 components.</li>
+    <li><strong>Late submission:</strong> The .pbix file is due on Canvas by the end of Monday, Week 16. The 48-hour grace period applies (no penalty). After 48 hours: 10% per day, capped at 30% max reduction.</li>
+    <li><strong>Presentation absence:</strong> If one partner is absent on presentation day, the other partner may present solo and both receive the presentation grade. If both partners are absent, a recorded walkthrough (2–3 minutes) may be submitted within 48 hours as an alternative.</li>
+    <li><strong>Redo option:</strong> If a group scores below Good (90 pts), both partners may revise and resubmit the .pbix file once for up to the Good tier score. The presentation component cannot be redone.</li>
+  </ul>
+</div>
+
+</body>
+</html>
