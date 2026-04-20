@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 15 · Session A — Optimization Guided Practice</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 30px 40px 60px;
+    color: #2c3e50;
+    line-height: 1.65;
+    font-size: 14pt;
+    background: #f7f9fb;
+  }
+  h1 { color: #1A5276; border-bottom: 4px solid #2E86C1; padding-bottom: 12px; margin-bottom: 8px; font-size: 28pt; line-height: 1.2; }
+  .subtitle { color: #5D6D7E; font-size: 14pt; margin-top: 0; margin-bottom: 30px; }
+  h2 { color: #1A5276; margin-top: 0; font-size: 20pt; }
+  h3 { color: #2874A6; margin-top: 28px; font-size: 16pt; }
+  p { margin: 12px 0; }
+  strong { color: #1A5276; }
+  code { background: #ECF0F1; padding: 2px 7px; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 12pt; color: #922B21; }
+
+  .header-info { background: #fff; border: 2px solid #2E86C1; padding: 18px 22px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .header-info p { margin: 8px 0; }
+  .header-info label { display: inline-block; font-weight: bold; color: #1A5276; margin-right: 12px; min-width: 140px; }
+  .header-info input { border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 320px; background: transparent; }
+  .header-info input:focus { outline: none; border-bottom-color: #2E86C1; }
+
+  .launch-pad { background: linear-gradient(135deg, #EBF5FB 0%, #D6EAF8 100%); border: 2px solid #2E86C1; border-radius: 10px; padding: 22px 28px; margin: 30px 0; box-shadow: 0 3px 8px rgba(46,134,193,0.1); }
+  .launch-pad h3 { margin-top: 0; color: #1A5276; font-size: 18pt; border-bottom: 2px solid #AED6F1; padding-bottom: 8px; }
+  .launch-pad ul { list-style: none; padding-left: 0; margin: 10px 0 0; }
+  .launch-pad li { padding: 8px 0; border-bottom: 1px dashed #AED6F1; }
+  .launch-pad li:last-child { border-bottom: none; }
+
+  .do-this, .why, .common-mistake, .stop-check, .take-a-breath { padding: 16px 20px; margin: 18px 0; border-radius: 6px; }
+  .do-this { background-color: #D5F5E3; border-left: 6px solid #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why { background-color: #D6EAF8; border-left: 6px solid #2E86C1; }
+  .why .label { color: #1A5276; }
+  .common-mistake { background-color: #FEF9E7; border-left: 6px solid #F1C40F; }
+  .common-mistake .label { color: #7D6608; }
+  .stop-check { background-color: #FADBD8; border-left: 6px solid #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .take-a-breath { background-color: #E8DAEF; border-left: 6px solid #8E44AD; }
+  .take-a-breath .label { color: #6C3483; }
+  .label { display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; letter-spacing: 0.3px; }
+
+  .phase { background: #fff; border: 2px solid #AED6F1; border-radius: 10px; padding: 0 28px 24px; margin: 35px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .phase-header { background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%); color: #fff; padding: 16px 24px; margin: 0 -28px 20px; border-radius: 8px 8px 0 0; font-size: 17pt; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+  .phase-time { font-size: 12pt; background: rgba(255,255,255,0.25); padding: 5px 14px; border-radius: 15px; font-weight: normal; }
+
+  ol.steps { padding-left: 28px; margin: 15px 0; }
+  ol.steps > li { padding: 8px 0; margin-bottom: 6px; }
+  ol.steps > li::marker { font-weight: bold; color: #1A5276; }
+  ul.sub { padding-left: 22px; margin: 8px 0; }
+  ul.sub li { padding: 4px 0; list-style: disc; }
+
+  .paste-zone { border: 3px dashed #2E86C1; background: #F8FBFD; padding: 30px 20px; margin: 15px 0; text-align: center; border-radius: 8px; min-height: 120px; position: relative; cursor: pointer; transition: background 0.2s; }
+  .paste-zone:hover { background: #EBF5FB; }
+  .paste-zone.has-image { padding: 10px; cursor: default; }
+  .paste-zone-placeholder { color: #5D6D7E; font-style: italic; font-size: 12pt; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; margin: 0 auto; }
+  .remove-btn { position: absolute; top: 8px; right: 8px; background: #E74C3C; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11pt; font-weight: bold; display: none; }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  textarea.reflection { width: 100%; min-height: 100px; border: 2px solid #AED6F1; border-radius: 8px; padding: 14px; font-family: inherit; font-size: 13pt; line-height: 1.6; resize: vertical; background: #fff; }
+  textarea.reflection:focus { outline: none; border-color: #2E86C1; }
+
+  .partner-box { background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%); color: #fff; padding: 26px 30px; margin: 40px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(230,126,34,0.25); }
+  .partner-box h2 { color: #fff; margin-top: 0; }
+  .partner-box input { border: none; border-bottom: 2px solid rgba(255,255,255,0.7); background: transparent; color: #fff; padding: 6px 10px; font-size: 14pt; font-family: inherit; width: 350px; }
+  .partner-box input::placeholder { color: rgba(255,255,255,0.6); }
+  .partner-box input:focus { outline: none; border-bottom-color: #fff; }
+
+  .progress { display: flex; justify-content: space-between; background: #fff; border: 1px solid #AED6F1; border-radius: 8px; padding: 10px 14px; margin: 20px 0 30px; font-size: 10pt; gap: 4px; }
+  .progress-step { flex: 1; text-align: center; padding: 8px 4px; color: #7F8C8D; border-radius: 4px; }
+
+  @media print {
+    body { background: white; font-size: 10.5pt; padding: 10px 15px; max-width: 100%; color: #000; }
+    h1 { font-size: 20pt; } h2 { font-size: 14pt; } h3 { font-size: 12pt; }
+    .phase, .launch-pad, .header-info, .do-this, .why, .common-mistake, .stop-check, .take-a-breath, .partner-box { page-break-inside: avoid; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .paste-zone { border: 1px solid #888; background: #fff !important; }
+    .paste-zone-placeholder { display: none; }
+    .remove-btn { display: none !important; }
+    .phase-header, .partner-box { -webkit-print-color-adjust: exact; }
+    textarea.reflection { border: 1px solid #888; min-height: 80px; }
+    input { border-bottom: 1px solid #000 !important; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Week 15 · Session A</h1>
+<p class="subtitle">Optimization Guided Practice — Hierarchies, Performance Analyzer, Column Removal</p>
+
+<div class="header-info">
+  <p><label>Student Name:</label><input type="text" placeholder="Your name"></p>
+  <p><label>Date:</label><input type="text" placeholder="Today's date"></p>
+  <p><label>Session:</label> Monday (Session 15A class + tutoring block right after)</p>
+</div>
+
+<div class="why">
+  <span class="label">💡 WHERE WE ARE IN THE COURSE</span>
+  Last week you proved you can build the full pipeline from scratch — twice — on two different datasets. This week is the final build week. Today you learn three optimization techniques that make your model <em>better</em>, not just <em>correct</em>. Wednesday you apply them in Lab #4 (your last graded lab). After that, you and your partner assemble your portfolio and present it Monday of Week 16.
+</div>
+
+<div class="launch-pad">
+  <h3>🚀 LAUNCH PAD</h3>
+  <ul>
+    <li><strong>What you are learning:</strong> Three techniques that turn a working model into a polished, optimized model — hierarchies, Performance Analyzer, and column removal.</li>
+    <li><strong>Tool:</strong> Power BI Desktop</li>
+    <li><strong>File to open:</strong> Your completed <code>LastName_FirstName_Lab3.pbix</code> file (the one with all 8 measures and the star schema).</li>
+    <li><strong>Backup plan:</strong> If your Lab 3 file is missing or broken, download <code>SaborMiami_Lab3_Starter.pbix</code> from GitHub. You will need to write 2–3 quick measures (Total Sales, Total Tips, Transaction Count) before starting Phase 2.</li>
+    <li><strong>Time estimate:</strong> Phases 1–4 in today's class session (~65 min). Continued practice in the tutoring block right after.</li>
+    <li><strong>Phases:</strong> 4 — Hierarchy → Performance Analyzer → Column Removal → RLS Awareness</li>
+    <li><strong>Start here →</strong> Open your Lab 3 file and save a copy: <strong>File → Save As → <code>LastName_FirstName_Week15_Practice.pbix</code></strong>. Do not overwrite your Lab 3 file.</li>
+  </ul>
+</div>
+
+<div class="progress">
+  <div class="progress-step">1 · Hierarchy</div>
+  <div class="progress-step">2 · Performance</div>
+  <div class="progress-step">3 · Columns</div>
+  <div class="progress-step">4 · RLS Demo</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 1 — HIERARCHY                                          -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 1 · Create a Date Hierarchy</span>
+    <span class="phase-time">⏱ 15 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY HIERARCHIES MATTER</span>
+    Right now, if you drag a date field into a visual, you see all the individual dates as a flat list. A hierarchy organizes related columns into a drill-down path — Year → Quarter → Month — so users can start at the top level and click to see more detail. Think of it as a staircase: you walk from year to quarter to month, one step at a time. Chapter 10 calls this "a staircase, not an elevator."
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — build the hierarchy in Model View</span>
+    <ol class="steps">
+      <li>Switch to <strong>Model View</strong> (left sidebar, third icon — the one that looks like connected boxes).</li>
+      <li>Find the <strong>Date</strong> table on the canvas.</li>
+      <li>Right-click the <strong>Year</strong> column → <strong>Create hierarchy</strong>.</li>
+      <li>A new item called "Year Hierarchy" appears at the bottom of the Date table's column list. Right-click it → <strong>Rename</strong> → type <code>Date Hierarchy</code>.</li>
+      <li>Drag <strong>Quarter</strong> onto the <code>Date Hierarchy</code> item. It becomes Level 2.</li>
+      <li>Drag <strong>Month Name</strong> onto the <code>Date Hierarchy</code> item. It becomes Level 3.</li>
+    </ol>
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    In the Date table, you should see <strong>Date Hierarchy</strong> with three levels listed beneath it: Year (Level 1), Quarter (Level 2), Month Name (Level 3). If the levels are in the wrong order, right-click a level and use <strong>Move Up</strong> or <strong>Move Down</strong> to reorder.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — test the drill-down in a visual</span>
+    <ol class="steps">
+      <li>Switch to <strong>Report View</strong> (left sidebar, top icon).</li>
+      <li>Click an empty area of the canvas.</li>
+      <li>In the <strong>Visualizations</strong> pane, click <strong>Clustered bar chart</strong>.</li>
+      <li>From the <strong>Data</strong> pane, expand the <strong>Date</strong> table. Drag <strong>Date Hierarchy</strong> to the <strong>Y-axis</strong> well.</li>
+      <li>Drag one of your measures (e.g., <code>Total Sales</code>) to the <strong>X-axis</strong> well.</li>
+      <li>The chart shows one bar for 2024. Look at the top of the visual for small arrow icons — these are the <strong>drill-down controls</strong>.</li>
+      <li>Click the <strong>double-arrow icon</strong> (Expand all down one level). The single bar splits into 4 quarter bars.</li>
+      <li>Click the double-arrow again. The 4 quarter bars expand into 12 month bars.</li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    If your months appear alphabetically (April, August, December...) instead of chronologically (January, February, March...), the <strong>Sort by Column</strong> setting is missing. Go to <strong>Table View</strong>, click <code>Month Name</code>, then in the <strong>Column tools</strong> tab, click <strong>Sort by column</strong> → pick <code>Month Number</code>. You set this up in Week 12 — if it already works, you are good.
+  </div>
+
+  <h3>Screenshot — your drill-down bar chart at the month level</h3>
+  <div class="paste-zone" data-zone="zone1">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<div class="take-a-breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You just built your first hierarchy. Users can now drill from year to quarter to month with a single click. That is a feature that exists in every professional Power BI dashboard. Stand up, stretch, then come back for Performance Analyzer.
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 2 — PERFORMANCE ANALYZER                               -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 2 · Run Performance Analyzer</span>
+    <span class="phase-time">⏱ 15 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY PERFORMANCE MATTERS</span>
+    A Power BI report can have dozens of visuals, each running its own query against the data model every time you open the page, click a slicer, or apply a filter. Some visuals load instantly. Some take seconds. Performance Analyzer tells you exactly how long each visual takes to render — so you can find the slow ones and decide what to do about them.
+    <br><br>
+    Think of it as a stopwatch for every visual on your report page.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — open Performance Analyzer</span>
+    <ol class="steps">
+      <li>Make sure you are in <strong>Report View</strong> and on a report page that has at least 3–4 visuals. If your page only has 1–2, quickly add a couple more: a Card visual with Total Sales, a bar chart by truck_name, a table with a few columns. Performance Analyzer needs multiple visuals to be meaningful.</li>
+      <li>Click the <strong>View</strong> tab in the top ribbon.</li>
+      <li>Click <strong>Performance Analyzer</strong>. A panel opens on the right side of the screen.</li>
+      <li>In the Performance Analyzer panel, click <strong>Start recording</strong>.</li>
+      <li>Click <strong>Refresh visuals</strong>. This forces every visual on the page to reload, and Performance Analyzer times each one.</li>
+      <li>Wait a few seconds for all visuals to finish loading.</li>
+      <li>Click <strong>Stop recording</strong> (or just leave it — it will keep recording as you interact).</li>
+    </ol>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — read the results</span>
+    <ol class="steps">
+      <li>The panel shows a list of every visual on the page with timing information. Each visual has a total time in milliseconds (ms).</li>
+      <li>Click the arrow next to any visual to expand it. You will see a breakdown:
+        <ul class="sub">
+          <li><strong>DAX query</strong> — time spent running the measure calculations</li>
+          <li><strong>Visual display</strong> — time spent rendering the visual on screen</li>
+          <li><strong>Other</strong> — time spent waiting, processing, or on background tasks</li>
+        </ul>
+      </li>
+      <li>Identify which visual took the longest. This is your "slowest visual."</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHAT THE NUMBERS MEAN</span>
+    For a dataset this size (Sabor Miami has ~500 rows), everything should be fast — probably under 100ms per visual. In real-world models with millions of rows, slow visuals might take 5,000–10,000ms (5–10 seconds). The technique is the same: find the slow one, figure out why, and optimize. Common causes of slow visuals: too many rows in a table visual, complex DAX with nested CALCULATE, or unnecessary columns bloating the model.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    You should be able to identify: (a) which visual was slowest, (b) whether the bottleneck was DAX query time or visual display time. If Performance Analyzer shows nothing, make sure you clicked "Refresh visuals" after starting the recording.
+  </div>
+
+  <h3>Screenshot — your Performance Analyzer results</h3>
+  <div class="paste-zone" data-zone="zone2">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 3 — COLUMN REMOVAL                                     -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 3 · Remove Unnecessary Columns</span>
+    <span class="phase-time">⏱ 15 min</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY REMOVE COLUMNS?</span>
+    Every column in your model takes up space in memory and slows down calculations — even if nobody ever uses it in a visual. Removing columns you do not need makes the model smaller, faster, and easier to navigate. This is called <strong>model optimization</strong>, and it is one of the first things a BI professional does before publishing a report.
+    <br><br>
+    The rule is: <strong>if a column is not used in a relationship, a measure, a visual, or a filter — it probably does not need to be in the model.</strong>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — check the file size before removing columns</span>
+    <ol class="steps">
+      <li>Save your file (<strong>Ctrl+S</strong>).</li>
+      <li>Open File Explorer and navigate to where your .pbix file is saved.</li>
+      <li>Right-click the file → <strong>Properties</strong>. Note the file size (in KB or MB). Write it down — you will compare after removing columns.</li>
+    </ol>
+  </div>
+
+  <p><strong>File size before:</strong> <input type="text" placeholder="e.g., 245 KB" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — identify columns that can be removed</span>
+    <ol class="steps">
+      <li>Go to <strong>Model View</strong>.</li>
+      <li>Look at each table and think: which columns are NOT used in any relationship, measure, visual, or filter?</li>
+      <li>Good candidates for removal in the Sabor Miami model:
+        <ul class="sub">
+          <li><code>employees[phone]</code> — personal contact info, not used in any analysis</li>
+          <li><code>employees[email]</code> — same reason</li>
+          <li><code>trucks[license_plate]</code> — operational detail, not analytical</li>
+          <li><code>events[expected_attendance]</code> — not used in any current measure</li>
+          <li><code>Date[Day Number]</code> — only used as a Sort By Column for Day of Week. If you are not using Day of Week in any visual, both can go.</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE — do NOT remove these</span>
+    <ul class="sub">
+      <li><strong>ID columns used in relationships</strong> — if you remove <code>truck_id</code> from <code>sales</code>, the relationship breaks.</li>
+      <li><strong>Columns used in measures</strong> — <code>sales[amount]</code> is used in Total Sales. Removing it would break the measure.</li>
+      <li><strong>Sort By Column targets</strong> — <code>Month Number</code> is used as the Sort By Column for <code>Month Name</code>. If you remove it, months go back to alphabetical order.</li>
+    </ul>
+    When in doubt, do not remove. You can always remove more later. You cannot easily undo a removal.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — remove at least 3 columns</span>
+    <ol class="steps">
+      <li>In <strong>Model View</strong> (or <strong>Table View</strong>), right-click a column you identified as removable.</li>
+      <li>Click <strong>Hide in report view</strong> first. This hides the column from the Data pane in Report View but does not delete it. Check that nothing breaks.</li>
+      <li>If nothing breaks, you can go further: open <strong>Power Query Editor</strong> (<strong>Home</strong> → <strong>Transform data</strong>), find the column in the relevant query, right-click it → <strong>Remove</strong>. Then <strong>Close &amp; Apply</strong>.</li>
+      <li>Repeat for at least 2 more columns.</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 HIDE VS REMOVE — TWO LEVELS</span>
+    <strong>Hide in report view</strong> is the safe option. The column still exists in the model (relationships and measures still work), but report builders cannot see it. <strong>Remove in Power Query</strong> is the permanent option — the column is gone from the model entirely. For Lab #4, either approach counts. For a professional model, removing in Power Query is the cleaner optimization.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS — check the file size after</span>
+    <ol class="steps">
+      <li>Save the file (<strong>Ctrl+S</strong>).</li>
+      <li>Check the file size again in File Explorer → Properties.</li>
+    </ol>
+  </div>
+
+  <p><strong>File size after:</strong> <input type="text" placeholder="e.g., 230 KB" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+
+  <div class="why">
+    <span class="label">💡 ABOUT THE SIZE DIFFERENCE</span>
+    On a small dataset like Sabor Miami (~500 rows), the file size difference will be tiny — maybe a few KB. That is normal. On a real-world model with millions of rows, removing unnecessary columns can shrink a file by hundreds of megabytes and cut refresh times by minutes. The skill matters even if the demo is small.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    Open <strong>Report View</strong> and click through your visuals. Do they all still work? Do your measures still return numbers? If any visual shows an error, you removed a column that was in use — go back to Power Query and undo that step.
+  </div>
+</div>
+
+<div class="take-a-breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You have now learned the three optimization techniques that go into Lab #4 on Wednesday: hierarchy, Performance Analyzer, and column removal. One more short phase — an awareness demo of Row-Level Security — and then we pick partners for the portfolio.
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 4 — RLS AWARENESS                                      -->
+<!-- ============================================================ -->
+<div class="phase">
+  <div class="phase-header">
+    <span>Phase 4 · Row-Level Security — Awareness Demo</span>
+    <span class="phase-time">⏱ 5 min · Instructor-Led</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHAT IS RLS?</span>
+    Row-Level Security (RLS) is a Power BI feature that restricts which rows a user can see. Everyone opens the same report, but each person sees only the data they are authorized to access. In the Sabor Miami model, you might create an RLS role so the manager of La Havana Express (T001) can only see T001's sales — not the sales from Sabor on Wheels, Caribbean Cruiser, or The Plantain Express.
+    <br><br>
+    Chapter 10 uses the metaphor: <strong>"everyone enters the same house, but some rooms have locks on the doors."</strong> The key you hold determines which rooms you can enter.
+  </div>
+
+  <div class="why">
+    <span class="label">💡 HOW IT WORKS (YOUR INSTRUCTOR WILL DEMO THIS)</span>
+    <ol class="steps">
+      <li>In Power BI Desktop, go to <strong>Modeling</strong> tab → <strong>Manage roles</strong>.</li>
+      <li>Create a role (e.g., "Truck T001 Manager").</li>
+      <li>Apply a filter on the <strong>trucks</strong> table: <code>[truck_id] = "T001"</code></li>
+      <li>Because of the star schema relationships, this filter flows from <code>trucks</code> through to <code>sales</code> automatically. The user only sees T001's sales.</li>
+      <li>Test with <strong>Modeling</strong> → <strong>View as</strong> → check the role → OK. A yellow banner confirms you are viewing as that role.</li>
+    </ol>
+    <strong>You do not need to build this yourself today.</strong> Just watch the demo and understand the concept. RLS is not part of Lab #4 — it is a "know that it exists" topic for your certification preparation.
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY THE FILTER GOES ON THE DIMENSION TABLE</span>
+    Notice the RLS filter is on <code>trucks</code> (the dimension), not on <code>sales</code> (the fact). The star schema's one-to-many relationship carries the filter from dimension to fact automatically. This is the same cross-filter direction you learned in Week 12. The model does the work — you do not need separate filters on every table.
+  </div>
+
+  <div class="why">
+    <span class="label">💡 READ MORE</span>
+    Chapter 10, Section 10.5 walks through the full RLS setup with screenshots. If you are curious and want to try it yourself during tutoring, follow those instructions on your practice file.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PARTNER SELECTION                                             -->
+<!-- ============================================================ -->
+<div class="partner-box">
+  <h2>🤝 Portfolio Partner Selection</h2>
+  <p>For the final project, you will work with a partner. Together, you will polish your Sabor Miami model into a portfolio-ready .pbix file and present it to the class on Monday of Week 16.</p>
+  <p><strong>How to pick a partner:</strong> Find someone you work well with. You will sit together during Wednesday's tutoring block to combine and polish your work. You need to be able to communicate between now and Monday's presentation.</p>
+  <p><strong>The presentation:</strong> 5 minutes per group. Each partner speaks. You will cover: what you discovered in the data, the challenges you faced, how you overcame them, and what you would do next with more time.</p>
+
+  <br>
+  <p><strong>My partner's name:</strong></p>
+  <p><input type="text" placeholder="Partner's full name"></p>
+  <p><strong>How we will communicate:</strong></p>
+  <p><input type="text" placeholder="e.g., text, Canvas messages, in person"></p>
+  <p><strong>Our plan for Wednesday tutoring:</strong></p>
+  <p><input type="text" placeholder="e.g., compare our files, pick the better one, polish together"></p>
+</div>
+
+<div class="why">
+  <span class="label">💡 WHAT HAPPENS NEXT</span>
+  <ul class="sub">
+    <li><strong>Monday tutoring (today, right after class):</strong> Continue practicing the optimization techniques. If you finish early, sketch your Lab #4 dashboard layout on paper — what 4+ visuals will you build?</li>
+    <li><strong>Wednesday class:</strong> Lab #4 (individual, graded, 50 pts). You will build a hierarchy, run Performance Analyzer, remove columns, and build a dashboard page.</li>
+    <li><strong>Wednesday tutoring:</strong> Sit with your partner. Compare your Lab #4 files. Pick the stronger one. Polish it together. Plan your 5-minute presentation.</li>
+    <li><strong>Monday Week 16:</strong> Present your portfolio. 5 minutes per group.</li>
+  </ul>
+</div>
+
+<script>
+document.querySelectorAll('.paste-zone').forEach(zone => {
+  zone.addEventListener('click', () => zone.focus());
+  zone.setAttribute('tabindex', '0');
+  zone.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const items = (e.clipboardData || window.clipboardData).items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const placeholder = zone.querySelector('.paste-zone-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        return;
+      }
+    }
+  });
+  const removeBtn = zone.querySelector('.remove-btn');
+  if (removeBtn) {
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const img = zone.querySelector('img');
+      if (img) img.remove();
+      const placeholder = zone.querySelector('.paste-zone-placeholder');
+      if (placeholder) placeholder.style.display = 'block';
+      zone.classList.remove('has-image');
+    });
+  }
+});
+</script>
+
+</body>
+</html>
