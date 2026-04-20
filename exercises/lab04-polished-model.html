@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab #4 — Polished Model (50 pts)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; max-width: 920px; margin: 0 auto; padding: 30px 40px 60px; color: #2c3e50; line-height: 1.65; font-size: 14pt; background: #f7f9fb; }
+  h1 { color: #1A5276; border-bottom: 4px solid #2E86C1; padding-bottom: 12px; margin-bottom: 8px; font-size: 28pt; line-height: 1.2; }
+  .subtitle { color: #5D6D7E; font-size: 14pt; margin-top: 0; margin-bottom: 30px; }
+  h2 { color: #1A5276; margin-top: 40px; font-size: 20pt; }
+  h3 { color: #2874A6; margin-top: 28px; font-size: 16pt; }
+  p { margin: 12px 0; }
+  strong { color: #1A5276; }
+  code { background: #ECF0F1; padding: 2px 7px; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 12pt; color: #922B21; }
+
+  .header-info { background: #fff; border: 2px solid #2E86C1; padding: 18px 22px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .header-info p { margin: 8px 0; }
+  .header-info label { display: inline-block; font-weight: bold; color: #1A5276; margin-right: 12px; min-width: 140px; }
+  .header-info input { border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 320px; background: transparent; }
+  .header-info input:focus { outline: none; border-bottom-color: #2E86C1; }
+
+  .launch-pad { background: linear-gradient(135deg, #EBF5FB 0%, #D6EAF8 100%); border: 2px solid #2E86C1; border-radius: 10px; padding: 22px 28px; margin: 30px 0; box-shadow: 0 3px 8px rgba(46,134,193,0.1); }
+  .launch-pad h3 { margin-top: 0; color: #1A5276; font-size: 18pt; border-bottom: 2px solid #AED6F1; padding-bottom: 8px; }
+  .launch-pad ul { list-style: none; padding-left: 0; margin: 10px 0 0; }
+  .launch-pad li { padding: 8px 0; border-bottom: 1px dashed #AED6F1; }
+  .launch-pad li:last-child { border-bottom: none; }
+
+  .do-this, .why, .common-mistake, .stop-check, .take-a-breath { padding: 16px 20px; margin: 18px 0; border-radius: 6px; }
+  .do-this { background-color: #D5F5E3; border-left: 6px solid #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why { background-color: #D6EAF8; border-left: 6px solid #2E86C1; }
+  .why .label { color: #1A5276; }
+  .common-mistake { background-color: #FEF9E7; border-left: 6px solid #F1C40F; }
+  .common-mistake .label { color: #7D6608; }
+  .stop-check { background-color: #FADBD8; border-left: 6px solid #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .take-a-breath { background-color: #E8DAEF; border-left: 6px solid #8E44AD; }
+  .take-a-breath .label { color: #6C3483; }
+  .label { display: block; font-weight: bold; font-size: 13pt; margin-bottom: 8px; letter-spacing: 0.3px; }
+
+  .task { background: #fff; border: 2px solid #AED6F1; border-radius: 10px; padding: 0 28px 24px; margin: 35px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .task-header { background: linear-gradient(135deg, #1A5276 0%, #2874A6 100%); color: #fff; padding: 16px 24px; margin: 0 -28px 20px; border-radius: 8px 8px 0 0; font-size: 17pt; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+  .task-pts { font-size: 14pt; background: rgba(255,255,255,0.25); padding: 5px 14px; border-radius: 15px; font-weight: normal; }
+
+  ol.steps { padding-left: 28px; margin: 15px 0; }
+  ol.steps > li { padding: 8px 0; margin-bottom: 6px; }
+  ol.steps > li::marker { font-weight: bold; color: #1A5276; }
+  ul.sub { padding-left: 22px; margin: 8px 0; }
+  ul.sub li { padding: 4px 0; list-style: disc; }
+
+  .paste-zone { border: 3px dashed #2E86C1; background: #F8FBFD; padding: 30px 20px; margin: 15px 0; text-align: center; border-radius: 8px; min-height: 120px; position: relative; cursor: pointer; transition: background 0.2s; }
+  .paste-zone:hover { background: #EBF5FB; }
+  .paste-zone.has-image { padding: 10px; cursor: default; }
+  .paste-zone-placeholder { color: #5D6D7E; font-style: italic; font-size: 12pt; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; margin: 0 auto; }
+  .remove-btn { position: absolute; top: 8px; right: 8px; background: #E74C3C; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11pt; font-weight: bold; display: none; }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  textarea.response { width: 100%; min-height: 140px; border: 2px solid #AED6F1; border-radius: 8px; padding: 14px; font-family: inherit; font-size: 13pt; line-height: 1.6; resize: vertical; background: #fff; }
+  textarea.response:focus { outline: none; border-color: #2E86C1; }
+
+  .rubric { background: #fff; border: 2px solid #1A5276; border-radius: 10px; padding: 22px 28px; margin: 40px 0; }
+  .rubric h2 { margin-top: 0; }
+  .rubric table { width: 100%; border-collapse: collapse; font-size: 12pt; margin-top: 12px; }
+  .rubric th, .rubric td { border: 1px solid #AED6F1; padding: 10px 14px; text-align: left; }
+  .rubric th { background: #1A5276; color: #fff; }
+  .rubric tr:nth-child(even) td { background: #F8FBFD; }
+  .rubric .tier { font-weight: bold; }
+  .rubric .tier-e { color: #27AE60; }
+  .rubric .tier-g { color: #2E86C1; }
+  .rubric .tier-n { color: #E74C3C; }
+
+  .submit-box { background: linear-gradient(135deg, #27AE60 0%, #1E8449 100%); color: #fff; padding: 24px 28px; margin: 40px 0; border-radius: 12px; font-size: 14pt; box-shadow: 0 4px 12px rgba(39,174,96,0.25); }
+  .submit-box strong { color: #fff; }
+
+  @media print {
+    body { background: white; font-size: 10.5pt; padding: 10px 15px; max-width: 100%; color: #000; }
+    h1 { font-size: 20pt; } h2 { font-size: 14pt; } h3 { font-size: 12pt; }
+    .task, .launch-pad, .header-info, .do-this, .why, .common-mistake, .stop-check, .take-a-breath, .rubric { page-break-inside: avoid; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .paste-zone { border: 1px solid #888; background: #fff !important; }
+    .paste-zone-placeholder { display: none; }
+    .remove-btn { display: none !important; }
+    .task-header, .submit-box { -webkit-print-color-adjust: exact; }
+    textarea.response { border: 1px solid #888; min-height: 100px; }
+    input { border-bottom: 1px solid #000 !important; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lab #4 — Polished Model</h1>
+<p class="subtitle">Week 15 · Session B (Wednesday) · Individual · 50 Points</p>
+
+<div class="header-info">
+  <p><label>Student Name:</label><input type="text" placeholder="Your name"></p>
+  <p><label>Date:</label><input type="text" placeholder="Today's date"></p>
+</div>
+
+<div class="why">
+  <span class="label">💡 WHAT THIS LAB IS ABOUT</span>
+  Labs 1–3 built your model from the ground up: clean data, combined tables, star schema, DAX measures. Lab #4 takes that working model and makes it <strong>better</strong>. You will add drill-down navigation, measure performance, remove unnecessary columns, and build a dashboard page that shows your Sabor Miami model at its best. The dashboard you build here carries directly into your portfolio presentation next Monday.
+</div>
+
+<div class="launch-pad">
+  <h3>🚀 LAUNCH PAD</h3>
+  <ul>
+    <li><strong>What you are building:</strong> An optimized, polished version of your Sabor Miami model with a hierarchy, performance analysis, removed columns, and a complete dashboard page.</li>
+    <li><strong>Tool:</strong> Power BI Desktop</li>
+    <li><strong>File to open:</strong> Your completed <code>LastName_FirstName_Lab3.pbix</code>. Save a copy as <code>LastName_FirstName_Lab4.pbix</code> before you start.</li>
+    <li><strong>Backup plan:</strong> If your Lab 3 file is missing or broken, download <code>SaborMiami_Lab3_Starter.pbix</code> from GitHub, write 3 measures (Total Sales = SUM(sales[amount]), Total Tips = SUM(sales[tip]), Transaction Count = COUNTROWS(sales)), and proceed.</li>
+    <li><strong>Time estimate:</strong> 55–70 minutes</li>
+    <li><strong>Tasks:</strong> 5 — Hierarchy (8 pts) → Performance Analyzer (10 pts) → Column Removal (8 pts) → Dashboard Page (16 pts) → Written Response (8 pts)</li>
+    <li><strong>What you submit:</strong> Your <code>LastName_FirstName_Lab4.pbix</code> file + this worksheet printed/saved as PDF (with screenshots and written responses filled in) → both uploaded to Canvas.</li>
+    <li><strong>Start here →</strong> Open your Lab 3 file, Save As Lab 4, and begin Task 1.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- TASK 1 — HIERARCHY                                           -->
+<!-- ============================================================ -->
+<div class="task">
+  <div class="task-header">
+    <span>Task 1 · Create a Date Hierarchy</span>
+    <span class="task-pts">8 pts</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>In <strong>Model View</strong>, find the <strong>Date</strong> table.</li>
+      <li>Right-click <strong>Year</strong> → <strong>Create hierarchy</strong>.</li>
+      <li>Rename the hierarchy to <code>Date Hierarchy</code>.</li>
+      <li>Drag <strong>Quarter</strong> onto the hierarchy (Level 2).</li>
+      <li>Drag <strong>Month Name</strong> onto the hierarchy (Level 3).</li>
+      <li>In <strong>Report View</strong>, create a bar chart using Date Hierarchy on the Y-axis and one of your measures on the X-axis. Drill down to verify Year → Quarter → Month works correctly.</li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    If months appear alphabetically instead of chronologically, set <strong>Sort by Column</strong> on <code>Month Name</code> → <code>Month Number</code> (Column tools tab in Table View). You set this up in Week 12 — check if it is already working before changing anything.
+  </div>
+
+  <h3>Screenshot — Date Hierarchy drilled to month level</h3>
+  <div class="paste-zone" data-zone="zone1">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TASK 2 — PERFORMANCE ANALYZER                                -->
+<!-- ============================================================ -->
+<div class="task">
+  <div class="task-header">
+    <span>Task 2 · Run Performance Analyzer</span>
+    <span class="task-pts">10 pts</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>Make sure you are in <strong>Report View</strong> on a page with at least 3–4 visuals. (If your page does not have enough visuals yet, you will build more in Task 4. You can come back to Task 2 after Task 4 if needed.)</li>
+      <li><strong>View</strong> tab → <strong>Performance Analyzer</strong>.</li>
+      <li>Click <strong>Start recording</strong>.</li>
+      <li>Click <strong>Refresh visuals</strong>.</li>
+      <li>Wait a few seconds, then click <strong>Stop recording</strong>.</li>
+      <li>Identify which visual was slowest.</li>
+    </ol>
+  </div>
+
+  <h3>Screenshot — Performance Analyzer results panel</h3>
+  <div class="paste-zone" data-zone="zone2">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+
+  <p><strong>Which visual was the slowest?</strong></p>
+  <textarea class="response" placeholder="Name the visual and its total time in ms. Example: 'The table visual showing all transactions was slowest at 87ms.'"></textarea>
+
+  <p><strong>Why do you think that visual was slower than the others?</strong></p>
+  <textarea class="response" placeholder="One sentence is enough. Example: 'It has the most rows to render because it shows individual transactions instead of aggregated totals.'"></textarea>
+</div>
+
+<div class="take-a-breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  Two tasks done. You have a hierarchy and Performance Analyzer results. The next task is column removal — quick and satisfying. Then the dashboard page, which is the largest task and the most creative part of this lab.
+</div>
+
+<!-- ============================================================ -->
+<!-- TASK 3 — COLUMN REMOVAL                                      -->
+<!-- ============================================================ -->
+<div class="task">
+  <div class="task-header">
+    <span>Task 3 · Remove Unnecessary Columns</span>
+    <span class="task-pts">8 pts</span>
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>Save your file and check the file size in File Explorer → Properties.</li>
+      <li>Identify at least 3 columns that are not used in any relationship, measure, visual, or filter.</li>
+      <li>For each column: either <strong>Hide in report view</strong> (right-click in Model View) or <strong>Remove in Power Query</strong> (open Power Query Editor, right-click column → Remove, then Close &amp; Apply).</li>
+      <li>Save and check the file size again.</li>
+    </ol>
+  </div>
+
+  <div class="common-mistake">
+    <span class="label">⚠️ COMMON MISTAKE</span>
+    Do not remove: ID columns used in relationships, columns used in measures (like <code>sales[amount]</code>), or Sort By Column targets (like <code>Month Number</code>). When in doubt, <strong>Hide</strong> instead of Remove — it is safer and still counts for full credit.
+  </div>
+
+  <p><strong>File size before:</strong> <input type="text" placeholder="e.g., 245 KB" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+  <p><strong>File size after:</strong> <input type="text" placeholder="e.g., 230 KB" style="border: none; border-bottom: 1.5px solid #888; padding: 4px 8px; font-size: 13pt; font-family: inherit; width: 200px;"></p>
+
+  <p><strong>List the columns you removed or hid (at least 3):</strong></p>
+  <textarea class="response" placeholder="Example:
+1. employees[phone] — hidden. Not used in any visual or measure.
+2. employees[email] — hidden. Personal info, not analytical.
+3. trucks[license_plate] — removed in Power Query. Operational detail not needed for analysis."></textarea>
+</div>
+
+<!-- ============================================================ -->
+<!-- TASK 4 — DASHBOARD PAGE                                      -->
+<!-- ============================================================ -->
+<div class="task">
+  <div class="task-header">
+    <span>Task 4 · Build a Dashboard Page</span>
+    <span class="task-pts">16 pts</span>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 WHY THIS IS THE BIG TASK</span>
+    This is 16 of your 50 points — and it is the most creative task in the lab. You are building a report page that shows the Sabor Miami business at a glance. This dashboard carries directly into your portfolio and your group presentation next Monday. Build it with that in mind.
+  </div>
+
+  <div class="do-this">
+    <span class="label">✅ DO THIS</span>
+    <ol class="steps">
+      <li>In Report View, create a <strong>new page</strong> (click the <strong>+</strong> icon at the bottom of the canvas, next to the existing page tabs).</li>
+      <li>Right-click the new page tab and rename it to <code>Dashboard</code>.</li>
+      <li>Build <strong>at least 4 visuals</strong> on this page. Requirements:
+        <ul class="sub">
+          <li>At least <strong>2 different visual types</strong> (e.g., bar chart + card, table + pie chart, line chart + slicer)</li>
+          <li>At least <strong>1 slicer</strong> (e.g., a truck_name slicer or a Date Hierarchy slicer so users can filter the page)</li>
+          <li>Use your existing measures — Total Sales, Total Tips, Average Ticket, Transaction Count, Tip Percentage, La Havana Express Sales, or any others you wrote in Lab #3</li>
+        </ul>
+      </li>
+      <li>Arrange the visuals so the page looks intentional, not random. Align edges. Leave some white space. Give the page a title using a Text Box (<strong>Insert</strong> tab → <strong>Text Box</strong>).</li>
+    </ol>
+  </div>
+
+  <div class="why">
+    <span class="label">💡 DASHBOARD DESIGN TIPS</span>
+    <ul class="sub">
+      <li><strong>Top of the page:</strong> Big numbers (Card visuals) that give the high-level picture — total revenue, total transactions, average ticket.</li>
+      <li><strong>Middle of the page:</strong> Charts that show comparisons — revenue by truck, revenue by month, tips by payment method.</li>
+      <li><strong>Side or top:</strong> Slicers for filtering — let the user pick a truck, a time period, or a category.</li>
+      <li><strong>Bottom or side:</strong> A detail table for users who want to see the numbers behind the charts.</li>
+    </ul>
+    You do not have to follow this layout. It is one common pattern. Build something that tells a story about Sabor Miami's business.
+  </div>
+
+  <div class="stop-check">
+    <span class="label">🛑 STOP AND CHECK</span>
+    Before taking your screenshot, test the slicer. Click on a truck name (or a date range) and confirm that all the other visuals on the page update. If a visual does not respond to the slicer, check that the tables involved have active relationships in Model View.
+  </div>
+
+  <h3>Screenshot — your completed dashboard page</h3>
+  <div class="paste-zone" data-zone="zone4">
+    <button class="remove-btn" type="button">Remove</button>
+    <div class="paste-zone-placeholder">📋 Click here and press Ctrl+V to paste your screenshot</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TASK 5 — WRITTEN RESPONSE                                    -->
+<!-- ============================================================ -->
+<div class="task">
+  <div class="task-header">
+    <span>Task 5 · Written Response</span>
+    <span class="task-pts">8 pts</span>
+  </div>
+
+  <p><strong>Question 1 (4 pts):</strong> Look at your Performance Analyzer results from Task 2. What did Performance Analyzer tell you about how your visuals load? If you were working with a much larger dataset (millions of rows instead of hundreds), which visual would you optimize first and what would you try?</p>
+  <textarea class="response" placeholder="Write 3–5 sentences."></textarea>
+
+  <p style="margin-top: 24px;"><strong>Question 2 (4 pts):</strong> You removed or hid at least 3 columns in Task 3. How did you decide which columns were safe to remove? What is the risk of removing the wrong column, and how can you protect yourself?</p>
+  <textarea class="response" placeholder="Write 3–5 sentences."></textarea>
+</div>
+
+<!-- ============================================================ -->
+<!-- RUBRIC                                                       -->
+<!-- ============================================================ -->
+<div class="rubric">
+  <h2>📊 Lab #4 Rubric — 50 Points</h2>
+
+  <table>
+    <tr>
+      <th>Task</th>
+      <th>Points</th>
+      <th class="tier tier-e">Excellent</th>
+      <th class="tier tier-g">Good</th>
+      <th class="tier tier-n">Needs Work</th>
+    </tr>
+    <tr>
+      <td><strong>1. Date Hierarchy</strong></td>
+      <td>8</td>
+      <td>Hierarchy has 3 correct levels (Year → Quarter → Month Name), drill-down works in a visual, months in chronological order (7–8 pts)</td>
+      <td>Hierarchy exists but levels are wrong order, or months are alphabetical (4–6 pts)</td>
+      <td>No hierarchy created, or hierarchy is broken (0–3 pts)</td>
+    </tr>
+    <tr>
+      <td><strong>2. Performance Analyzer</strong></td>
+      <td>10</td>
+      <td>Screenshot shows Performance Analyzer results, slowest visual correctly identified, explanation of why it is slow is reasonable (8–10 pts)</td>
+      <td>Screenshot present but missing identification or explanation (5–7 pts)</td>
+      <td>No Performance Analyzer screenshot, or analysis missing (0–4 pts)</td>
+    </tr>
+    <tr>
+      <td><strong>3. Column Removal</strong></td>
+      <td>8</td>
+      <td>3+ columns removed or hidden, all choices are safe (no broken relationships or measures), before/after sizes noted, reasoning provided (7–8 pts)</td>
+      <td>Fewer than 3 columns, or a removed column caused a minor issue (4–6 pts)</td>
+      <td>No columns removed, or removal broke the model (0–3 pts)</td>
+    </tr>
+    <tr>
+      <td><strong>4. Dashboard Page</strong></td>
+      <td>16</td>
+      <td>4+ visuals, 2+ visual types, includes a working slicer, layout is intentional and readable, measures are used correctly (13–16 pts)</td>
+      <td>3 visuals or missing slicer, or layout needs improvement (7–12 pts)</td>
+      <td>Fewer than 3 visuals, no slicer, or visuals show errors (0–6 pts)</td>
+    </tr>
+    <tr>
+      <td><strong>5. Written Response</strong></td>
+      <td>8</td>
+      <td>Both questions answered with specific references to own work, reasoning is clear (7–8 pts)</td>
+      <td>Both answered but generic or vague (4–6 pts)</td>
+      <td>Missing one or both responses (0–3 pts)</td>
+    </tr>
+  </table>
+
+  <p style="margin-top: 16px;"><strong>Grading tiers:</strong> Excellent (45–50) · Good (30–44) · Needs Work (0–29)</p>
+  <p><strong>Late policy:</strong> 48-hour grace period (no penalty). After 48 hours: 10% per day, capped at 30% max reduction.</p>
+  <p><strong>Redo option:</strong> If you score below Good (30 pts), you may revise and resubmit once for up to the Good tier score.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUBMISSION                                                   -->
+<!-- ============================================================ -->
+<div class="submit-box">
+  <strong>📤 Submission Checklist</strong>
+  <ol class="steps" style="color: #fff;">
+    <li>Save your file: <code style="background: rgba(255,255,255,0.2); color: #fff;">LastName_FirstName_Lab4.pbix</code></li>
+    <li>Save or print this worksheet as a PDF (with all screenshots pasted and responses filled in).</li>
+    <li>Upload <strong>both files</strong> to the Canvas assignment: the .pbix and the PDF.</li>
+    <li>After submitting, sit with your partner for the tutoring clinic. Bring both partners' Lab 4 files.</li>
+  </ol>
+</div>
+
+<script>
+document.querySelectorAll('.paste-zone').forEach(zone => {
+  zone.addEventListener('click', () => zone.focus());
+  zone.setAttribute('tabindex', '0');
+  zone.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const items = (e.clipboardData || window.clipboardData).items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const existingImg = zone.querySelector('img');
+          if (existingImg) existingImg.remove();
+          const placeholder = zone.querySelector('.paste-zone-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          zone.appendChild(img);
+          zone.classList.add('has-image');
+        };
+        reader.readAsDataURL(blob);
+        return;
+      }
+    }
+  });
+  const removeBtn = zone.querySelector('.remove-btn');
+  if (removeBtn) {
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const img = zone.querySelector('img');
+      if (img) img.remove();
+      const placeholder = zone.querySelector('.paste-zone-placeholder');
+      if (placeholder) placeholder.style.display = 'block';
+      zone.classList.remove('has-image');
+    });
+  }
+});
+</script>
+
+</body>
+</html>
